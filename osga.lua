@@ -6,7 +6,7 @@ a-Z = workers
 all workers must have defaults
 
 signals:
-  * = power, always true, when it touch a worker run it with the defaults
+  * = power, always true, when it touch a worker run it with the defaults 
   $ = setup, only data, this override the worker defaults
   @ = transmission, this do not override the worker defaults, but run a single time the data in the worker
 
@@ -14,11 +14,11 @@ signal operators:
   ! = output
   ? = redirects a signal, if no output present it works as a block
   + = send the signal in the 3 other directions
+  
+special:
+  & = queue
   < = slow down by 1
   > = speed up by 1
-banks:
-  & = queue
-  ~ = waterbank
 --]]
 
 local util = require("util")
