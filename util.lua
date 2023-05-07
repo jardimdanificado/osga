@@ -1,22 +1,47 @@
 local util = {}
 
-util.char = --36
+util.char =
 {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-    'u', 'v', 'w', 'x', 'y', 'z'
+    'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
+    'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
+    'Y', 'Z', '!', '?', "%", "@", "#", ">", "<", 
+    [[$]], [[¨]], [[&]], [[*]], [[_]], [[-]], [[,]], 
+    [[.]], [[+]], [[/]], [[;]], [[:]], [[}]], [[{]],
+    [[=]], [[§]], [[|]], [[~]], [[`]], [[´]], [[^]],
+    [[ ]], [[ª]], [[º]], [[[]], "]", [[(]], [[)]], 
+    [[¬]], [[°]], [[ç]], [[Ç]], [[ã]], [[â]], [[Â]], 
+    [[Ã]], [[á]], [[à]], [[Á]], [[À]], [[ä]], [[Ä]], 
+    [[ê]], [[Ê]], [[é]], [[É]], [[è]], [[È]], [[ë]], 
+    [[Ë]], [[î]], [[Î]], [[ï]], [[Ï]], [[í]], [[Í]], 
+    [[ì]], [[Ì]], [[õ]], [[Õ]], [[ô]], [[Ô]], [[ó]],
+    [[Ó]], [[ò]], [[Ò]], [[ö]], [[Ö]], [[ú]], [[Ú]],
+    [[ù]], [[Ù]], [[û]], [[Û]], [[ü]], [[Ü]], [[ñ]],
+    [[Ñ]]
 }
 util.math = {}
 util.string = {}
 util.array = {}
+util.table = {}
 util.matrix = {}
 util.file = {}
 util.file.save = {}
 util.file.load = {}
 util.func = {}
 
-util.array.unpack = unpack or table.unpack
+util.array._unpack = unpack or table.unpack
+util.array.unpack = function(obj)
+    local key_list = {}
+    for k in pairs(obj) do
+        if string.sub(k, 1, 1) ~= "_" then
+            table.insert(key_list, obj[k])
+        end
+    end
+    return util.array._unpack(key_list)
+end
 
 util.math.vec2 = function(x, y)
     return {x=x, y=y}
@@ -174,6 +199,10 @@ util.string.includes = function(str,substring)
     return string.find(str, substring, 1, true) ~= nil
 end
 
+util.string.trim = function(s)
+    return s:gsub("^%s+", ""):gsub("%s+$", "")
+end
+
 util.file.load.text = function(path)
     local file = io.open(path, "r")
     local contents = file("*all")
@@ -185,6 +214,54 @@ util.file.save.text = function(path, text)
     local file = io.open(path, "w")
     file:write(text)
     file:close()
+end
+
+util.table.add = function(arr1,arr2)
+    for k, v in pairs(arr2) do
+        if util.array.includes(util.reserved,k) then
+            arr1[k] = arr2[k] + arr2[k]
+        end
+    end
+end
+
+util.table.sub = function(arr1,arr2)
+    for k, v in pairs(arr2) do
+        if util.array.includes(util.reserved,k) then
+            arr1[k] = arr2[k] - arr2[k]
+        end
+    end
+end
+
+util.table.mul = function(arr1,arr2)
+    for k, v in pairs(arr2) do
+        if util.array.includes(util.reserved,k) then
+            arr1[k] = arr2[k] * arr2[k]
+        end
+    end
+end
+
+util.table.div = function(arr1,arr2)
+    for k, v in pairs(arr2) do
+        if util.array.includes(util.reserved,k) then
+            arr1[k] = arr2[k] / arr2[k]
+        end
+    end
+end
+
+util.table.mod = function(arr1,arr2)
+    for k, v in pairs(arr2) do
+        if util.array.includes(util.reserved,k) then
+            arr1[k] = arr2[k] % arr2[k]
+        end
+    end
+end
+
+util.table.sub = function(arr1,arr2)
+    for k, v in pairs(arr2) do
+        if util.array.includes(util.reserved,k) then
+            arr1[k] = arr2[k] - arr2[k]
+        end
+    end
 end
 
 util.array.slice = function(arr, start, final)
@@ -289,7 +366,7 @@ end
 util.array.filter = function(arr, callback)
     local result = {}
     local names = {}
-    for k, v in pairs(t) do
+    for k, v in pairs(arr) do
         if callback(v,k) then
             table.insert(result, v)
             table.insert(names, k)
@@ -313,6 +390,24 @@ util.array.includes = function(arr,value)
         end
     end
     return false
+end
+
+util.array.serialize = function(tbl)
+    local result = {}
+    for k, v in pairs(tbl) do
+        local key = type(k) == "number" and "["..k.."]" or k
+        local val = type(v) == "table" and serializeTable(v) or v
+        if type(v) == "function" then
+            result[#result + 1] = key.."=loadstring("..string.format("%q", string.dump(v))..")"
+        elseif type(val) ~= "function" then
+            result[#result + 1] = key.."="..val
+        end
+    end
+    return "{"..table.concat(result, ",").."}"
+end    
+util.array.deserialize = function(str)
+    local f = loadstring("return "..str)
+    return f()
 end
 
 util.matrix.includes = function(matrix,value)
@@ -358,7 +453,7 @@ util.matrix.minmax = function(matrix)
             end
         end
     end
-    return {min = min_val, max = max_val}
+    return min_val, max_val
 end
 
 util.matrix.unique = function(matrix)
@@ -437,69 +532,9 @@ util.func.time = function(func,...)
     return result,tclock
 end
 
-randi = randi or 1
-
-util.random = function(min, max)
-    math.randomseed(os.time() + randi)
-    randi = randi + math.random(1,40)  
-    return math.random(min,max)
-end
-
-util.roleta = function(...)
-    local odds = {...}
-    local total = 0
-    for i = 1, #odds do
-        total = total + odds[i]
-    end
-    
-    local random_num = util.random(1, total)
-    local sum = 0
-    for i = 1, #odds do
-        sum = sum + odds[i]
-        if random_num <= sum then
-            return i
-        end
-    end
-end
-
-util.id = function(charTable)
-    charTable = charTable or util.char
-    local tablelen = #charTable
-    local numbers = util.string.replace(os.clock() .. os.time(),'%.','')
-    numbers = util.string.split(numbers,'')
-    local result = ""
-    for i = 1, #numbers do 
-        --print 'a'
-        result = result .. numbers[i]
-        result = result .. charTable[util.random(1,tablelen)]
-    end
-    return result
-end
-
-function util.iddebug(size)--debug uniqueid generator
-    --[[
-    u = require "util"
-    u.debug(10000)
-    --]]
-    local ps = {}
-    for i = 1, size do
-        ps[i] = (util.id())
-        print(ps[i])
-    end
-
-    for i = 1, #ps do
-        for x = 1, #ps do
-            if x ~= i and ps[x] == ps[i] then
-                print "id repetido"
-            end
-        end
-    end
-end
-
-util.file.save.heightmap = function(matrix, filename, drawRamps)
+util.file.save.map = function(filename,matrix)
     local file = io.open(filename, "w")
     local max = 0
-    drawRamps = drawRamps or false
     for i=1,#matrix do
         for j=1,#matrix[i] do
             if matrix[i][j] > max then
@@ -511,11 +546,7 @@ util.file.save.heightmap = function(matrix, filename, drawRamps)
     for i=1,#matrix do
         for j=1,#matrix[i] do
             local value = matrix[i][j]
-            --if (i > 1 and matrix[i-1][j] == value - 1) or (i < #matrix and matrix[i+1][j] == value - 1) or (j > 1 and matrix[i][j-1] == value - 1) or (j < #matrix[i] and matrix[i][j+1] == value - 1) then
-            --file:write(string.rep(">", digits))
-            --else
             file:write(string.format("%0"..digits.."d", value))
-            --end
             if j < #matrix[i] then
                 file:write(" ")
             end
@@ -523,6 +554,20 @@ util.file.save.heightmap = function(matrix, filename, drawRamps)
         file:write("\n")
     end
     file:close()
+end
+
+util.file.load.map = function(filepath)
+    local text = util.file.load.text(filepath)
+    local spl = util.string.split(text,"\n")
+    local result = {}
+    for x,v in spl do
+      v = util.string.split(v," ")
+      result[x] = {}
+      for y,l in ipairs(v) do
+        result[x][y] = l
+      end
+    end
+    return result
 end
 
 util.file.exist = function(path)
@@ -574,6 +619,77 @@ util.math.scale = function(value, min, max)
     end
     value = util.math.regrad3(max-min,100,value-min)
     return value;
+end
+
+randi = randi or 1
+
+util.random = function(min, max)
+    math.randomseed(os.time() + randi)
+    randi = randi + math.random(1,40)  
+    return math.random(min,max)
+end
+
+util.roleta = function(...)
+    local odds = {...}
+    local total = 0
+    for i = 1, #odds do
+        total = total + odds[i]
+    end
+    
+    local random_num = util.random(1, total)
+    local sum = 0
+    for i = 1, #odds do
+        sum = sum + odds[i]
+        if random_num <= sum then
+            return i
+        end
+    end
+end
+
+util.pairs = function(obj)
+    local key_list = {}
+    for k in pairs(obj) do
+        if string.sub(k, 1, 1) ~= "_" then
+            table.insert(key_list, k)
+        end
+    end
+    local i = 0
+    return function()
+        i = i + 1
+        if key_list[i] ~= nil then
+            return key_list[i], obj[key_list[i]]
+        else
+            return nil, nil
+        end
+    end
+end
+
+util.id = function(charTable)
+    charTable = charTable or util.char
+    local tablelen = #charTable
+    local numbers = util.string.replace(os.clock() .. os.time(),'%.','')
+    numbers = util.string.split(numbers,'')
+    local result = ""
+    for i = 1, #numbers do 
+        --print 'a'
+        result = result .. numbers[i]
+        result = result .. charTable[util.random(1,tablelen)]
+    end
+    return result
+end
+
+util.assign = function(obj1,obj2)
+    for k, v in pairs(obj2) do
+        obj1[k] = obj2[k]
+    end
+end
+
+util.len = function(obj)
+    local count = 0
+    for k, v in pairs(obj) do
+        count = count + 1
+    end
+    return count
 end
 
 return util
