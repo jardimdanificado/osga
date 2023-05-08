@@ -1,4 +1,25 @@
+--[[
 
+speed = 100 --iterations, bigger the speed slower it will be
+. = empty space
+a-Z = workers
+all workers must have defaults
+
+signals:
+  * = power, always true, when it touch a worker run it with the defaults 
+  $ = setup, only data, this override the worker defaults
+  @ = transmission, this do not override the worker defaults, but run a single time the data in the worker
+
+signal operators:
+  ! = output
+  ? = redirects a signal, if no output present it works as a block
+  + = send the signal in the 3 other directions
+  
+special:
+  & = queue
+  < = slow down by 1
+  > = speed up by 1
+--]]
 
 local util = require("util")
 
@@ -24,8 +45,6 @@ end
 local function main()
   if util.file.exist("./data/config.lua") == false then
     install()
-  else
-    
   end
   local config = require("data.config")
 end
