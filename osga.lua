@@ -30,7 +30,6 @@ cfg.size =
   h = 16
 }
 cfg.name = "osga"
-cfg.redraw = false
 return cfg]]
 
 local util = require("util")
@@ -111,7 +110,6 @@ local function main()
 
   local world = 
   {
-    config = require("data.config"),
     ruleset = require("data.ruleset"),
     signal={},
     worker = {},
@@ -126,9 +124,9 @@ local function main()
       cposi = {x=1,y=1}
     }
   }
-  world.map = util.matrix.new(world.config.size.w,world.config.size.h,'.')
+  world.map = util.matrix.new(16,16,'.')
   world.map.char = util.file.load.charMap("./data/map.txt")
-  world.map.signal = util.matrix.new(world.config.size.w,world.config.size.h,'.')
+  world.map.signal = util.matrix.new(16,16,'.')
   world.session.editmode = true
   while not world.config.exit do
     frame(world)
