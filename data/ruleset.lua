@@ -1,402 +1,503 @@
 local ruleset = {}
+ruleset.defaults = {}
 
-ruleset['a'] = function(input,api)
+ruleset.defaults['a'] = {}
+ruleset['a'] = function(input,api,worker)
   return input 
 end
 
-ruleset['b'] = function(input,api)
+ruleset.defaults['b'] = {}
+ruleset['b'] = function(input,api,worker)
   return input 
 end
 
-ruleset['c'] = function(input,api)
+ruleset.defaults['c'] = {}
+ruleset['c'] = function(input,api,worker)
   return input 
 end
 
-ruleset['d'] = function(input,api)
+ruleset.defaults['d'] = {}
+ruleset['d'] = function(input,api,worker)
   return input 
 end
 
-ruleset['e'] = function(input,api)
+ruleset.defaults['e'] = {}
+ruleset['e'] = function(input,api,worker)
   return input 
 end
 
-ruleset['f'] = function(input,api)
+ruleset.defaults['f'] = {}
+ruleset['f'] = function(input,api,worker)
   return input 
 end
 
-ruleset['g'] = function(input,api)
+ruleset.defaults['g'] = {}
+ruleset['g'] = function(input,api,worker)
   return input 
 end
 
-ruleset['h'] = function(input,api)
+ruleset.defaults['h'] = {}
+ruleset['h'] = function(input,api,worker)
   return input 
 end
 
-ruleset['i'] = function(input,api)
+ruleset.defaults['i'] = {}
+ruleset['i'] = function(input,api,worker)
   return input 
 end
 
-ruleset['j'] = function(input,api)
+ruleset.defaults['j'] = {}
+ruleset['j'] = function(input,api,worker)
   return input 
 end
 
-ruleset['k'] = function(input,api)
+ruleset.defaults['k'] = {}
+ruleset['k'] = function(input,api,worker)
   return input 
 end
 
-ruleset['l'] = function(input,api)
+ruleset.defaults['l'] = {}
+ruleset['l'] = function(input,api,worker)
   return input 
 end
 
-ruleset['m'] = function(input,api)
+ruleset.defaults['m'] = {}
+ruleset['m'] = function(input,api,worker)
   return input 
 end
 
-ruleset['n'] = function(input,api)
+ruleset.defaults['n'] = {}
+ruleset['n'] = function(input,api,worker)
   return input 
 end
 
-ruleset['o'] = function(input,api)
+ruleset.defaults['o'] = {}
+ruleset['o'] = function(input,api,worker)
   return input 
 end
 
-ruleset['p'] = function(input,api)
+ruleset.defaults['p'] = {}
+ruleset['p'] = function(input,api,worker)
   return input 
 end
 
-ruleset['q'] = function(input,api)
+ruleset.defaults['q'] = {}
+ruleset['q'] = function(input,api,worker)
   return input 
 end
 
-ruleset['r'] = function(input,api)
+ruleset.defaults['r'] = {}
+ruleset['r'] = function(input,api,worker)
   return input 
 end
 
-ruleset['s'] = function(input,api)
+ruleset.defaults['s'] = {}
+ruleset['s'] = function(input,api,worker)
   return input 
 end
 
-ruleset['t'] = function(input,api)
+ruleset.defaults['t'] = {}
+ruleset['t'] = function(input,api,worker)
   return input 
 end
 
-ruleset['u'] = function(input,api)
+ruleset.defaults['u'] = {}
+ruleset['u'] = function(input,api,worker)
   return input 
 end
 
-ruleset['v'] = function(input,api)
+ruleset.defaults['v'] = {}
+ruleset['v'] = function(input,api,worker)
   return input 
 end
 
-ruleset['w'] = function(input,api)
+ruleset.defaults['w'] = {}
+ruleset['w'] = function(input,api,worker)
   return input 
 end
 
-ruleset['x'] = function(input,api)
+ruleset.defaults['x'] = {}
+ruleset['x'] = function(input,api,worker)
   return input 
 end
 
-ruleset['y'] = function(input,api)
+ruleset.defaults['y'] = {}
+ruleset['y'] = function(input,api,worker)
   return input 
 end
 
-ruleset['z'] = function(input,api)
+ruleset.defaults['z'] = {}
+ruleset['z'] = function(input,api,worker)
   return input 
 end
 
-ruleset['A'] = function(input,api)
+ruleset.defaults['A'] = {}
+ruleset['A'] = function(input,api,worker)
   return input 
 end
 
-ruleset['B'] = function(input,api)
+ruleset.defaults['B'] = {}
+ruleset['B'] = function(input,api,worker)
   return input 
 end
 
-ruleset['C'] = function(input,api)
+ruleset.defaults['C'] = {}
+ruleset['C'] = function(input,api,worker)
   return input 
 end
 
-ruleset['D'] = function(input,api)
+ruleset.defaults['D'] = {}
+ruleset['D'] = function(input,api,worker)
   return input 
 end
 
-ruleset['E'] = function(input,api)
+ruleset.defaults['E'] = {}
+ruleset['E'] = function(input,api,worker)
   return input 
 end
 
-ruleset['F'] = function(input,api)
+ruleset.defaults['F'] = {}
+ruleset['F'] = function(input,api,worker)
   return input 
 end
 
-ruleset['G'] = function(input,api)
+ruleset.defaults['G'] = {}
+ruleset['G'] = function(input,api,worker)
   return input 
 end
 
-ruleset['H'] = function(input,api)
+ruleset.defaults['H'] = {}
+ruleset['H'] = function(input,api,worker)
   return input 
 end
 
-ruleset['I'] = function(input,api)
+ruleset.defaults['I'] = {}
+ruleset['I'] = function(input,api,worker)
   return input 
 end
 
-ruleset['J'] = function(input,api)
+ruleset.defaults['J'] = {}
+ruleset['J'] = function(input,api,worker)
   return input 
 end
 
-ruleset['K'] = function(input,api)
+ruleset.defaults['K'] = {}
+ruleset['K'] = function(input,api,worker)
   return input 
 end
 
-ruleset['L'] = function(input,api)
+ruleset.defaults['L'] = {}
+ruleset['L'] = function(input,api,worker)
   return input 
 end
 
-ruleset['M'] = function(input,api)
+ruleset.defaults['M'] = {}
+ruleset['M'] = function(input,api,worker)
   return input 
 end
 
-ruleset['N'] = function(input,api)
+ruleset.defaults['N'] = {}
+ruleset['N'] = function(input,api,worker)
   return input 
 end
 
-ruleset['O'] = function(input,api)
+ruleset.defaults['O'] = {}
+ruleset['O'] = function(input,api,worker)
   return input 
 end
 
-ruleset['P'] = function(input,api)
+ruleset.defaults['P'] = {}
+ruleset['P'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Q'] = function(input,api)
+ruleset.defaults['Q'] = {}
+ruleset['Q'] = function(input,api,worker)
   return input 
 end
 
-ruleset['R'] = function(input,api)
+ruleset.defaults['R'] = {}
+ruleset['R'] = function(input,api,worker)
   return input 
 end
 
-ruleset['S'] = function(input,api)
+ruleset.defaults['S'] = {}
+ruleset['S'] = function(input,api,worker)
   return input 
 end
 
-ruleset['T'] = function(input,api)
+ruleset.defaults['T'] = {}
+ruleset['T'] = function(input,api,worker)
   return input 
 end
 
-ruleset['U'] = function(input,api)
+ruleset.defaults['U'] = {}
+ruleset['U'] = function(input,api,worker)
   return input 
 end
 
-ruleset['V'] = function(input,api)
+ruleset.defaults['V'] = {}
+ruleset['V'] = function(input,api,worker)
   return input 
 end
 
-ruleset['W'] = function(input,api)
+ruleset.defaults['W'] = {}
+ruleset['W'] = function(input,api,worker)
   return input 
 end
 
-ruleset['X'] = function(input,api)
+ruleset.defaults['X'] = {}
+ruleset['X'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Y'] = function(input,api)
+ruleset.defaults['Y'] = {}
+ruleset['Y'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Z'] = function(input,api)
+ruleset.defaults['Z'] = {}
+ruleset['Z'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ç'] = function(input,api)
+ruleset.defaults['ç'] = {}
+ruleset['ç'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ç'] = function(input,api)
+ruleset.defaults['Ç'] = {}
+ruleset['Ç'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ã'] = function(input,api)
+ruleset.defaults['ã'] = {}
+ruleset['ã'] = function(input,api,worker)
   return input 
 end
 
-ruleset['â'] = function(input,api)
+ruleset.defaults['â'] = {}
+ruleset['â'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Â'] = function(input,api)
+ruleset.defaults['Â'] = {}
+ruleset['Â'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ã'] = function(input,api)
+ruleset.defaults['Ã'] = {}
+ruleset['Ã'] = function(input,api,worker)
   return input 
 end
 
-ruleset['á'] = function(input,api)
+ruleset.defaults['á'] = {}
+ruleset['á'] = function(input,api,worker)
   return input 
 end
 
-ruleset['à'] = function(input,api)
+ruleset.defaults['à'] = {}
+ruleset['à'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Á'] = function(input,api)
+ruleset.defaults['Á'] = {}
+ruleset['Á'] = function(input,api,worker)
   return input 
 end
 
-ruleset['À'] = function(input,api)
+ruleset.defaults['À'] = {}
+ruleset['À'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ä'] = function(input,api)
+ruleset.defaults['ä'] = {}
+ruleset['ä'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ä'] = function(input,api)
+ruleset.defaults['Ä'] = {}
+ruleset['Ä'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ê'] = function(input,api)
+ruleset.defaults['ê'] = {}
+ruleset['ê'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ê'] = function(input,api)
+ruleset.defaults['Ê'] = {}
+ruleset['Ê'] = function(input,api,worker)
   return input 
 end
 
-ruleset['é'] = function(input,api)
+ruleset.defaults['é'] = {}
+ruleset['é'] = function(input,api,worker)
   return input 
 end
 
-ruleset['É'] = function(input,api)
+ruleset.defaults['É'] = {}
+ruleset['É'] = function(input,api,worker)
   return input 
 end
 
-ruleset['è'] = function(input,api)
+ruleset.defaults['è'] = {}
+ruleset['è'] = function(input,api,worker)
   return input 
 end
 
-ruleset['È'] = function(input,api)
+ruleset.defaults['È'] = {}
+ruleset['È'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ë'] = function(input,api)
+ruleset.defaults['ë'] = {}
+ruleset['ë'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ë'] = function(input,api)
+ruleset.defaults['Ë'] = {}
+ruleset['Ë'] = function(input,api,worker)
   return input 
 end
 
-ruleset['î'] = function(input,api)
+ruleset.defaults['î'] = {}
+ruleset['î'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Î'] = function(input,api)
+ruleset.defaults['Î'] = {}
+ruleset['Î'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ï'] = function(input,api)
+ruleset.defaults['ï'] = {}
+ruleset['ï'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ï'] = function(input,api)
+ruleset.defaults['Ï'] = {}
+ruleset['Ï'] = function(input,api,worker)
   return input 
 end
 
-ruleset['í'] = function(input,api)
+ruleset.defaults['í'] = {}
+ruleset['í'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Í'] = function(input,api)
+ruleset.defaults['Í'] = {}
+ruleset['Í'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ì'] = function(input,api)
+ruleset.defaults['ì'] = {}
+ruleset['ì'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ì'] = function(input,api)
+ruleset.defaults['Ì'] = {}
+ruleset['Ì'] = function(input,api,worker)
   return input 
 end
 
-ruleset['õ'] = function(input,api)
+ruleset.defaults['õ'] = {}
+ruleset['õ'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Õ'] = function(input,api)
+ruleset.defaults['Õ'] = {}
+ruleset['Õ'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ô'] = function(input,api)
+ruleset.defaults['ô'] = {}
+ruleset['ô'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ô'] = function(input,api)
+ruleset.defaults['Ô'] = {}
+ruleset['Ô'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ó'] = function(input,api)
+ruleset.defaults['ó'] = {}
+ruleset['ó'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ó'] = function(input,api)
+ruleset.defaults['Ó'] = {}
+ruleset['Ó'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ò'] = function(input,api)
+ruleset.defaults['ò'] = {}
+ruleset['ò'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ò'] = function(input,api)
+ruleset.defaults['Ò'] = {}
+ruleset['Ò'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ö'] = function(input,api)
+ruleset.defaults['ö'] = {}
+ruleset['ö'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ö'] = function(input,api)
+ruleset.defaults['Ö'] = {}
+ruleset['Ö'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ú'] = function(input,api)
+ruleset.defaults['ú'] = {}
+ruleset['ú'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ú'] = function(input,api)
+ruleset.defaults['Ú'] = {}
+ruleset['Ú'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ù'] = function(input,api)
+ruleset.defaults['ù'] = {}
+ruleset['ù'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ù'] = function(input,api)
+ruleset.defaults['Ù'] = {}
+ruleset['Ù'] = function(input,api,worker)
   return input 
 end
 
-ruleset['û'] = function(input,api)
+ruleset.defaults['û'] = {}
+ruleset['û'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Û'] = function(input,api)
+ruleset.defaults['Û'] = {}
+ruleset['Û'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ü'] = function(input,api)
+ruleset.defaults['ü'] = {}
+ruleset['ü'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ü'] = function(input,api)
+ruleset.defaults['Ü'] = {}
+ruleset['Ü'] = function(input,api,worker)
   return input 
 end
 
-ruleset['ñ'] = function(input,api)
+ruleset.defaults['ñ'] = {}
+ruleset['ñ'] = function(input,api,worker)
   return input 
 end
 
-ruleset['Ñ'] = function(input,api)
+ruleset.defaults['Ñ'] = {}
+ruleset['Ñ'] = function(input,api,worker)
   return input 
 end
 

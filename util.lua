@@ -707,4 +707,22 @@ util.len = function(obj)
     return count
 end
 
+util.turn = function(bool)
+    if bool == false then
+        return true
+    else
+        return false
+    end
+end
+
+util.unix = function(ifUnix, ifWindows)-- returts ifunix if unix, if windows return ifWindows, if no args return true if is unix
+    ifUnix = ifUnix or true
+    ifWindows = ifWindows or false
+    if package.config:sub(1,1) == '\\' then
+        return ifWindows
+      else
+        return ifUnix
+      end
+end
+
 return util

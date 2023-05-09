@@ -112,6 +112,7 @@ api.worker =
         if world.map[position.x][position.y] == '.' then 
            table.insert(world.worker,api.new.worker(world.ruleset,id,defaults or {world}))
            world.map[position.x][position.y] = world.worker[#world.worker]
+           return world.map[position.x][position.y]
         end
     end,
     work = function(world, worker)

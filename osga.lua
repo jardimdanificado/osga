@@ -29,32 +29,36 @@ cfg.size =
   w = 16,
   h = 16
 }
-cfg.name = "main"
+cfg.name = "osga"
+cfg.redraw = false
 return cfg]]
 
 local util = require("util")
 local api = require("api")
 
 local install = function()
+  os.execute(util.unix("rm -rf","rd /s /q") .. " data")
+  os.execute("mkdir data")
   util.file.save.text("./data/config.lua",cfgtxt)
-  local text = "local ruleset = {}\n\n"
+  local text = "local ruleset = {}\nruleset.defaults = {}\n\n"
   for k,v in pairs(util.char) do
-    text = text .. "ruleset['" .. v .. "'] = function(input,api)\n  return input \nend\n\n"
+    text = text .. "ruleset.defaults['" .. v .. "']" .. " = {}\n"
+    text = text .. "ruleset['" .. v .. "'] = function(input,api,worker)\n  return input \nend\n\n"
   end
   util.file.save.text("./data/ruleset.lua", text)
   util.file.save.charMap("./data/map.txt",util.matrix.new(16,16,'.'))
 end
 
 local function frame(world)
+  world.session.time = world.session.time + 1
   for i = 1, #world.signal do
     if(world.signal[i].position ~= nil) then
-      if(world.time % world.signal[i].speed == 0) then
+      if(world.session.time % world.signal[i].speed == 0) then
         api.signal.move(world,world.signal[i])
       end
     else
       world.signal[i] = nil
     end
-    world.time = world.time + 1
   end
 end
 
@@ -71,12 +75,37 @@ local function print_map(world)
     end
     str = str .. '\n'
   end
-  os.execute(world.session.clear)
+  os.execute(util.unix('clear', 'cls'))
   io.write(str)
 end
 
+local function movecursor(x,y)
+  return io.write("\27[".. x .. ";".. y .."H")
+end
+
+local function commander(world)
+  local cmd = io.read()
+  if cmd == "exit" then
+    world.config.exit = true
+  end
+end
+
+local function makemap(world,charmap)
+  local result = {}
+  for x, vx in ipairs(charmap) do
+    result[x] = {}
+    for y, vy in ipairs(vx) do
+      if vy ~= '.' and vy ~= '#' then
+        result[x][y] = api.worker.spawn(world,{x=x,y=y},vy,world.rulemap.defaults[vy])
+      else
+        result[x][y] = vy
+      end
+    end
+  end
+end
+
 local function main()
-  if util.file.exist("./data/config.lua") == false then
+  if util.file.exist("./data") == false or arg[1] == 'setup' or arg[1] == 'reset' or arg[1] == 'install' then
     install()
   end
 
@@ -84,28 +113,34 @@ local function main()
   {
     config = require("data.config"),
     ruleset = require("data.ruleset"),
-    session = {},
     signal={},
     worker = {},
-    speed = 10,
-    time = 1
+    speed = 1,
+    session = 
+    {
+      time = 1,
+      exit = false,
+      frame = true,
+      redraw = true,
+      editmode = false,
+      cposi = {x=1,y=1}
+    }
   }
   world.map = util.matrix.new(world.config.size.w,world.config.size.h,'.')
   world.map.char = util.file.load.charMap("./data/map.txt")
   world.map.signal = util.matrix.new(world.config.size.w,world.config.size.h,'.')
-
-  if package.config:sub(1,1) == '\\' then
-    print("Running on Windows")
-    world.session.clear = 'cls'
-  else
-      world.session.clear = 'clear'
-      print("Running on Unix-like system")
-  end
-  while true do
+  world.session.editmode = true
+  while not world.config.exit do
     frame(world)
     print_map(world)
+    
+    if world.session.editmode then
+      movecursor(world.session.cposi.x,world.session.cposi.y)
+      world.map[world.session.cposi.x][world.session.cposi.y] = io.stdin:read(1)
+      world.session.editmode = false
+    end
+    commander(world,world.session.cposi)
   end
 end
 
-install()
 main()
