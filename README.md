@@ -11,9 +11,6 @@ signals:
 
 special operators: -- these operators are hardcoded
   ! = outputer
-  # = blocker
-  < = left spawner
-  > = right spawner
   
 vanilla operators: -- these works exactly like any other ruleset operator
   ? = redirects a signal
