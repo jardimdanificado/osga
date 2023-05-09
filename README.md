@@ -1,7 +1,4 @@
 --[[
-
-
-
 speed = 10 --iterations, bigger the speed slower it will be
 . = empty space
 a-Z = workers
@@ -12,15 +9,21 @@ signals:
   $ = setup, only data, this override the worker defaults
   @ = transmission, this do not override the worker defaults, but run a single time the data in the worker
 
-signal operators: -- operators are pre-built logic controlers 
+special operators: -- these operators are hardcoded
   ! = outputer
   # = blocker
+  < = left spawner
+  > = right spawner
   
-special(need outputs): -- special are made with api functions
+vanilla operators: -- these works exactly like any other ruleset operator
   ? = redirects a signal
   & = queue
   + = send the signal in the 3 other directions
-  < = slow down by 1
-  > = speed up by 1
+
+console commands: 
+  add/new object width height
+  edit width height
+  rm width height
+  exit
 --]]
 

@@ -129,7 +129,7 @@ api.worker =
             elseif sig.setup ~= nil then
                 worker.defaults = sig.setup
             else
-                local result = worker.func(util.array.unpack(worker.defaults),api)
+                local result = worker.func(util.array.unpack(worker.defaults), {world = world ,signal=sig, worker = worker, api = api})
                 if result ~= nil then
                     local direction = api.worker.findOutput(world,worker)
                     if direction ~= nil then
