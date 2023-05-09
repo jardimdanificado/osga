@@ -48,8 +48,6 @@ api.signal =
                 signal.position = sum
                 world.map.signal[sum.x][sum.y] = signal
                 world.map.signal[signal.position.x][signal.position.y] = '.'
-            elseif world.map[sum.x][sum.y] == '#' then
-                signal.position = nil
             elseif 
                 (world.map.signal[sum.x][sum.y].setup ~= nil and world.map.signal[signal.position.x][signal.position.y].data == nil) or 
                 (world.map.signal[signal.position.x][signal.position.y].setup ~= nil and world.map.signal[sum.x][sum.y].data == nil)
