@@ -2,25 +2,16 @@ local util = {}
 
 util.char =
 {
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
     'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
     'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
-    'Y', 'Z', '!', '?', "%", "@", "#", ">", "<", 
-    [[$]], [[¨]], [[&]], [[*]], [[_]], [[-]], [[,]], 
-    [[.]], [[+]], [[/]], [[;]], [[:]], [[}]], [[{]],
-    [[=]], [[§]], [[|]], [[~]], [[`]], [[´]], [[^]],
-    [[ ]], [[ª]], [[º]], [[[]], "]", [[(]], [[)]], 
-    [[¬]], [[°]], [[ç]], [[Ç]], [[ã]], [[â]], [[Â]], 
-    [[Ã]], [[á]], [[à]], [[Á]], [[À]], [[ä]], [[Ä]], 
-    [[ê]], [[Ê]], [[é]], [[É]], [[è]], [[È]], [[ë]], 
-    [[Ë]], [[î]], [[Î]], [[ï]], [[Ï]], [[í]], [[Í]], 
-    [[ì]], [[Ì]], [[õ]], [[Õ]], [[ô]], [[Ô]], [[ó]],
-    [[Ó]], [[ò]], [[Ò]], [[ö]], [[Ö]], [[ú]], [[Ú]],
-    [[ù]], [[Ù]], [[û]], [[Û]], [[ü]], [[Ü]], [[ñ]],
-    [[Ñ]]
+    'Y', 'Z', 'ç', 'Ç', 'ã', 'â', 'Â', 'Ã', 'á', 'à', 
+    'Á', 'À', 'ä', 'Ä', 'ê', 'Ê', 'é', 'É', 'è', 'È', 
+    'ë', 'Ë', 'î', 'Î', 'ï', 'Ï', 'í', 'Í', 'ì', 'Ì', 
+    'õ', 'Õ', 'ô', 'Ô', 'ó', 'Ó', 'ò', 'Ò', 'ö', 'Ö', 
+    'ú', 'Ú', 'ù', 'Ù', 'û', 'Û', 'ü', 'Ü', 'ñ', 'Ñ'
 }
 util.math = {}
 util.string = {}
@@ -423,7 +414,6 @@ end
 
 util.matrix.new = function(sizex,sizey,sizez,value)
     local result = {}
-    value = value or 0
     for x = 1, sizex do
         result[x] = {}
         for y = 1, sizey do
@@ -532,7 +522,7 @@ util.func.time = function(func,...)
     return result,tclock
 end
 
-util.file.save.map = function(filename,matrix)
+util.file.save.intMap = function(filename,matrix)
     local file = io.open(filename, "w")
     local max = 0
     for i=1,#matrix do
@@ -554,6 +544,31 @@ util.file.save.map = function(filename,matrix)
         file:write("\n")
     end
     file:close()
+end
+
+util.file.save.charMap = function(filename,matrix)
+    local file = io.open(filename, "w")
+    for x = 1, #matrix, 1 do
+        for y = 1, #matrix[x], 1 do
+            file:write(matrix[x][y])
+        end
+        file:write("\n")
+    end
+    file:close()
+end
+
+util.file.load.charMap = function(filename)
+    local file = io.open(filename, "r")
+    local matrix = {}
+    for line in file:lines() do
+        local row = {}
+        for i = 1, #line do
+            row[i] = string.sub(line, i, i)
+        end
+        table.insert(matrix, row)
+    end
+    file:close()
+    return matrix
 end
 
 util.file.load.map = function(filepath)
