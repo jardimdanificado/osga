@@ -2,8 +2,8 @@ local ruleset = {}
 ruleset.defaults = {}
 
 ruleset.defaults['a'] = {}
-ruleset['a'] = function(input,advanced)
-  advanced.world.session.status = 'teste'
+ruleset['a'] = function(input,adv)
+  adv.api.signal.emit(adv.world,adv.worker.position,{x=0,y=1},true,{4})
   return input 
 end
 

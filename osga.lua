@@ -44,7 +44,16 @@ local function print_map(world)
   local str = ''
   for x = 1, #world.map, 1 do
     for y = 1, #world.map[x], 1 do
-        if type(world.map[x][y]) == 'table' then
+        if world.map.signal[x][y] ~= '.' then
+          local sig = world.map.signal[x][y]
+          if(sig.power == nil) then
+            str = str .. '$'
+          elseif sig.data == nil then
+            str = str .. '*'
+          else
+            str = str .. '@'
+          end
+        elseif type(world.map[x][y]) == 'table' then
           str = str .. world.map[x][y].id
         else
           str = str .. world.map[x][y]

@@ -12,7 +12,8 @@ api.new =
             speed = speed or 10,
             direction = direction or {x=1,y=0},
             data = data,
-            position = position
+            position = position,
+            power = power
         }
     end,
     worker = function(ruleset,id,position,timer,defaults)
@@ -30,15 +31,12 @@ api.signal =
 {
     move = function(world,signal)
         local sum = {x=signal.position.x+signal.direction.x,y=signal.position.y+signal.direction.y}
-        if world.map.signal[sum.x][sum.y] ~= nil then 
-            if world.map.signal[sum.x][sum.y] == '.' then
-                signal.position = sum
-                world.map.signal[sum.x][sum.y] = signal
-                world.map.signal[signal.position.x][signal.position.y] = '.'
-            end
-        else
-            signal = nil
-            return
+        world.session.status = sum.x
+        if world.map.signal[sum.x][sum.y] == '.' then
+            world.map.signal[signal.position.x][signal.position.y] = '.'
+            signal.position.x,signal.position.y = sum.x,sum.y
+            world.map.signal[sum.x][sum.y] = signal
+            
         end
     end,
     emit = function(world,position,direction, power,data)
