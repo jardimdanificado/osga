@@ -7,8 +7,9 @@ ruleset['a'] = function(input,adv)
   return input 
 end
 
-ruleset.defaults['b'] = {}
-ruleset['b'] = function(input,advanced)
+ruleset.defaults['b'] = {''}
+ruleset['b'] = function(input,adv)
+  adv.api.signal.emit(adv.world,adv.worker.position,{x=1,y=0},nil,input)
   return input 
 end
 

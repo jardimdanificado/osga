@@ -60,6 +60,7 @@ api.worker =
     work = function(world, worker)
         local sig = world.map.signal[worker.position.x][worker.position.y]
         local advanced = {world = world ,signal=sig, worker = worker, api = api}
+        world.session.status = sig
         if world.map.signal[worker.position.x][worker.position.y] ~= '.' and worker.timer == 0 then
             if sig.data ~= nil then
                 if sig.power ~= nil then
@@ -70,8 +71,11 @@ api.worker =
             elseif(sig.power ~= nil) then
                 worker.func(util.array.unpack(worker.defaults), advanced)
             end
+            world.map.signal[worker.position.x][worker.position.y] = '.'
         elseif(world.session.time % worker.timer == 0) then
+            world.map.signal[worker.position.x][worker.position.y] = '.'
             worker.func(util.array.unpack(worker.defaults), {world = world ,signal=sig, worker = worker, api = api})
+            
         end
     end
 }

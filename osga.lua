@@ -78,7 +78,7 @@ local function commander(world)
   elseif util.string.includes(cmd,"new") or util.string.includes(cmd,"add") then
     local split = util.string.split(cmd,' ')
     if #split >= 4 then
-      api.worker.spawn(world,{x=tonumber(split[3]),y=tonumber(split[4])},split[2],2)
+      api.worker.spawn(world,{x=tonumber(split[3]),y=tonumber(split[4])},split[2],split[5] or 2)
     end
   elseif util.string.includes(cmd,"rm") then
     local split = util.string.split(cmd,' ')
