@@ -1,19 +1,23 @@
---[[
+``
 speed = 10 --iterations, bigger the speed slower it will be
 . = empty space
 a-Z = workers
 all workers must have their defaults
 
-signals:
-  * = power, always true, when it touch a worker run it with the defaults 
-  $ = setup, only data, this override the worker defaults
-  @ = transmission, this do not override the worker defaults, but run a single time the data in the worker
+signal: 
+* = a power signal, contains just power
+$ = a setup signal, contains just data
+@ = a transmission signal, contains data and power
+{
+  speed = number,
+  direction = {x=number(-1 to 1),y=number(-1 to 1)},
+  data = any or nil,
+  power = boolean or nil,
+  position = {x=number,y=number}
+}
 
-special operators: -- these operators are hardcoded
-  ! = outputer
-  
 vanilla operators: -- these works exactly like any other ruleset operator
-  ? = redirects a signal
+  <,>,^,V = redirectors
   & = queue
   + = send the signal in the 3 other directions
 
@@ -22,5 +26,4 @@ console commands:
   edit width height
   rm width height
   exit
---]]
-
+``

@@ -3,6 +3,7 @@ ruleset.defaults = {}
 
 ruleset.defaults['a'] = {}
 ruleset['a'] = function(input,advanced)
+  advanced.world.session.status = 'teste'
   return input 
 end
 

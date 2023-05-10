@@ -23,16 +23,7 @@ util.file.save = {}
 util.file.load = {}
 util.func = {}
 
-util.array._unpack = unpack or table.unpack
-util.array.unpack = function(obj)
-    local key_list = {}
-    for k in pairs(obj) do
-        if string.sub(k, 1, 1) ~= "_" then
-            table.insert(key_list, obj[k])
-        end
-    end
-    return util.array._unpack(key_list)
-end
+util.array.unpack = unpack or table.unpack
 
 util.math.vec2 = function(x, y)
     return {x=x, y=y}

@@ -29,6 +29,15 @@ local function frame(world)
       world.signal[i] = nil
     end
   end
+
+  for i = 1, #world.worker do
+    if(world.worker[i].position ~= nil) then
+        api.worker.work(world,world.worker[i])
+    else
+      world.worker[i] = nil
+    end
+  end
+  return world
 end
 
 local function print_map(world)
@@ -60,7 +69,7 @@ local function commander(world)
   elseif util.string.includes(cmd,"new") or util.string.includes(cmd,"add") then
     local split = util.string.split(cmd,' ')
     if #split >= 4 then
-      api.worker.spawn(world,{x=tonumber(split[3]),y=tonumber(split[4])},split[2])
+      api.worker.spawn(world,{x=tonumber(split[3]),y=tonumber(split[4])},split[2],2)
     end
   elseif util.string.includes(cmd,"rm") then
     local split = util.string.split(cmd,' ')
@@ -81,7 +90,7 @@ local function makemap(world,charmap)
     result[x] = {}
     for y, vy in ipairs(vx) do
       if vy ~= '.' and vy ~= '#' then
-        result[x][y] = api.worker.spawn(world,{x=x,y=y},vy,world.rulemap.defaults[vy])
+        result[x][y] = api.worker.spawn(world,{x=x,y=y},vy,2)
       else
         result[x][y] = vy
       end
@@ -92,7 +101,7 @@ end
 
 local function main()
   local location = arg[2] or 'data'
-  if util.file.exist(location) == false then
+  if util.file.exist(location .. "/ruleset.lua") == false or util.file.exist(location .. "/map.txt") == false then
     location = install(arg[2],arg[3],arg[4])
   end
 
@@ -109,7 +118,8 @@ local function main()
       frame = true,
       redraw = true,
       editmode = false,
-      cposi = {x=1,y=1}
+      cposi = {x=1,y=1},
+      status = 'idle'
     }
   }
   local charmap = util.file.load.charMap(location .. "/map.txt")
@@ -117,12 +127,14 @@ local function main()
   world.map.char = charmap
   world.map.signal = util.matrix.new(#charmap,#charmap[1],'.')
   while not world.session.exit do
-    frame(world)
     print_map(world)
-    
+    print(world.session.time)
+    print(world.session.status)
+    frame(world)
     if world.session.editmode then
       movecursor(world.session.cposi.x,world.session.cposi.y)
-      world.map[world.session.cposi.x][world.session.cposi.y] = io.stdin:read(1)
+      local chin = io.stdin:read(1)
+      world.map[world.session.cposi.x][world.session.cposi.y] = api.worker.spawn(world, world.session.cposi, chin, 2)
       world.session.editmode = false
     end
     commander(world,world.session.cposi)
