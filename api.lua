@@ -106,15 +106,15 @@ api.worker =
             end
         end
     end,
-    spawn = function(world, position, id, defaults)
+    spawn = function(world, position, id, defaults, timer)
         if world.map[position.x][position.y] == '.' then 
-           table.insert(world.worker,api.new.worker(world.ruleset,id,defaults or {world}))
+           table.insert(world.worker,api.new.worker(world.ruleset,id,defaults,timer))
            world.map[position.x][position.y] = world.worker[#world.worker]
            return world.map[position.x][position.y]
         end
     end,
     work = function(world, worker)
-        if world.map.signal[worker.position.x][worker.position.y] ~= '.' then
+        if world.map.signal[worker.position.x][worker.position.y] ~= '.' and worker.timer == 0 then
             local sig = world.map.signal[worker.position.x][worker.position.y]
             if sig.data ~= nil then
                 local result = worker.func(util.array.unpack(sig.data),api)
@@ -135,6 +135,14 @@ api.worker =
                     end
                 end
             end
+        elseif(world.time % worker.timer == 0) then
+            local result = worker.func(util.array.unpack(worker.defaults), {world = world ,signal=sig, worker = worker, api = api})
+                if result ~= nil then
+                    local direction = api.worker.findOutput(world,worker)
+                    if direction ~= nil then
+                        api.signal.transmit(world,result,util.math.vec2add(worker.position,direction),direction,true)
+                    end
+                end
         end
     end
 }
