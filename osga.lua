@@ -72,7 +72,7 @@ end
 local function commander(world)
   local cmd = io.read()
   if util.string.includes(cmd,"edit") then
-    local split = util.string.split(cmd,' ')    
+    local split = util.string.split(cmd,' ')
     world.session.cposi = {x=tonumber(split[2]),y=tonumber(split[3])}
     world.session.editmode = true
   elseif util.string.includes(cmd,"new") or util.string.includes(cmd,"add") then
