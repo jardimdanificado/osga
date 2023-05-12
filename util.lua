@@ -187,7 +187,7 @@ end
 
 util.file.load.text = function(path)
     local file = io.open(path, "r")
-    local contents = file("*all")
+    local contents = file:read("*all")
     file:close()
     return contents
 end
@@ -552,7 +552,12 @@ util.file.save.charMap = function(filename,matrix)
     local file = io.open(filename, "w")
     for x = 1, #matrix, 1 do
         for y = 1, #matrix[x], 1 do
-            file:write(matrix[x][y])
+            if type(matrix[x][y]) == 'table' then
+                file:write(matrix[x][y].id)
+            else
+                file:write(matrix[x][y])
+            end
+            
         end
         file:write("\n")
     end

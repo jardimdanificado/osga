@@ -17,7 +17,6 @@ $ = a setup signal, contains just data
 }
 
 vanilla operators: -- these works exactly like any other ruleset operator
-  <,>,^,V = redirectors
   & = queue
   + = send the signal in the 3 other directions
 

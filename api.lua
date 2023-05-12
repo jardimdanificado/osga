@@ -56,8 +56,8 @@ api.signal =
             signal.position = {x=signal.position.x+signal.direction.x,y=signal.position.y+signal.direction.y}
         end
     end,
-    emit = function(world,position,direction, power,data)
-        table.insert(world.signal,api.new.signal(position,direction,power,data,world.speed/2))
+    emit = function(world,position,direction,power,data,speed)
+        table.insert(world.signal,api.new.signal(position,direction,power,data,speed))
     end,
 }
 

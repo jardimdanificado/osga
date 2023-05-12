@@ -7,8 +7,9 @@ local install = function(dataname,x,y)
   y = y or 16
   os.execute(util.unix("rm -rf","rd /s /q") .. " " .. dataname)
   os.execute("mkdir " .. dataname)
-  local text = "local ruleset = {}\nruleset.defaults = {}\nruleset.auto = {}\n\n"
+  local text = "local ruleset = {}\nruleset.defaults = {}\nruleset.auto = {}\nruleset.speed = {}\n\n"
   for k,v in pairs(util.char) do
+    text = text .. "ruleset.speed['" .. v .. "']" .. " = 2\n"
     text = text .. "ruleset.auto['" .. v .. "']" .. " = false\n"
     text = text .. "ruleset.defaults['" .. v .. "']" .. " = {}\n"
     text = text .. "ruleset['" .. v .. "'] = function(input,advanced)\n  return input \nend\n\n"
@@ -32,13 +33,11 @@ local function frame(world)
     end
   end
   for i,v in ipairs(world.worker) do
-    if(world.session.time % world.speed == 0) then
-      if v.auto == true then
-        if(v.position ~= nil) then
-          v.func(util.array.unpack(v.defaults),{world = world,worker = v, api = api})
-        else
-          v = nil
-        end
+    if v.auto == true then
+      if(v.position ~= nil) then
+        v.func(util.array.unpack(v.defaults),{world = world,worker = v, api = api})
+      else
+        v = nil
       end
     end
   end
@@ -79,23 +78,29 @@ local function movecursor(x,y)
   return io.write("\27[".. x .. ";".. y .."H")
 end
 
-local function commander(world)
-  local fullcmd = io.read()
-  
+local function commander(world,command)
+  local fullcmd = command or io.read()
+  while util.string.includes(fullcmd,'\n') do
+    fullcmd = util.string.replace(fullcmd,'\n',';')
+  end
   while util.string.includes(fullcmd,'  ') do
     fullcmd = util.string.replace(fullcmd,'  ',' ')
   end
   fullcmd = util.string.replace(fullcmd,'; ',';')
   fullcmd = util.string.replace(fullcmd,' ;',';')
-
   local splited = util.string.split(fullcmd,';')
+  for i, v in ipairs(splited) do
+    if util.string.includes(v,'--') then
+      splited[i] = ''
+    end
+  end
   for i,cmd in ipairs(splited) do
     local split = util.string.split(cmd," ")
     cmd = string.gsub(cmd, "^%s*(.-)%s*$", "%1")
     if util.string.includes(cmd,"edit") then
       world.session.cposi = {x=tonumber(split[2]),y=tonumber(split[3])}
       world.session.editmode = true
-    elseif util.string.includes(cmd,"new") or util.string.includes(cmd,"add") then
+    elseif util.string.includes(cmd,"add") then
       if #split >= 4 then
         api.worker.spawn(world,{x=tonumber(split[3]),y=tonumber(split[4])},split[2],split[5] or 2)
       end
@@ -109,23 +114,26 @@ local function commander(world)
       world.session.exit = true
     elseif util.string.includes(cmd,'skip') then
       world.session.toskip = tonumber(split[2])
+    elseif util.string.includes(cmd,'run') then
+      local script = util.file.load.text(split[2])
+      commander(world,script)
+    elseif cmd =='save' then
+      util.file.save.charMap('data/map.txt',world.map)
     end
   end
 end
 
 local function makemap(world,charmap)
-  local result = {}
   for x, vx in ipairs(charmap) do
-    result[x] = {}
     for y, vy in ipairs(vx) do
-      if vy ~= '.' and vy ~= '#' then
-        result[x][y] = api.worker.spawn(world,{x=x,y=y},vy,2)
+      if vy ~= '.' then
+        charmap[x][y] = api.worker.spawn(world,{x=x,y=y},vy,2)
       else
-        result[x][y] = vy
+        charmap[x][y] = '.'
       end
     end
   end
-  return result
+  return charmap
 end
 
 local function main()
@@ -154,6 +162,7 @@ local function main()
     }
   }
   local charmap = util.file.load.charMap(location .. "/map.txt")
+  world.map = util.matrix.new(#charmap,#charmap[1],'.')
   world.map = makemap(world,charmap)
   --world.map.char = charmap
   --world.map.signal = util.matrix.new(#charmap,#charmap[1],'.')
@@ -172,7 +181,7 @@ local function main()
     end
 
     if world.session.toskip == 0 then
-      commander(world,world.session.cposi)
+      commander(world)
     else
       world.session.toskip = world.session.toskip - 1
     end
