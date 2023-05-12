@@ -117,8 +117,13 @@ local function commander(world,command)
     elseif util.string.includes(cmd,'run') then
       local script = util.file.load.text(split[2])
       commander(world,script)
-    elseif cmd =='save' then
-      util.file.save.charMap('data/map.txt',world.map)
+    elseif util.string.includes(cmd,'save') then
+      if split[2] ~= nil then
+        util.file.save.charMap(split[2],world.map)
+      else
+        util.file.save.charMap('data/map.txt',world.map)
+      end
+      
     end
   end
 end
