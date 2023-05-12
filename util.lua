@@ -421,6 +421,17 @@ util.matrix.new = function(sizex,sizey,sizez,value)
     return result
 end
 
+util.matrix.tostring = function(matrix)
+    local str = ''
+    for x = 1, #matrix, 1 do
+        for y = 1, #matrix[x], 1 do
+            str = str .. matrix[x][y]
+        end
+        str = str .. '\n'
+    end
+    return str
+end
+
 util.matrix.minmax = function(matrix)
     local min_val = matrix[1][1]
     local max_val = matrix[1][1]

@@ -20,6 +20,7 @@ api.new =
         return {
             id = id,
             func = ruleset[id],
+            auto = ruleset.auto[id],
             defaults = defaults,
             position = position,
             timer = timer
@@ -29,21 +30,34 @@ api.new =
 
 api.signal = 
 {
+    work = function(world,signal)
+        if signal.position == nil or world.map[signal.position.x][signal.position.y] == '.' then
+            return
+        end
+        local worker = world.map[signal.position.x][signal.position.y]
+        local advanced = {world = world ,signal=signal, worker = worker, api = api}
+        if signal.data ~= nil then
+            if signal.power ~= nil then
+                worker.func(util.array.unpack(signal.data),advanced)
+            else
+                worker.defaults = signal.data
+            end
+            signal.position = nil
+        elseif(signal.power ~= nil) then
+            worker.func(util.array.unpack(worker.defaults), advanced)
+            signal.position = nil
+        end
+    end,
     move = function(world,signal)
         local sum = {x=signal.position.x+signal.direction.x,y=signal.position.y+signal.direction.y}
-        world.session.status = sum.x
-        if world.map.signal[sum.x][sum.y] == '.' then
-            world.map.signal[signal.position.x][signal.position.y] = '.'
-            signal.position.x,signal.position.y = sum.x,sum.y
-            world.map.signal[sum.x][sum.y] = signal
-            
+        if sum.x < 1 or sum.x > #world.map or sum.y < 1 or sum.y > #world.map[1] then
+            signal.position = nil
+        else
+            signal.position = {x=signal.position.x+signal.direction.x,y=signal.position.y+signal.direction.y}
         end
     end,
     emit = function(world,position,direction, power,data)
-        if world.map.signal[position.x][position.y] == '.' then
-            table.insert(world.signal,api.new.signal(position,direction,power,data,world.speed))
-            world.map.signal[position.x][position.y] = world.signal[#world.signal]
-        end
+        table.insert(world.signal,api.new.signal(position,direction,power,data,world.speed/2))
     end,
 }
 
@@ -55,28 +69,6 @@ api.worker =
            table.insert(world.worker,api.new.worker(world.ruleset,id,position,timer,defaults))
            world.map[position.x][position.y] = world.worker[#world.worker]
            return world.map[position.x][position.y]
-        end
-    end,
-    work = function(world, worker)
-        local sig = world.map.signal[worker.position.x][worker.position.y]
-        local advanced = {world = world ,signal=sig, worker = worker, api = api}
-        world.map.signal[worker.position.x][worker.position.y] = '.'
-        world.session.status = sig
-        if world.map.signal[worker.position.x][worker.position.y] ~= '.' and worker.timer == 0 then
-            if sig.data ~= nil then
-                if sig.power ~= nil then
-                    worker.func(util.array.unpack(sig.data),advanced)
-                else
-                    worker.defaults = sig.data
-                end
-            elseif(sig.power ~= nil) then
-                worker.func(util.array.unpack(worker.defaults), advanced)
-            end
-            
-        elseif(world.session.time % worker.timer == 0) then
-            
-            worker.func(util.array.unpack(worker.defaults), {world = world ,signal=sig, worker = worker, api = api})
-            --world.map.signal[worker.position.x][worker.position.y] = '.'
         end
     end
 }

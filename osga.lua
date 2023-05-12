@@ -7,8 +7,9 @@ local install = function(dataname,x,y)
   y = y or 16
   os.execute(util.unix("rm -rf","rd /s /q") .. " " .. dataname)
   os.execute("mkdir " .. dataname)
-  local text = "local ruleset = {}\nruleset.defaults = {}\n\n"
+  local text = "local ruleset = {}\nruleset.defaults = {}\nruleset.auto = {}\n\n"
   for k,v in pairs(util.char) do
+    text = text .. "ruleset.auto['" .. v .. "']" .. " = false\n"
     text = text .. "ruleset.defaults['" .. v .. "']" .. " = {}\n"
     text = text .. "ruleset['" .. v .. "'] = function(input,advanced)\n  return input \nend\n\n"
   end
@@ -20,21 +21,25 @@ end
 
 local function frame(world)
   world.session.time = world.session.time + 1
-  for i = 1, #world.signal do
-    if(world.signal[i].position ~= nil) then
-      if(world.session.time % world.signal[i].speed == 0) then
-        api.signal.move(world,world.signal[i])
+  for i,v in ipairs(world.signal) do
+    if(v.position ~= nil) then
+      if(world.session.time % v.speed == 0) then
+        api.signal.move(world,v)
+        api.signal.work(world,v)
       end
     else
-      world.signal[i] = nil
+      v = nil
     end
   end
-
   for i = 1, #world.worker do
-    if(world.worker[i].position ~= nil) then
-        api.worker.work(world,world.worker[i])
-    else
-      world.worker[i] = nil
+    if(world.session.time % world.speed == 0) then
+      if world.worker[i].auto == true then
+        if(world.worker[i].position ~= nil) then
+          world.worker[i].func(util.array.unpack(world.worker[i].defaults),{world = world,worker = world.worker[i], api = api})
+        else
+          world.worker[i] = nil
+        end
+      end
     end
   end
   return world
@@ -42,27 +47,24 @@ end
 
 local function print_map(world)
   local str = ''
+  local printmap = {}
   for x = 1, #world.map, 1 do
+    printmap[x] = {}
     for y = 1, #world.map[x], 1 do
-        if world.map.signal[x][y] ~= '.' then
-          local sig = world.map.signal[x][y]
-          if(sig.power == nil) then
-            str = str .. '$'
-          elseif sig.data == nil then
-            str = str .. '*'
-          else
-            str = str .. '@'
-          end
-        elseif type(world.map[x][y]) == 'table' then
-          str = str .. world.map[x][y].id
-        else
-          str = str .. world.map[x][y]
-        end
+      if type(world.map[x][y]) == 'table' then
+        printmap[x][y] = world.map[x][y].id
+      else
+        printmap[x][y] = world.map[x][y]
+      end
     end
-    str = str .. '\n'
+  end
+  for i, v in ipairs(world.signal) do
+    if v.position ~= nil then
+      printmap[v.position.x][v.position.y] = '*'
+    end
   end
   os.execute(util.unix('clear', 'cls'))
-  io.write(str)
+  io.write(util.matrix.tostring(printmap))
 end
 
 local function movecursor(x,y)
@@ -87,7 +89,6 @@ local function commander(world)
       world.map[tonumber(split[2])][tonumber(split[3])].position = nil
       world.map[tonumber(split[2])][tonumber(split[3])] = '.'
     end
-    
   elseif cmd == "exit" then
     world.session.exit = true
   end
@@ -119,7 +120,7 @@ local function main()
     ruleset = require(location .. ".ruleset"),
     signal={},
     worker = {},
-    speed = 1,
+    speed = 2,
     session = 
     {
       time = 1,
@@ -128,13 +129,14 @@ local function main()
       redraw = true,
       editmode = false,
       cposi = {x=1,y=1},
-      status = 'idle'
+      status = 'idle',
+      auto = true
     }
   }
   local charmap = util.file.load.charMap(location .. "/map.txt")
   world.map = makemap(world,charmap)
-  world.map.char = charmap
-  world.map.signal = util.matrix.new(#charmap,#charmap[1],'.')
+  --world.map.char = charmap
+  --world.map.signal = util.matrix.new(#charmap,#charmap[1],'.')
   while not world.session.exit do
     print_map(world)
     print(world.session.time)
