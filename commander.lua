@@ -1,5 +1,3 @@
-
-
 return function(world, command, api)
     master = {world=world,api=api}
     local fullcmd = command or io.read()

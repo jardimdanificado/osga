@@ -21,7 +21,8 @@
 ## OSGA Vanilla Operators
 
 - `&` : Queue operator.
-- `+` : Send the signal in the 3 other directions.
+- `+` : Spammer, sends the signal in all directions.
+- `-` : Deleter, delete the signal.
 - `?` : Randomizer.
 
 ## OSGA Console Commands

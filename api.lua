@@ -3,6 +3,31 @@ local commander = require('commander')
 local api = {}
 api.util = util
 
+api.combinations = 
+{
+  {x = -1, y = -1},
+  {x = -1, y = 0},
+  {x = -1, y = 1},
+  {x = 0, y = -1},
+  {x = 0, y = 0},
+  {x = 0, y = 1},
+  {x = 1, y = -1},
+  {x = 1, y = 0},
+  {x = 1, y = 1}
+}
+
+api.colors = 
+{
+  black = '\27[30m',
+  red = '\27[31m',
+  green = '\27[32m',
+  yellow = '\27[33m',
+  blue = '\27[34m',
+  magenta = '\27[35m',
+  cyan = '\27[36m',
+  white = '\27[37m',
+  reset = '\27[0m'
+}
 
 api.print = function(world, string)
     world.session.message = string

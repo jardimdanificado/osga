@@ -2,34 +2,51 @@ local ruleset = {}
 ruleset.auto = {}
 ruleset.speed = {}
 
-local combinations = 
-{
-  {x = -1, y = -1},
-  {x = -1, y = 0},
-  {x = -1, y = 1},
-  {x = 0, y = -1},
-  {x = 0, y = 0},
-  {x = 0, y = 1},
-  {x = 1, y = -1},
-  {x = 1, y = 0},
-  {x = 1, y = 1}
-}
+ruleset.auto['V'] = false
+ruleset.speed['V'] = 2
+ruleset['V'] = function(signal,worker,world,api)
+    signal.direction = {x=1,y=0} -- x = up/down, y = right/left
+end
+
+ruleset.auto['^'] = false
+ruleset.speed['^'] = 2
+ruleset['^'] = function(signal,worker,world,api)
+    signal.direction = {x=-1,y=0} -- x = up/down, y = right/left
+end
+
+ruleset.auto['>'] = false
+ruleset.speed['>'] = 2
+ruleset['>'] = function(signal,worker,world,api)
+    signal.direction = {x=0,y=1} -- x = up/down, y = right/left
+end
+
+ruleset.auto['<'] = false
+ruleset.speed['<'] = 2
+ruleset['<'] = function(signal,worker,world,api)
+    signal.direction = {x=0,y=-1} -- x = up/down, y = right/left
+end
 
 ruleset.auto['+'] = false
 ruleset.speed['+'] = 1
 ruleset['+'] = function(signal,worker,world,api)
-  for i, v in ipairs(combinations) do
+  for i, v in ipairs(api.combinations) do
     if v.x ~= signal.direction.x *-1 or v.y ~= signal.direction.y *-1 then
-      api.signal.emit(world,worker.position,combinations[i],signal.data)
+      api.signal.emit(world,worker.position,api.combinations[i],signal.data)
     end
   end
+  signal.position = nil
+end
+
+ruleset.auto['-'] = false
+ruleset.speed['-'] = 1
+ruleset['-'] = function(signal,worker,world,api)
   signal.position = nil
 end
 
 ruleset.auto['?'] = false
 ruleset.speed['?'] = 2
 ruleset['?'] = function(signal,worker,world,api)
-  api.signal.emit(world,worker.position,combinations[api.util.random(1,#combinations+1)],signal.data)
+  api.signal.emit(world,worker.position,api.combinations[api.util.random(1,#api.combinations+1)],signal.data)
   signal.position = nil
 end
 
@@ -42,7 +59,7 @@ end
 ruleset.auto['b'] = false
 ruleset.speed['b'] = 2
 ruleset['b'] = function(signal,worker,world,api)
-    signal.direction = {x=1,y=0}
+--put your lua code here
 end
 
 ruleset.auto['c'] = false
@@ -315,11 +332,13 @@ ruleset['U'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
+--[[ this is used as a operator
 ruleset.auto['V'] = false
 ruleset.speed['V'] = 2
 ruleset['V'] = function(signal,worker,world,api)
 --put your lua code here
 end
+]]
 
 ruleset.auto['W'] = false
 ruleset.speed['W'] = 2
