@@ -84,7 +84,7 @@ api.new = {
                 },
                 message = 'idle',
                 toskip = 0,
-                renderskip = false,
+                renderskip = true,
                 collect = true
             }
         }        
