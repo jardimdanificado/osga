@@ -1,709 +1,636 @@
 local ruleset = {}
-ruleset.defaults = {}
 ruleset.auto = {}
 ruleset.speed = {}
 
-ruleset.speed['a'] = 2
+local combinations = 
+{
+  {x = -1, y = -1},
+  {x = -1, y = 0},
+  {x = -1, y = 1},
+  {x = 0, y = -1},
+  {x = 0, y = 0},
+  {x = 0, y = 1},
+  {x = 1, y = -1},
+  {x = 1, y = 0},
+  {x = 1, y = 1}
+}
+
+ruleset.auto['+'] = false
+ruleset.speed['+'] = 1
+ruleset['+'] = function(signal,worker,world,api)
+  for i, v in ipairs(combinations) do
+    if v.x ~= signal.direction.x *-1 or v.y ~= signal.direction.y *-1 then
+      api.signal.emit(world,worker.position,combinations[i],signal.data)
+    end
+  end
+  signal.position = nil
+end
+
+ruleset.auto['?'] = false
+ruleset.speed['?'] = 2
+ruleset['?'] = function(signal,worker,world,api)
+  api.signal.emit(world,worker.position,combinations[api.util.random(1,#combinations+1)],signal.data)
+  signal.position = nil
+end
+
 ruleset.auto['a'] = true
-ruleset.defaults['a'] = {}
-ruleset['a'] = function(input,adv)
-  adv.api.signal.emit(adv.world,adv.worker.position,{x=0,y=1},true,{4})
-  --adv.world.session.message = "teste"
-  return input 
+ruleset.speed['a'] = 2
+ruleset['a'] = function(signal,worker,world,api)
+    api.signal.emit(world,worker.position,{x=0,y=1},true,nil)
 end
 
-ruleset.speed['b'] = 1
 ruleset.auto['b'] = false
-ruleset.defaults['b'] = {'a'}
-ruleset['b'] = function(input,adv)
-  adv.api.signal.emit(adv.world,adv.worker.position,{x=1,y=0},nil,input)
-  return input 
+ruleset.speed['b'] = 2
+ruleset['b'] = function(signal,worker,world,api)
+    signal.direction = {x=1,y=0}
 end
 
-ruleset.speed['c'] = 2
 ruleset.auto['c'] = false
-ruleset.defaults['c'] = {}
-ruleset['c'] = function(input,advanced)
-  return input 
+ruleset.speed['c'] = 2
+ruleset['c'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['d'] = 2
 ruleset.auto['d'] = false
-ruleset.defaults['d'] = {}
-ruleset['d'] = function(input,advanced)
-  return input 
+ruleset.speed['d'] = 2
+ruleset['d'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['e'] = 2
 ruleset.auto['e'] = false
-ruleset.defaults['e'] = {}
-ruleset['e'] = function(input,advanced)
-  return input 
+ruleset.speed['e'] = 2
+ruleset['e'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['f'] = 2
 ruleset.auto['f'] = false
-ruleset.defaults['f'] = {}
-ruleset['f'] = function(input,advanced)
-  return input 
+ruleset.speed['f'] = 2
+ruleset['f'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['g'] = 2
 ruleset.auto['g'] = false
-ruleset.defaults['g'] = {}
-ruleset['g'] = function(input,advanced)
-  return input 
+ruleset.speed['g'] = 2
+ruleset['g'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['h'] = 2
 ruleset.auto['h'] = false
-ruleset.defaults['h'] = {}
-ruleset['h'] = function(input,advanced)
-  return input 
+ruleset.speed['h'] = 2
+ruleset['h'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['i'] = 2
 ruleset.auto['i'] = false
-ruleset.defaults['i'] = {}
-ruleset['i'] = function(input,advanced)
-  return input 
+ruleset.speed['i'] = 2
+ruleset['i'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['j'] = 2
 ruleset.auto['j'] = false
-ruleset.defaults['j'] = {}
-ruleset['j'] = function(input,advanced)
-  return input 
+ruleset.speed['j'] = 2
+ruleset['j'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['k'] = 2
 ruleset.auto['k'] = false
-ruleset.defaults['k'] = {}
-ruleset['k'] = function(input,advanced)
-  return input 
+ruleset.speed['k'] = 2
+ruleset['k'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['l'] = 2
 ruleset.auto['l'] = false
-ruleset.defaults['l'] = {}
-ruleset['l'] = function(input,advanced)
-  return input 
+ruleset.speed['l'] = 2
+ruleset['l'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['m'] = 2
 ruleset.auto['m'] = false
-ruleset.defaults['m'] = {}
-ruleset['m'] = function(input,advanced)
-  return input 
+ruleset.speed['m'] = 2
+ruleset['m'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['n'] = 2
 ruleset.auto['n'] = false
-ruleset.defaults['n'] = {}
-ruleset['n'] = function(input,advanced)
-  return input 
+ruleset.speed['n'] = 2
+ruleset['n'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['o'] = 2
 ruleset.auto['o'] = false
-ruleset.defaults['o'] = {}
-ruleset['o'] = function(input,advanced)
-  return input 
+ruleset.speed['o'] = 2
+ruleset['o'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['p'] = 2
 ruleset.auto['p'] = false
-ruleset.defaults['p'] = {}
-ruleset['p'] = function(input,advanced)
-  return input 
+ruleset.speed['p'] = 2
+ruleset['p'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['q'] = 2
 ruleset.auto['q'] = false
-ruleset.defaults['q'] = {}
-ruleset['q'] = function(input,advanced)
-  return input 
+ruleset.speed['q'] = 2
+ruleset['q'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['r'] = 2
 ruleset.auto['r'] = false
-ruleset.defaults['r'] = {}
-ruleset['r'] = function(input,advanced)
-  return input 
+ruleset.speed['r'] = 2
+ruleset['r'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['s'] = 2
 ruleset.auto['s'] = false
-ruleset.defaults['s'] = {}
-ruleset['s'] = function(input,advanced)
-  return input 
+ruleset.speed['s'] = 2
+ruleset['s'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['t'] = 2
 ruleset.auto['t'] = false
-ruleset.defaults['t'] = {}
-ruleset['t'] = function(input,advanced)
-  return input 
+ruleset.speed['t'] = 2
+ruleset['t'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['u'] = 2
 ruleset.auto['u'] = false
-ruleset.defaults['u'] = {}
-ruleset['u'] = function(input,advanced)
-  return input 
+ruleset.speed['u'] = 2
+ruleset['u'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['v'] = 2
 ruleset.auto['v'] = false
-ruleset.defaults['v'] = {}
-ruleset['v'] = function(input,advanced)
-  return input 
+ruleset.speed['v'] = 2
+ruleset['v'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['w'] = 2
 ruleset.auto['w'] = false
-ruleset.defaults['w'] = {}
-ruleset['w'] = function(input,advanced)
-  return input 
+ruleset.speed['w'] = 2
+ruleset['w'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['x'] = 2
 ruleset.auto['x'] = false
-ruleset.defaults['x'] = {}
-ruleset['x'] = function(input,advanced)
-  return input 
+ruleset.speed['x'] = 2
+ruleset['x'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['y'] = 2
 ruleset.auto['y'] = false
-ruleset.defaults['y'] = {}
-ruleset['y'] = function(input,advanced)
-  return input 
+ruleset.speed['y'] = 2
+ruleset['y'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['z'] = 2
 ruleset.auto['z'] = false
-ruleset.defaults['z'] = {}
-ruleset['z'] = function(input,advanced)
-  return input 
+ruleset.speed['z'] = 2
+ruleset['z'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['A'] = 2
 ruleset.auto['A'] = false
-ruleset.defaults['A'] = {}
-ruleset['A'] = function(input,advanced)
-  return input 
+ruleset.speed['A'] = 2
+ruleset['A'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['B'] = 2
 ruleset.auto['B'] = false
-ruleset.defaults['B'] = {}
-ruleset['B'] = function(input,advanced)
-  return input 
+ruleset.speed['B'] = 2
+ruleset['B'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['C'] = 2
 ruleset.auto['C'] = false
-ruleset.defaults['C'] = {}
-ruleset['C'] = function(input,advanced)
-  return input 
+ruleset.speed['C'] = 2
+ruleset['C'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['D'] = 2
 ruleset.auto['D'] = false
-ruleset.defaults['D'] = {}
-ruleset['D'] = function(input,advanced)
-  return input 
+ruleset.speed['D'] = 2
+ruleset['D'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['E'] = 2
 ruleset.auto['E'] = false
-ruleset.defaults['E'] = {}
-ruleset['E'] = function(input,advanced)
-  return input 
+ruleset.speed['E'] = 2
+ruleset['E'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['F'] = 2
 ruleset.auto['F'] = false
-ruleset.defaults['F'] = {}
-ruleset['F'] = function(input,advanced)
-  return input 
+ruleset.speed['F'] = 2
+ruleset['F'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['G'] = 2
 ruleset.auto['G'] = false
-ruleset.defaults['G'] = {}
-ruleset['G'] = function(input,advanced)
-  return input 
+ruleset.speed['G'] = 2
+ruleset['G'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['H'] = 2
 ruleset.auto['H'] = false
-ruleset.defaults['H'] = {}
-ruleset['H'] = function(input,advanced)
-  return input 
+ruleset.speed['H'] = 2
+ruleset['H'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['I'] = 2
 ruleset.auto['I'] = false
-ruleset.defaults['I'] = {}
-ruleset['I'] = function(input,advanced)
-  return input 
+ruleset.speed['I'] = 2
+ruleset['I'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['J'] = 2
 ruleset.auto['J'] = false
-ruleset.defaults['J'] = {}
-ruleset['J'] = function(input,advanced)
-  return input 
+ruleset.speed['J'] = 2
+ruleset['J'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['K'] = 2
 ruleset.auto['K'] = false
-ruleset.defaults['K'] = {}
-ruleset['K'] = function(input,advanced)
-  return input 
+ruleset.speed['K'] = 2
+ruleset['K'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['L'] = 2
 ruleset.auto['L'] = false
-ruleset.defaults['L'] = {}
-ruleset['L'] = function(input,advanced)
-  return input 
+ruleset.speed['L'] = 2
+ruleset['L'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['M'] = 2
 ruleset.auto['M'] = false
-ruleset.defaults['M'] = {}
-ruleset['M'] = function(input,advanced)
-  return input 
+ruleset.speed['M'] = 2
+ruleset['M'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['N'] = 2
 ruleset.auto['N'] = false
-ruleset.defaults['N'] = {}
-ruleset['N'] = function(input,advanced)
-  return input 
+ruleset.speed['N'] = 2
+ruleset['N'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['O'] = 2
 ruleset.auto['O'] = false
-ruleset.defaults['O'] = {}
-ruleset['O'] = function(input,advanced)
-  return input 
+ruleset.speed['O'] = 2
+ruleset['O'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['P'] = 2
 ruleset.auto['P'] = false
-ruleset.defaults['P'] = {}
-ruleset['P'] = function(input,advanced)
-  return input 
+ruleset.speed['P'] = 2
+ruleset['P'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Q'] = 2
 ruleset.auto['Q'] = false
-ruleset.defaults['Q'] = {}
-ruleset['Q'] = function(input,advanced)
-  return input 
+ruleset.speed['Q'] = 2
+ruleset['Q'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['R'] = 2
 ruleset.auto['R'] = false
-ruleset.defaults['R'] = {}
-ruleset['R'] = function(input,advanced)
-  return input 
+ruleset.speed['R'] = 2
+ruleset['R'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['S'] = 2
 ruleset.auto['S'] = false
-ruleset.defaults['S'] = {}
-ruleset['S'] = function(input,advanced)
-  return input 
+ruleset.speed['S'] = 2
+ruleset['S'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['T'] = 2
 ruleset.auto['T'] = false
-ruleset.defaults['T'] = {}
-ruleset['T'] = function(input,advanced)
-  return input 
+ruleset.speed['T'] = 2
+ruleset['T'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['U'] = 2
 ruleset.auto['U'] = false
-ruleset.defaults['U'] = {}
-ruleset['U'] = function(input,advanced)
-  return input 
+ruleset.speed['U'] = 2
+ruleset['U'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['V'] = 2
 ruleset.auto['V'] = false
-ruleset.defaults['V'] = {}
-ruleset['V'] = function(input,advanced)
-  return input 
+ruleset.speed['V'] = 2
+ruleset['V'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['W'] = 2
 ruleset.auto['W'] = false
-ruleset.defaults['W'] = {}
-ruleset['W'] = function(input,advanced)
-  return input 
+ruleset.speed['W'] = 2
+ruleset['W'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['X'] = 2
 ruleset.auto['X'] = false
-ruleset.defaults['X'] = {}
-ruleset['X'] = function(input,advanced)
-  return input 
+ruleset.speed['X'] = 2
+ruleset['X'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Y'] = 2
 ruleset.auto['Y'] = false
-ruleset.defaults['Y'] = {}
-ruleset['Y'] = function(input,advanced)
-  return input 
+ruleset.speed['Y'] = 2
+ruleset['Y'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Z'] = 2
 ruleset.auto['Z'] = false
-ruleset.defaults['Z'] = {}
-ruleset['Z'] = function(input,advanced)
-  return input 
+ruleset.speed['Z'] = 2
+ruleset['Z'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ç'] = 2
 ruleset.auto['ç'] = false
-ruleset.defaults['ç'] = {}
-ruleset['ç'] = function(input,advanced)
-  return input 
+ruleset.speed['ç'] = 2
+ruleset['ç'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ç'] = 2
 ruleset.auto['Ç'] = false
-ruleset.defaults['Ç'] = {}
-ruleset['Ç'] = function(input,advanced)
-  return input 
+ruleset.speed['Ç'] = 2
+ruleset['Ç'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ã'] = 2
 ruleset.auto['ã'] = false
-ruleset.defaults['ã'] = {}
-ruleset['ã'] = function(input,advanced)
-  return input 
+ruleset.speed['ã'] = 2
+ruleset['ã'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['â'] = 2
 ruleset.auto['â'] = false
-ruleset.defaults['â'] = {}
-ruleset['â'] = function(input,advanced)
-  return input 
+ruleset.speed['â'] = 2
+ruleset['â'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Â'] = 2
 ruleset.auto['Â'] = false
-ruleset.defaults['Â'] = {}
-ruleset['Â'] = function(input,advanced)
-  return input 
+ruleset.speed['Â'] = 2
+ruleset['Â'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ã'] = 2
 ruleset.auto['Ã'] = false
-ruleset.defaults['Ã'] = {}
-ruleset['Ã'] = function(input,advanced)
-  return input 
+ruleset.speed['Ã'] = 2
+ruleset['Ã'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['á'] = 2
 ruleset.auto['á'] = false
-ruleset.defaults['á'] = {}
-ruleset['á'] = function(input,advanced)
-  return input 
+ruleset.speed['á'] = 2
+ruleset['á'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['à'] = 2
 ruleset.auto['à'] = false
-ruleset.defaults['à'] = {}
-ruleset['à'] = function(input,advanced)
-  return input 
+ruleset.speed['à'] = 2
+ruleset['à'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Á'] = 2
 ruleset.auto['Á'] = false
-ruleset.defaults['Á'] = {}
-ruleset['Á'] = function(input,advanced)
-  return input 
+ruleset.speed['Á'] = 2
+ruleset['Á'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['À'] = 2
 ruleset.auto['À'] = false
-ruleset.defaults['À'] = {}
-ruleset['À'] = function(input,advanced)
-  return input 
+ruleset.speed['À'] = 2
+ruleset['À'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ä'] = 2
 ruleset.auto['ä'] = false
-ruleset.defaults['ä'] = {}
-ruleset['ä'] = function(input,advanced)
-  return input 
+ruleset.speed['ä'] = 2
+ruleset['ä'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ä'] = 2
 ruleset.auto['Ä'] = false
-ruleset.defaults['Ä'] = {}
-ruleset['Ä'] = function(input,advanced)
-  return input 
+ruleset.speed['Ä'] = 2
+ruleset['Ä'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ê'] = 2
 ruleset.auto['ê'] = false
-ruleset.defaults['ê'] = {}
-ruleset['ê'] = function(input,advanced)
-  return input 
+ruleset.speed['ê'] = 2
+ruleset['ê'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ê'] = 2
 ruleset.auto['Ê'] = false
-ruleset.defaults['Ê'] = {}
-ruleset['Ê'] = function(input,advanced)
-  return input 
+ruleset.speed['Ê'] = 2
+ruleset['Ê'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['é'] = 2
 ruleset.auto['é'] = false
-ruleset.defaults['é'] = {}
-ruleset['é'] = function(input,advanced)
-  return input 
+ruleset.speed['é'] = 2
+ruleset['é'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['É'] = 2
 ruleset.auto['É'] = false
-ruleset.defaults['É'] = {}
-ruleset['É'] = function(input,advanced)
-  return input 
+ruleset.speed['É'] = 2
+ruleset['É'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['è'] = 2
 ruleset.auto['è'] = false
-ruleset.defaults['è'] = {}
-ruleset['è'] = function(input,advanced)
-  return input 
+ruleset.speed['è'] = 2
+ruleset['è'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['È'] = 2
 ruleset.auto['È'] = false
-ruleset.defaults['È'] = {}
-ruleset['È'] = function(input,advanced)
-  return input 
+ruleset.speed['È'] = 2
+ruleset['È'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ë'] = 2
 ruleset.auto['ë'] = false
-ruleset.defaults['ë'] = {}
-ruleset['ë'] = function(input,advanced)
-  return input 
+ruleset.speed['ë'] = 2
+ruleset['ë'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ë'] = 2
 ruleset.auto['Ë'] = false
-ruleset.defaults['Ë'] = {}
-ruleset['Ë'] = function(input,advanced)
-  return input 
+ruleset.speed['Ë'] = 2
+ruleset['Ë'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['î'] = 2
 ruleset.auto['î'] = false
-ruleset.defaults['î'] = {}
-ruleset['î'] = function(input,advanced)
-  return input 
+ruleset.speed['î'] = 2
+ruleset['î'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Î'] = 2
 ruleset.auto['Î'] = false
-ruleset.defaults['Î'] = {}
-ruleset['Î'] = function(input,advanced)
-  return input 
+ruleset.speed['Î'] = 2
+ruleset['Î'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ï'] = 2
 ruleset.auto['ï'] = false
-ruleset.defaults['ï'] = {}
-ruleset['ï'] = function(input,advanced)
-  return input 
+ruleset.speed['ï'] = 2
+ruleset['ï'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ï'] = 2
 ruleset.auto['Ï'] = false
-ruleset.defaults['Ï'] = {}
-ruleset['Ï'] = function(input,advanced)
-  return input 
+ruleset.speed['Ï'] = 2
+ruleset['Ï'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['í'] = 2
 ruleset.auto['í'] = false
-ruleset.defaults['í'] = {}
-ruleset['í'] = function(input,advanced)
-  return input 
+ruleset.speed['í'] = 2
+ruleset['í'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Í'] = 2
 ruleset.auto['Í'] = false
-ruleset.defaults['Í'] = {}
-ruleset['Í'] = function(input,advanced)
-  return input 
+ruleset.speed['Í'] = 2
+ruleset['Í'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ì'] = 2
 ruleset.auto['ì'] = false
-ruleset.defaults['ì'] = {}
-ruleset['ì'] = function(input,advanced)
-  return input 
+ruleset.speed['ì'] = 2
+ruleset['ì'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ì'] = 2
 ruleset.auto['Ì'] = false
-ruleset.defaults['Ì'] = {}
-ruleset['Ì'] = function(input,advanced)
-  return input 
+ruleset.speed['Ì'] = 2
+ruleset['Ì'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['õ'] = 2
 ruleset.auto['õ'] = false
-ruleset.defaults['õ'] = {}
-ruleset['õ'] = function(input,advanced)
-  return input 
+ruleset.speed['õ'] = 2
+ruleset['õ'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Õ'] = 2
 ruleset.auto['Õ'] = false
-ruleset.defaults['Õ'] = {}
-ruleset['Õ'] = function(input,advanced)
-  return input 
+ruleset.speed['Õ'] = 2
+ruleset['Õ'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ô'] = 2
 ruleset.auto['ô'] = false
-ruleset.defaults['ô'] = {}
-ruleset['ô'] = function(input,advanced)
-  return input 
+ruleset.speed['ô'] = 2
+ruleset['ô'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ô'] = 2
 ruleset.auto['Ô'] = false
-ruleset.defaults['Ô'] = {}
-ruleset['Ô'] = function(input,advanced)
-  return input 
+ruleset.speed['Ô'] = 2
+ruleset['Ô'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ó'] = 2
 ruleset.auto['ó'] = false
-ruleset.defaults['ó'] = {}
-ruleset['ó'] = function(input,advanced)
-  return input 
+ruleset.speed['ó'] = 2
+ruleset['ó'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ó'] = 2
 ruleset.auto['Ó'] = false
-ruleset.defaults['Ó'] = {}
-ruleset['Ó'] = function(input,advanced)
-  return input 
+ruleset.speed['Ó'] = 2
+ruleset['Ó'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ò'] = 2
 ruleset.auto['ò'] = false
-ruleset.defaults['ò'] = {}
-ruleset['ò'] = function(input,advanced)
-  return input 
+ruleset.speed['ò'] = 2
+ruleset['ò'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ò'] = 2
 ruleset.auto['Ò'] = false
-ruleset.defaults['Ò'] = {}
-ruleset['Ò'] = function(input,advanced)
-  return input 
+ruleset.speed['Ò'] = 2
+ruleset['Ò'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ö'] = 2
 ruleset.auto['ö'] = false
-ruleset.defaults['ö'] = {}
-ruleset['ö'] = function(input,advanced)
-  return input 
+ruleset.speed['ö'] = 2
+ruleset['ö'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ö'] = 2
 ruleset.auto['Ö'] = false
-ruleset.defaults['Ö'] = {}
-ruleset['Ö'] = function(input,advanced)
-  return input 
+ruleset.speed['Ö'] = 2
+ruleset['Ö'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ú'] = 2
 ruleset.auto['ú'] = false
-ruleset.defaults['ú'] = {}
-ruleset['ú'] = function(input,advanced)
-  return input 
+ruleset.speed['ú'] = 2
+ruleset['ú'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ú'] = 2
 ruleset.auto['Ú'] = false
-ruleset.defaults['Ú'] = {}
-ruleset['Ú'] = function(input,advanced)
-  return input 
+ruleset.speed['Ú'] = 2
+ruleset['Ú'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ù'] = 2
 ruleset.auto['ù'] = false
-ruleset.defaults['ù'] = {}
-ruleset['ù'] = function(input,advanced)
-  return input 
+ruleset.speed['ù'] = 2
+ruleset['ù'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ù'] = 2
 ruleset.auto['Ù'] = false
-ruleset.defaults['Ù'] = {}
-ruleset['Ù'] = function(input,advanced)
-  return input 
+ruleset.speed['Ù'] = 2
+ruleset['Ù'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['û'] = 2
 ruleset.auto['û'] = false
-ruleset.defaults['û'] = {}
-ruleset['û'] = function(input,advanced)
-  return input 
+ruleset.speed['û'] = 2
+ruleset['û'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Û'] = 2
 ruleset.auto['Û'] = false
-ruleset.defaults['Û'] = {}
-ruleset['Û'] = function(input,advanced)
-  return input 
+ruleset.speed['Û'] = 2
+ruleset['Û'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ü'] = 2
 ruleset.auto['ü'] = false
-ruleset.defaults['ü'] = {}
-ruleset['ü'] = function(input,advanced)
-  return input 
+ruleset.speed['ü'] = 2
+ruleset['ü'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ü'] = 2
 ruleset.auto['Ü'] = false
-ruleset.defaults['Ü'] = {}
-ruleset['Ü'] = function(input,advanced)
-  return input 
+ruleset.speed['Ü'] = 2
+ruleset['Ü'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['ñ'] = 2
 ruleset.auto['ñ'] = false
-ruleset.defaults['ñ'] = {}
-ruleset['ñ'] = function(input,advanced)
-  return input 
+ruleset.speed['ñ'] = 2
+ruleset['ñ'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
-ruleset.speed['Ñ'] = 2
 ruleset.auto['Ñ'] = false
-ruleset.defaults['Ñ'] = {}
-ruleset['Ñ'] = function(input,advanced)
-  return input 
+ruleset.speed['Ñ'] = 2
+ruleset['Ñ'] = function(signal,worker,world,api)
+--put your lua code here
 end
 
 return ruleset

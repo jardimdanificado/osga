@@ -5,18 +5,15 @@
 
 ## OSGA Signals
 
-- `*` : A power signal, contains just power.
-- `$` : A setup signal, contains just data.
-- `@` : A transmission signal, contains data and power.
+- `*` : A pulse, contains nothing beside position and direction.
+- `@` : A transmission, same as pulse, but contains data.
 
 ### OSGA Signal Class
 
-- `speed` : Number.
 - `direction` : 
   - `x` : Number (-1 to 1).
   - `y` : Number (-1 to 1).
 - `data` : Any type or `nil`.
-- `power` : Boolean or `nil`.
 - `position` :
   - `x` : Number.
   - `y` : Number.
@@ -25,6 +22,7 @@
 
 - `&` : Queue operator.
 - `+` : Send the signal in the 3 other directions.
+- `?` : Randomizer.
 
 ## OSGA Console Commands
 
@@ -34,3 +32,4 @@
 - `run filename` : run the script on _filename_ path
 - `save filename` : save the map on _filename_ path, if no path provided it replaces the current _map.txt_
 - `exit` : quits the OSGA REPL
+- `clear` : free memory

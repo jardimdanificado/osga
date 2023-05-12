@@ -2,26 +2,27 @@ local util = require('util')
 local api = {}
 api.util = util
 
+api.print = function(world,string)
+    world.session.message = string
+end
+
 api.new = 
 {
     vec2 = function(x,y)
         return{x=x,y=y}
     end,
-    signal = function(position,direction,power,data,speed)
+    signal = function(position,direction,data)
         return {
-            speed = speed or 10,
             direction = direction or {x=1,y=0},
             data = data,
             position = position,
-            power = power
         }
     end,
-    worker = function(ruleset,id,position,timer,speed,defaults)
+    worker = function(ruleset,id,position,timer,speed)
         return {
             id = id,
             func = ruleset[id],
             auto = ruleset.auto[id],
-            defaults = defaults,
             position = position,
             timer = timer,
             speed = speed
@@ -36,18 +37,7 @@ api.signal =
             return
         end
         local worker = world.map[signal.position.x][signal.position.y]
-        local advanced = {world = world ,signal=signal, worker = worker, api = api}
-        if signal.data ~= nil then
-            if signal.power ~= nil then
-                worker.func(util.array.unpack(signal.data),advanced)
-            else
-                worker.defaults = signal.data
-            end
-            signal.position = nil
-        elseif(signal.power ~= nil) then
-            worker.func(util.array.unpack(worker.defaults), advanced)
-            signal.position = nil
-        end
+        worker.func(signal,worker,world,api)
     end,
     move = function(world,signal)
         local sum = {x=signal.position.x+signal.direction.x,y=signal.position.y+signal.direction.y}
@@ -57,18 +47,20 @@ api.signal =
             signal.position = {x=signal.position.x+signal.direction.x,y=signal.position.y+signal.direction.y}
         end
     end,
-    emit = function(world,position,direction,power,data,speed)
-        table.insert(world.signal,api.new.signal(position,direction,power,data,speed))
+    emit = function(world,position,direction,data)
+        if position.direction ~= nil then
+            table.insert(world.signal,position)
+        end
+        table.insert(world.signal,api.new.signal(position,direction,data))
     end,
 }
 
 api.worker = 
 {
-    spawn = function(world, position, id, timer, speed, defaults)
-        defaults = defaults or world.ruleset.defaults[id]
+    spawn = function(world, position, id, timer, speed)
         speed = speed or world.ruleset.speed[id]
         if world.map[position.x][position.y] == '.' then 
-           table.insert(world.worker,api.new.worker(world.ruleset,id,position,timer,speed,defaults))
+           table.insert(world.worker,api.new.worker(world.ruleset,id,position,timer,speed))
            world.map[position.x][position.y] = world.worker[#world.worker]
            return world.map[position.x][position.y]
         end

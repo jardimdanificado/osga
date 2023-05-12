@@ -23,7 +23,15 @@ util.file.save = {}
 util.file.load = {}
 util.func = {}
 
-util.array.unpack = unpack or table.unpack
+util.array._unpack = unpack or table.unpack
+
+util.array.unpack = function(input)
+    if type(input) == 'table' then
+        return util.array._unpack(input)
+    else
+        return input
+    end
+end
 
 util.math.vec2 = function(x, y)
     return {x=x, y=y}
@@ -721,6 +729,8 @@ util.turn = function(bool)
         return false
     end
 end
+
+util.load = loadstring or load
 
 util.unix = function(ifUnix, ifWindows)-- returts ifunix if unix, if windows return ifWindows, if no args return true if is unix
     ifUnix = ifUnix or true
