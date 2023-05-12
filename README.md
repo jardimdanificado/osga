@@ -1,5 +1,6 @@
-``
-* signals: 
+
+signals: 
+
 
 \* = a power signal, contains just power
 
@@ -20,13 +21,15 @@ $ = a setup signal, contains just data
 }
 
 
-* vanilla operators: -- these works exactly like any other ruleset operator
+vanilla operators: -- these works exactly like any other ruleset operator
+
 
   & = queue
 
   + = send the signal in the 3 other directions
 
-* console commands: 
+console commands: 
+
 
   add object width height
 
@@ -39,4 +42,3 @@ $ = a setup signal, contains just data
   save
 
   exit
-``
