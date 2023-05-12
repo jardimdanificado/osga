@@ -6,7 +6,7 @@ ruleset.auto['a'] = true
 ruleset.defaults['a'] = {}
 ruleset['a'] = function(input,adv)
   adv.api.signal.emit(adv.world,adv.worker.position,{x=0,y=1},true,{4})
-  --adv.world.session.status = "teste"
+  --adv.world.session.message = "teste"
   return input 
 end
 

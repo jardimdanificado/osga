@@ -31,13 +31,13 @@ local function frame(world)
       v = nil
     end
   end
-  for i = 1, #world.worker do
+  for i,v in ipairs(world.worker) do
     if(world.session.time % world.speed == 0) then
-      if world.worker[i].auto == true then
-        if(world.worker[i].position ~= nil) then
-          world.worker[i].func(util.array.unpack(world.worker[i].defaults),{world = world,worker = world.worker[i], api = api})
+      if v.auto == true then
+        if(v.position ~= nil) then
+          v.func(util.array.unpack(v.defaults),{world = world,worker = v, api = api})
         else
-          world.worker[i] = nil
+          v = nil
         end
       end
     end
@@ -58,9 +58,17 @@ local function print_map(world)
       end
     end
   end
-  for i, v in ipairs(world.signal) do
-    if v.position ~= nil then
-      printmap[v.position.x][v.position.y] = '*'
+  for i, signal in ipairs(world.signal) do
+    if signal.position ~= nil then
+      if signal.data ~= nil then
+        if signal.power ~= nil then
+          printmap[signal.position.x][signal.position.y] = '@'
+        else
+          printmap[signal.position.x][signal.position.y] = '$'
+        end
+      elseif(signal.power ~= nil) then
+        printmap[signal.position.x][signal.position.y] = '*'
+      end
     end
   end
   os.execute(util.unix('clear', 'cls'))
@@ -72,25 +80,36 @@ local function movecursor(x,y)
 end
 
 local function commander(world)
-  local cmd = io.read()
-  if util.string.includes(cmd,"edit") then
-    local split = util.string.split(cmd,' ')
-    world.session.cposi = {x=tonumber(split[2]),y=tonumber(split[3])}
-    world.session.editmode = true
-  elseif util.string.includes(cmd,"new") or util.string.includes(cmd,"add") then
-    local split = util.string.split(cmd,' ')
-    if #split >= 4 then
-      api.worker.spawn(world,{x=tonumber(split[3]),y=tonumber(split[4])},split[2],split[5] or 2)
-    end
-  elseif util.string.includes(cmd,"rm") then
-    local split = util.string.split(cmd,' ')
-    if world.map[tonumber(split[2])][tonumber(split[3])]  ~= '.' then
+  local fullcmd = io.read()
+  
+  while util.string.includes(fullcmd,'  ') do
+    fullcmd = util.string.replace(fullcmd,'  ',' ')
+  end
+  fullcmd = util.string.replace(fullcmd,'; ',';')
+  fullcmd = util.string.replace(fullcmd,' ;',';')
+
+  local splited = util.string.split(fullcmd,';')
+  for i,cmd in ipairs(splited) do
+    local split = util.string.split(cmd," ")
+    cmd = string.gsub(cmd, "^%s*(.-)%s*$", "%1")
+    if util.string.includes(cmd,"edit") then
       world.session.cposi = {x=tonumber(split[2]),y=tonumber(split[3])}
-      world.map[tonumber(split[2])][tonumber(split[3])].position = nil
-      world.map[tonumber(split[2])][tonumber(split[3])] = '.'
+      world.session.editmode = true
+    elseif util.string.includes(cmd,"new") or util.string.includes(cmd,"add") then
+      if #split >= 4 then
+        api.worker.spawn(world,{x=tonumber(split[3]),y=tonumber(split[4])},split[2],split[5] or 2)
+      end
+    elseif util.string.includes(cmd,"rm") then
+      if world.map[tonumber(split[2])][tonumber(split[3])]  ~= '.' then
+        world.session.cposi = {x=tonumber(split[2]),y=tonumber(split[3])}
+        world.map[tonumber(split[2])][tonumber(split[3])].position = nil
+        world.map[tonumber(split[2])][tonumber(split[3])] = '.'
+      end
+    elseif cmd == "exit" then
+      world.session.exit = true
+    elseif util.string.includes(cmd,'skip') then
+      world.session.toskip = tonumber(split[2])
     end
-  elseif cmd == "exit" then
-    world.session.exit = true
   end
 end
 
@@ -129,8 +148,9 @@ local function main()
       redraw = true,
       editmode = false,
       cposi = {x=1,y=1},
-      status = 'idle',
-      auto = true
+      message = 'idle',
+      auto = true,
+      toskip = 0
     }
   }
   local charmap = util.file.load.charMap(location .. "/map.txt")
@@ -139,16 +159,25 @@ local function main()
   --world.map.signal = util.matrix.new(#charmap,#charmap[1],'.')
   while not world.session.exit do
     print_map(world)
-    print(world.session.time)
-    print(world.session.status)
-    frame(world)
+    print('frame: ' .. world.session.time)
+    print('message: ' .. world.session.message)
+    print('signals created: ' .. #world.signal)
+    print('worker count: ' .. #world.worker)
+    
     if world.session.editmode then
       movecursor(world.session.cposi.x,world.session.cposi.y)
       local chin = io.stdin:read(1)
       world.map[world.session.cposi.x][world.session.cposi.y] = api.worker.spawn(world, world.session.cposi, chin, 2)
       world.session.editmode = false
     end
-    commander(world,world.session.cposi)
+
+    if world.session.toskip == 0 then
+      commander(world,world.session.cposi)
+    else
+      world.session.toskip = world.session.toskip - 1
+    end
+    
+    frame(world)
   end
 end
 
