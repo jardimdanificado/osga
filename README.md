@@ -1,44 +1,36 @@
+## OSGA command-line commands
 
-signals: 
+- `lua osga.lua` : Starts the OSGA REPL on the default path (default is: ./data)
+- `lua osga.lua filename` : Starts the repl on specified _filename_ file
 
+## OSGA Signals
 
-\* = a power signal, contains just power
+- `*` : A power signal, contains just power.
+- `$` : A setup signal, contains just data.
+- `@` : A transmission signal, contains data and power.
 
-$ = a setup signal, contains just data
+### OSGA Signal Class
 
-@ = a transmission signal, contains data and power
+- `speed` : Number.
+- `direction` : 
+  - `x` : Number (-1 to 1).
+  - `y` : Number (-1 to 1).
+- `data` : Any type or `nil`.
+- `power` : Boolean or `nil`.
+- `position` :
+  - `x` : Number.
+  - `y` : Number.
 
-{
-  speed = number,
+## OSGA Vanilla Operators
 
-  direction = {x=number(-1 to 1),y=number(-1 to 1)},
+- `&` : Queue operator.
+- `+` : Send the signal in the 3 other directions.
 
-  data = any or nil,
+## OSGA Console Commands
 
-  power = boolean or nil,
-
-  position = {x=number,y=number}
-}
-
-
-vanilla operators: -- these works exactly like any other ruleset operator
-
-
-  & = queue
-
-  + = send the signal in the 3 other directions
-
-console commands: 
-
-
-  add object width height
-
-  edit width height
-
-  rm width height
-
-  run filename
-
-  save
-
-  exit
+- `add object width height` :  add a _object_ to specified _width_ x _height_ position
+- `edit width height` : set the cusor to the specified _width_ x _height_ position
+- `rm width height` : remove the worker on the specified _width_ x _height_ position
+- `run filename` : run the script on _filename_ path
+- `save filename` : save the map on _filename_ path, if no path provided it replaces the current _map.txt_
+- `exit` : quits the OSGA REPL

@@ -24,10 +24,8 @@ local function frame(world)
   world.session.time = world.session.time + 1
   for i,v in ipairs(world.signal) do
     if(v.position ~= nil) then
-      if(world.session.time % v.speed == 0) then
-        api.signal.move(world,v)
-        api.signal.work(world,v)
-      end
+      api.signal.move(world,v)
+      api.signal.work(world,v)
     else
       v = nil
     end
@@ -35,7 +33,9 @@ local function frame(world)
   for i,v in ipairs(world.worker) do
     if v.auto == true then
       if(v.position ~= nil) then
-        v.func(util.array.unpack(v.defaults),{world = world,worker = v, api = api})
+        if(world.session.time % v.speed == 0) then
+          v.func(util.array.unpack(v.defaults),{world = world,worker = v, api = api})
+        end
       else
         v = nil
       end
@@ -72,6 +72,10 @@ local function print_map(world)
   end
   os.execute(util.unix('clear', 'cls'))
   io.write(util.matrix.tostring(printmap))
+  print('frame: ' .. world.session.time)
+  print('message: ' .. world.session.message)
+  print('signals created: ' .. #world.signal)
+  print('worker count: ' .. #world.worker)
 end
 
 local function movecursor(x,y)
@@ -114,6 +118,7 @@ local function commander(world,command)
       world.session.exit = true
     elseif util.string.includes(cmd,'skip') then
       world.session.toskip = tonumber(split[2])
+      print("please wait...")
     elseif util.string.includes(cmd,'run') then
       local script = util.file.load.text(split[2])
       commander(world,script)
@@ -123,7 +128,6 @@ local function commander(world,command)
       else
         util.file.save.charMap('data/map.txt',world.map)
       end
-      
     end
   end
 end
@@ -152,7 +156,7 @@ local function main()
     ruleset = require(location .. ".ruleset"),
     signal={},
     worker = {},
-    speed = 2,
+    speed = 1,
     session = 
     {
       time = 1,
@@ -162,8 +166,7 @@ local function main()
       editmode = false,
       cposi = {x=1,y=1},
       message = 'idle',
-      auto = true,
-      toskip = 0
+      toskip = 0,
     }
   }
   local charmap = util.file.load.charMap(location .. "/map.txt")
@@ -172,12 +175,9 @@ local function main()
   --world.map.char = charmap
   --world.map.signal = util.matrix.new(#charmap,#charmap[1],'.')
   while not world.session.exit do
-    print_map(world)
-    print('frame: ' .. world.session.time)
-    print('message: ' .. world.session.message)
-    print('signals created: ' .. #world.signal)
-    print('worker count: ' .. #world.worker)
-    
+    if world.session.toskip == 0 then      
+      print_map(world)
+    end
     if world.session.editmode then
       movecursor(world.session.cposi.x,world.session.cposi.y)
       local chin = io.stdin:read(1)

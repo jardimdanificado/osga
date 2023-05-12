@@ -16,14 +16,15 @@ api.new =
             power = power
         }
     end,
-    worker = function(ruleset,id,position,timer,defaults)
+    worker = function(ruleset,id,position,timer,speed,defaults)
         return {
             id = id,
             func = ruleset[id],
             auto = ruleset.auto[id],
             defaults = defaults,
             position = position,
-            timer = timer
+            timer = timer,
+            speed = speed
         }
     end
 }
@@ -63,10 +64,11 @@ api.signal =
 
 api.worker = 
 {
-    spawn = function(world, position, id, timer, defaults)
+    spawn = function(world, position, id, timer, speed, defaults)
         defaults = defaults or world.ruleset.defaults[id]
+        speed = speed or world.ruleset.speed[id]
         if world.map[position.x][position.y] == '.' then 
-           table.insert(world.worker,api.new.worker(world.ruleset,id,position,timer,defaults))
+           table.insert(world.worker,api.new.worker(world.ruleset,id,position,timer,speed,defaults))
            world.map[position.x][position.y] = world.worker[#world.worker]
            return world.map[position.x][position.y]
         end
