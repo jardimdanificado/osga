@@ -17,28 +17,8 @@ api.combinations =
 
 api.colors = 
 {
-  red = '\27[31m',
-  green = '\27[32m',
-  yellow = '\27[33m',
-  blue = '\27[34m',
-  magenta = '\27[35m',
-  cyan = '\27[36m',
-  white = '\27[37m',
-  reset = '\27[0m'
+    "black","green","yellow","blue","magenta","cyan","white","reset"
 }
-
-api.colornames = 
-{
-    "green","yellow","blue","magenta","cyan","white","reset"
-}
-
-api.randomcolor = function()
-    return api.colornames[api.util.random(1,#api.colornames)]
-end
-
-local colorchar = function(char,color)
-    return api.colors[color] .. char .. api.colors.reset
-end
 
 api.new = {
     install = function(dataname, x, y)
@@ -158,7 +138,7 @@ api.worker = {
     spawn = function(world, position, id, timer, speed)
         speed = speed or world.ruleset.speed[id]
         if world.map[position.x][position.y] == '.' then
-            table.insert(world.worker, api.new.worker(world.ruleset, id, position, timer, speed))
+            table.insert(world.worker, api.new.worker(world.ruleset, id, position, timer, speed, world.ruleset.color[id]))
             world.map[position.x][position.y] = world.worker[#world.worker]
             return world.map[position.x][position.y]
         end
@@ -166,6 +146,28 @@ api.worker = {
 }
 
 api.console = {
+    colors = 
+    {
+        black = '\27[30m',
+        red = '\27[31m',
+        green = '\27[32m',
+        yellow = '\27[33m',
+        blue = '\27[34m',
+        magenta = '\27[35m',
+        cyan = '\27[36m',
+        white = '\27[37m',
+        reset = '\27[0m'
+    },
+
+    colorstring = function(str,color)
+        return api.console.colors[color] .. str .. api.console.colors.reset
+    end,
+    boldstring = function(str)
+        return "\27[1m" .. str .. "\27[0m"
+    end,
+    randomcolor = function()
+        return api.colors[api.util.random(1,#api.colors)]
+    end,
     movecursor = function(x, y)
         return io.write("\27[" .. x .. ";" .. y .. "H")
     end,
@@ -195,7 +197,7 @@ api.console = {
         for i, worker in ipairs(world.worker) do
             if worker.position ~= nil then
                 if type(worker) == 'table' then
-                    print_map[worker.position.x][worker.position.y] = colorchar(world.map[worker.position.x][worker.position.y].id,worker.color)
+                    print_map[worker.position.x][worker.position.y] = api.console.boldstring(api.console.colorstring(world.map[worker.position.x][worker.position.y].id,worker.color))
                 else
                     print_map[worker.position.x][worker.position.y] = world.map[worker.position.x][worker.position.y]
                 end
@@ -204,9 +206,9 @@ api.console = {
         for i, signal in ipairs(world.signal) do
             if signal.position ~= nil then
                 if signal.data ~= nil then
-                    print_map[signal.position.x][signal.position.y] = colorchar('@',signal.color)
+                    print_map[signal.position.x][signal.position.y] = api.console.colorstring('@',signal.color)
                 else
-                    print_map[signal.position.x][signal.position.y] = colorchar('$',signal.color)
+                    print_map[signal.position.x][signal.position.y] = api.console.colorstring('$',signal.color)
                 end
             end
         end

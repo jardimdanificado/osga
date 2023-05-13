@@ -2,35 +2,35 @@ local ruleset = {}
 ruleset.speed = {}
 ruleset.color = {}
 
-ruleset.color['<'] = 'reset'
+ruleset.color['<'] = 'yellow'
 ruleset.speed['<'] = 0
 ruleset['<'] = function(signal,worker,world,api)
     signal.direction = {x=0,y=-1} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['>'] = 'reset'
+ruleset.color['>'] = 'yellow'
 ruleset.speed['>'] = 0
 ruleset['>'] = function(signal,worker,world,api)
     signal.direction = {x=0,y=1} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['^'] = 'reset'
+ruleset.color['^'] = 'yellow'
 ruleset.speed['^'] = 0
 ruleset['^'] = function(signal,worker,world,api)
     signal.direction = {x=-1,y=0} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['V'] = 'reset'
+ruleset.color['V'] = 'yellow'
 ruleset.speed['V'] = 0
 ruleset['V'] = function(signal,worker,world,api)
     signal.direction = {x=1,y=0} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['+'] = 'reset'
+ruleset.color['+'] = 'blue'
 ruleset.speed['+'] = 0
 ruleset['+'] = function(signal,worker,world,api)
     for i, v in ipairs(api.combinations) do
@@ -44,40 +44,40 @@ ruleset['+'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['-'] = 'reset'
+ruleset.color['-'] = 'red'
 ruleset.speed['-'] = 0
 ruleset['-'] = function(signal,worker,world,api)
     signal.position = nil
 end
 
 
-ruleset.color['?'] = 'reset'
+ruleset.color['?'] = 'blue'
 ruleset.speed['?'] = 0
 ruleset['?'] = function(signal,worker,world,api)
     local sig = api.signal.emit(world,worker.position,api.combinations[api.util.random(1,#api.combinations)],signal.data)
-    sig.color = api.randomcolor()
+    sig.color = api.console.randomcolor()
     worker.color = sig.color
     signal.position = nil
 end
 
 
-ruleset.color['*'] = 'reset'
+ruleset.color['*'] = 'blue'
 ruleset.speed['*'] = 0
 ruleset['*'] = function(signal,worker,world,api)
     local sig
     for i, v in ipairs(api.combinations) do
         sig = api.signal.emit(world,worker.position,api.combinations[i],signal.data)
+        worker.color = sig.color
         sig.color = signal.color
     end
     signal.position = nil
 end
 
 
-ruleset.color['a'] = 'reset'
+ruleset.color['a'] = 'green'
 ruleset.speed['a'] = 4
 ruleset['a'] = function(signal,worker,world,api)
     local sig = api.signal.emit(world,worker.position,{x=0,y=1},true,nil)
-    sig.color = 'yellow'
 end
 
 
