@@ -413,7 +413,14 @@ end
 ruleset.color['X'] = 'reset'
 ruleset.speed['X'] = 0
 ruleset['X'] = function(signal,worker,world,api)
---put your lua code here
+       for i, v in ipairs(api.combinations) do
+        if v.x ~= 0 and v.y ~= 0 then
+          local sig = api.signal.emit(world,worker.position,api.combinations[i],signal.data)
+          sig.color = signal.color
+          worker.color = signal.color
+        end
+      end
+      signal.position = nil
 end
 
 
