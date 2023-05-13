@@ -21,7 +21,9 @@
 ## OSGA Vanilla Operators
 
 - `&` : Queue operator.
-- `+` : Spammer, sends the signal in all directions.
+- `+` : Square spammer, sends the signal in vertical and horizontal directions.
+- `X` : Diagonal spammer, sends the signal in vertical and horizontal directions.
+- `*` : Spammer, sends the signal in vertical and horizontal directions.
 - `-` : Deleter, delete the signal.
 - `?` : Randomizer.
 

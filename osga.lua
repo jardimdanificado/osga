@@ -10,7 +10,7 @@ local function frame(world)
         end
     end
     for i, v in ipairs(world.worker) do
-        if v.auto == true then
+        if v.speed > 0 then
             if (v.position ~= nil) then
                 if (world.session.time % v.speed == 0) then
                     v.func(nil, v, world, api)

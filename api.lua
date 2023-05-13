@@ -9,7 +9,6 @@ api.combinations =
   {x = -1, y = 0},
   {x = -1, y = 1},
   {x = 0, y = -1},
-  {x = 0, y = 0},
   {x = 0, y = 1},
   {x = 1, y = -1},
   {x = 1, y = 0},
@@ -18,7 +17,6 @@ api.combinations =
 
 api.colors = 
 {
-  black = '\27[30m',
   red = '\27[31m',
   green = '\27[32m',
   yellow = '\27[33m',
@@ -29,8 +27,17 @@ api.colors =
   reset = '\27[0m'
 }
 
-api.print = function(world, string)
-    world.session.message = string
+api.colornames = 
+{
+    "green","yellow","blue","magenta","cyan","white","reset"
+}
+
+api.randomcolor = function()
+    return api.colornames[api.util.random(1,#api.colornames)]
+end
+
+local colorchar = function(char,color)
+    return api.colors[color] .. char .. api.colors.reset
 end
 
 api.new = {
@@ -40,11 +47,11 @@ api.new = {
         y = y or 64
         os.execute(util.unix("rm -rf", "rd /s /q") .. " " .. dataname)
         os.execute("mkdir " .. dataname)
-        local text = "local ruleset = {}\nruleset.auto = {}\nruleset.speed = {}\n\n"
+        local text = "local ruleset = {}\nruleset.speed = {}\nruleset.color = {}\n\n"
         for k, v in pairs(util.char) do
-            text = text .. "ruleset.auto['" .. v .. "']" .. " = false\n"
-            text = text .. "ruleset.speed['" .. v .. "']" .. " = 2\n"
-            text = text .. "ruleset['" .. v .. "'] = function(signal,worker,world,api)\n--put your lua code here\nend\n\n"
+            text = text .. "ruleset.color['" .. v .. "']" .. " = 'reset'\n"
+            text = text .. "ruleset.speed['" .. v .. "']" .. " = 0\n"
+            text = text .. "ruleset['" .. v .. "'] = function(signal,worker,world,api)\n--put your lua code here\nend\n\n\n"
         end
         text = text .. "return ruleset\n"
         util.file.save.text(dataname .. "/ruleset.lua", text)
@@ -57,24 +64,25 @@ api.new = {
             y = y
         }
     end,
-    signal = function(position, direction, data)
+    signal = function(position, direction, data, color)
         return {
             direction = direction or {
                 x = 1,
                 y = 0
             },
             data = data,
-            position = position
+            position = position,
+            color = color or 'white'
         }
     end,
-    worker = function(ruleset, id, position, timer, speed)
+    worker = function(ruleset, id, position, timer, speed, color)
         return {
             id = id,
             func = ruleset[id],
-            auto = ruleset.auto[id],
             position = position,
             timer = timer,
-            speed = speed
+            speed = speed,
+            color = color or 'white'
         }
     end,
     map = function(world, charmap)
@@ -140,11 +148,9 @@ api.signal = {
             }
         end
     end,
-    emit = function(world, position, direction, data)
-        if position.direction ~= nil then
-            table.insert(world.signal, position)
-        end
-        table.insert(world.signal, api.new.signal(position, direction, data))
+    emit = function(world, position, direction, data, color)
+        table.insert(world.signal, api.new.signal(position, direction, data, color))
+        return world.signal[#world.signal]
     end
 }
 
@@ -185,23 +191,22 @@ api.console = {
     end,
     printmap = function(world)
         local str = ''
-        local print_map = {}
-        for x = 1, #world.map, 1 do
-            print_map[x] = {}
-            for y = 1, #world.map[x], 1 do
-                if type(world.map[x][y]) == 'table' then
-                    print_map[x][y] = world.map[x][y].id
+        local print_map = util.matrix.new(#world.map,#world.map[1],'.')
+        for i, worker in ipairs(world.worker) do
+            if worker.position ~= nil then
+                if type(worker) == 'table' then
+                    print_map[worker.position.x][worker.position.y] = colorchar(world.map[worker.position.x][worker.position.y].id,worker.color)
                 else
-                    print_map[x][y] = world.map[x][y]
+                    print_map[worker.position.x][worker.position.y] = world.map[worker.position.x][worker.position.y]
                 end
             end
         end
         for i, signal in ipairs(world.signal) do
             if signal.position ~= nil then
                 if signal.data ~= nil then
-                    print_map[signal.position.x][signal.position.y] = '@'
+                    print_map[signal.position.x][signal.position.y] = colorchar('@',signal.color)
                 else
-                    print_map[signal.position.x][signal.position.y] = '*'
+                    print_map[signal.position.x][signal.position.y] = colorchar('$',signal.color)
                 end
             end
         end
@@ -213,7 +218,10 @@ api.console = {
         print('active signals: ' .. #world.signal)
         print('active worker count: ' .. #world.worker)
     end,
-    commander = function(world,command) return commander(world,command,api) end
+    commander = function(world,command) return commander(world,command,api) end,
+    message = function(world,str)
+        world.session.message = str
+    end
 }
 
 return api
