@@ -29,13 +29,66 @@ ruleset['V'] = function(signal,worker,world,api)
     signal.direction = {x=1,y=0} -- x = up/down, y = right/left
 end
 
+ruleset.color['/'] = 'yellow'
+ruleset.speed['/'] = 0
+ruleset['/'] = function(signal,worker,world,api)
+    local directions =
+    {
+        {x = 1, y = 1},     --3
+        {x = 0, y = 1},     --6
+        nil,                --X
+        {x = 1, y = 0},     --2
+        {x = -1, y = 0},    --8
+        nil,                --X
+        {x = 0, y = -1},    --4
+        {x = -1, y = -1},   --7
+    }
+    
+    local index = -1
+    for i, v in ipairs(api.directions) do
+        if v.x == signal.direction.x and v.y == signal.direction.y then
+            index = i
+            break
+        end
+    end
+    
+    signal.direction.x = directions[index].x
+    signal.direction.y = directions[index].y
+end
+
+ruleset.color['\\'] = 'reset'
+ruleset.speed['\\'] = 0
+ruleset['\\'] = function(signal,worker,world,api)
+    local directions =
+    {
+        nil,                --x
+        {x = 0, y = -1},    --4
+        {x = 1, y = -1},    --1
+        {x = -1, y = 0},    --8
+        {x = 1, y = 0},     --2
+        {x = -1, y = 1},    --9
+        {x = 0, y = 1},     --6
+        nil
+    }
+
+    local index = -1
+    for i, v in ipairs(api.directions) do
+        if v.x == signal.direction.x and v.y == signal.direction.y then
+            index = i
+            break
+        end
+    end
+
+    signal.direction.x = directions[index].x
+    signal.direction.y = directions[index].y
+end
 
 ruleset.color['+'] = 'blue'
 ruleset.speed['+'] = 0
 ruleset['+'] = function(signal,worker,world,api)
-    for i, v in ipairs(api.combinations) do
+    for i, v in ipairs(api.directions) do
         if v.x == 0 or v.y == 0 then
-          local sig = api.signal.emit(world,worker.position,api.combinations[i],signal.data)
+          local sig = api.signal.emit(world,worker.position,api.directions[i],signal.data)
           sig.color = signal.color
           worker.color = signal.color
         end
@@ -54,7 +107,7 @@ end
 ruleset.color['?'] = 'blue'
 ruleset.speed['?'] = 0
 ruleset['?'] = function(signal,worker,world,api)
-    local sig = api.signal.emit(world,worker.position,api.combinations[api.util.random(1,#api.combinations)],signal.data)
+    local sig = api.signal.emit(world,worker.position,api.directions[api.util.random(1,#api.directions)],signal.data)
     sig.color = api.console.randomcolor()
     worker.color = sig.color
     signal.position = nil
@@ -65,8 +118,8 @@ ruleset.color['*'] = 'blue'
 ruleset.speed['*'] = 0
 ruleset['*'] = function(signal,worker,world,api)
     local sig
-    for i, v in ipairs(api.combinations) do
-        sig = api.signal.emit(world,worker.position,api.combinations[i],signal.data)
+    for i, v in ipairs(api.directions) do
+        sig = api.signal.emit(world,worker.position,api.directions[i],signal.data)
         worker.color = sig.color
         sig.color = signal.color
     end

@@ -3,7 +3,7 @@ local commander = require('commander')
 local api = {}
 api.util = util
 
-api.combinations = 
+api.directions = 
 {
   {x = -1, y = -1},
   {x = -1, y = 0},
