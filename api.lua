@@ -55,14 +55,15 @@ api.new = {
             color = 'white'
         }
     end,
-    worker = function(ruleset, id, position, timer, speed, color)
+    worker = function(ruleset, id, position, timer, speed, color, data)
         return {
             id = id,
             func = ruleset[id],
             position = position,
             timer = timer,
             speed = speed,
-            color = color or 'white'
+            color = color or 'white',
+            data = data or {}
         }
     end,
     map = function(world, charmap)

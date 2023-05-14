@@ -55,6 +55,12 @@ return function(world, command, api)
             world.signal = temp
             temp = {}
             for i, worker in ipairs(world.worker) do
+                local temp2 = {}
+                if worker.id == '&' then --if bank
+                    for i, v in ipairs(worker.data) do
+                        table.insert(temp2,v)
+                    end
+                end
                 if worker ~= nil and worker.position then
                     table.insert(temp, worker)
                 end
