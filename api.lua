@@ -66,7 +66,10 @@ api.new = {
             data = data or {}
         }
     end,
-    map = function(world, charmap)
+    map = function(world, mapname)
+        
+        local charmap = api.util.file.load.charMap(world.session.path .. '/' .. mapname  ..'.txt')
+        
         world.map = util.matrix.new(#charmap, #charmap[1], '.')
         for x, vx in ipairs(charmap) do
             for y, vy in ipairs(vx) do
@@ -82,7 +85,7 @@ api.new = {
         end
         return charmap
     end,
-    world = function(location)
+    world = function(location,mapname)
         local world = 
         {
             ruleset = require(location .. ".ruleset"),
@@ -101,10 +104,12 @@ api.new = {
                 renderskip = true,
                 collect = true,
                 print = {},
-                dotgrid = false
+                dotgrid = false,
+                path = location,
+                map = mapname
             }
         }        
-        world.map = api.new.map(world, api.util.file.load.charMap(location .. "/map.txt"))
+        world.map = api.new.map(world, mapname)
         return world
     end
 }

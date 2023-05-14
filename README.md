@@ -1,7 +1,7 @@
 ## OSGA command-line commands
 
 - `lua osga.lua` : Starts the OSGA REPL on the default path _./data_
-- `lua osga.lua path` : Starts the repl on specified _path_
+- `lua osga.lua (path) (mapname)` : Starts the repl on specified (_path_)
 
 ## OSGA Signals
 
@@ -38,5 +38,6 @@
 - `run (filename)` : run the (_filename_) script
 - `save (filename)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
 - `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints help
+- `load (mapname)` : load a map named (_mapname_)
 - `exit` : quits the OSGA REPL
 - `clear` : free memory

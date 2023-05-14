@@ -24,6 +24,13 @@ return function(world, command, api)
                 }, split[2], split[5] or 2)
             end
 
+        elseif api.util.string.includes(cmd, "load") then
+
+            world.singnal = {}
+            world.worker = {}
+            world.map = api.new.map(world, split[2])
+            world.session.map = split[2]
+
         elseif api.util.string.includes(cmd, 'master.') or api.util.string.includes(cmd, '>') then
 
             cmd = api.util.string.replace(cmd, ">", 'master.')
@@ -95,16 +102,14 @@ return function(world, command, api)
             print("please wait...")
 
         elseif api.util.string.includes(cmd, 'run') then
-
-            local script = api.util.file.load.text(split[2])
-            api.console.commander(world, script)
+            api.console.commander(world, api.util.file.load.text(world.session.path .. '/' .. split[2] .. '.osga'))
 
         elseif api.util.string.includes(cmd, 'save') then
 
             if split[2] ~= nil then
-                api.util.file.save.charMap(split[2], world.map)
+                api.util.file.save.charMap(world.session.path .. '/' .. split[2] .. '.txt', world.map)
             else
-                api.util.file.save.charMap('data/map.txt', world.map)
+                api.util.file.save.charMap(api.util.file.load.text(world.session.path .. '/' .. world.session.map .. '.osga'), world.map)
             end
 
         end

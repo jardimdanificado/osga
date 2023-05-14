@@ -27,12 +27,13 @@ end
 local function main()
     
     local location = arg[2] or 'data'
+    local map = arg[3] or 'map'
 
-    if util.file.exist(location .. "/ruleset.lua") == false or util.file.exist(location .. "/map.txt") == false then
+    if util.file.exist(location .. "/ruleset.lua") == false or api.util.string.replace(location .. '/' .. map,'//','/') == false then
         location = api.new.install(arg[2], arg[3], arg[4])
     end
 
-    local world = api.new.world(location)
+    local world = api.new.world(location, map)
     
     while not world.session.exit do
 
