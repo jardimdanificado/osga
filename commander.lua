@@ -74,9 +74,20 @@ return function(world, command, api)
             end
             world.session.print = temp
 
-        elseif api.util.string.includes(cmd, 'render skip') then
+        elseif api.util.string.includes(cmd, 'turn') then
 
-            world.session.renderskip = api.util.turn(world.session.renderskip)
+            if type(world.session[split[2]]) == 'boolean' then
+                world.session[split[2]] = api.util.turn(world.session[split[2]])
+            else
+                print("\n\27[32mavaliable to turn:\27[0m")
+                for k, v in pairs(world.session) do
+                    if type(v) == 'boolean' then
+                        print(k)
+                    end
+                end
+                print()
+                api.console.commander(world,command, api)
+            end
 
         elseif api.util.string.includes(cmd, 'skip') then
 

@@ -37,6 +37,6 @@
 - `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
 - `run (filename)` : run the (_filename_) script
 - `save (filename)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
-- `render skip` : turn skip's rendering
+- `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints help
 - `exit` : quits the OSGA REPL
 - `clear` : free memory

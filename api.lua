@@ -100,7 +100,8 @@ api.new = {
                 toskip = 0,
                 renderskip = true,
                 collect = true,
-                print = {}
+                print = {},
+                dotgrid = false
             }
         }        
         world.map = api.new.map(world, api.util.file.load.charMap(location .. "/map.txt"))
@@ -195,7 +196,8 @@ api.console = {
     end,
     printmap = function(world)
         local str = ''
-        local print_map = util.matrix.new(#world.map,#world.map[1],'.')
+        local empty = world.session.dotgrid and '.' or ' '
+        local print_map = util.matrix.new(#world.map,#world.map[1],empty)
         for i, worker in ipairs(world.worker) do
             if worker.position ~= nil then
                 if type(worker) == 'table' then
