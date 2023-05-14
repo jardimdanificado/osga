@@ -26,6 +26,7 @@
 - `*` : Spammer, sends the signal in vertical and horizontal directions.
 - `-` : Deleter, delete the signal.
 - `?` : Randomizer.
+- `!` : Printer.
 
 ## OSGA Console Commands
 

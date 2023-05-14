@@ -44,7 +44,7 @@ api.new = {
             y = y
         }
     end,
-    signal = function(position, direction, data, color)
+    signal = function(position, direction, data)
         return {
             direction = direction or {
                 x = 1,
@@ -52,7 +52,7 @@ api.new = {
             },
             data = data,
             position = position,
-            color = color or 'white'
+            color = 'white'
         }
     end,
     worker = function(ruleset, id, position, timer, speed, color)
@@ -98,7 +98,8 @@ api.new = {
                 message = 'idle',
                 toskip = 0,
                 renderskip = true,
-                collect = true
+                collect = true,
+                print = {}
             }
         }        
         world.map = api.new.map(world, api.util.file.load.charMap(location .. "/map.txt"))
@@ -149,6 +150,7 @@ api.console = {
     colors = 
     {
         black = '\27[30m',
+        reset = '\27[0m',
         red = '\27[31m',
         green = '\27[32m',
         yellow = '\27[33m',
@@ -156,7 +158,6 @@ api.console = {
         magenta = '\27[35m',
         cyan = '\27[36m',
         white = '\27[37m',
-        reset = '\27[0m'
     },
 
     colorstring = function(str,color)
@@ -166,7 +167,7 @@ api.console = {
         return "\27[1m" .. str .. "\27[0m"
     end,
     randomcolor = function()
-        return api.colors[api.util.random(1,#api.colors)]
+        return api.colors[api.util.random(3,#api.colors)]--ignores black and reset
     end,
     movecursor = function(x, y)
         return io.write("\27[" .. x .. ";" .. y .. "H")
@@ -203,12 +204,28 @@ api.console = {
                 end
             end
         end
+
         for i, signal in ipairs(world.signal) do
             if signal.position ~= nil then
                 if signal.data ~= nil then
                     print_map[signal.position.x][signal.position.y] = api.console.colorstring('@',signal.color)
                 else
                     print_map[signal.position.x][signal.position.y] = api.console.colorstring('$',signal.color)
+                end
+            end
+        end
+
+        if #world.session.print > 0 then
+            for i, v in ipairs(world.session.print) do
+                print(v.timer)
+                for y = 1, #v.str, 1 do
+                    if print_map[v.position.x][v.position.y + y] ~= nil then
+                        print_map[v.position.x][v.position.y + y] = string.sub(v.str,y,y)
+                    end
+                end
+                v.timer = v.timer - 1
+                if v.timer < 1 then
+                    world.session.print[i] = nil
                 end
             end
         end

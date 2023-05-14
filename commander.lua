@@ -59,7 +59,14 @@ return function(world, command, api)
                     table.insert(temp, worker)
                 end
             end
-            world.worker = temp
+            world.session.print = temp
+            temp = {}
+            for i, prt in ipairs(world.session.print) do
+                if prt.timer < 1 then
+                    table.insert(temp, prt)
+                end
+            end
+            world.session.print = temp
 
         elseif api.util.string.includes(cmd, 'render skip') then
 
