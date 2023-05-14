@@ -1,11 +1,11 @@
 ## OSGA command-line commands
 
-- `lua osga.lua` : Starts the OSGA REPL on the default path (default is: ./data)
-- `lua osga.lua filename` : Starts the repl on specified _filename_ file
+- `lua osga.lua` : Starts the OSGA REPL on the default path _./data_
+- `lua osga.lua path` : Starts the repl on specified _path_
 
 ## OSGA Signals
 
-- `*` : A pulse, contains nothing beside position and direction.
+- `$` : A pulse, contains nothing beside position and direction.
 - `@` : A transmission, same as pulse, but contains data.
 
 ### OSGA Signal Class
@@ -20,6 +20,7 @@
 
 ## OSGA Vanilla Operators
 
+- `> < ^ V` : Redirectiors.
 - `&` : Queue operator.
 - `+` : Square spammer, sends the signal in vertical and horizontal directions.
 - `X` : Diagonal spammer, sends the signal in vertical and horizontal directions.
@@ -31,10 +32,11 @@
 
 ## OSGA Console Commands
 
-- `add object width height` :  add a _object_ to specified _width_ x _height_ position
-- `edit width height` : set the cusor to the specified _width_ x _height_ position
-- `rm width height` : remove the worker on the specified _width_ x _height_ position
-- `run filename` : run the script on _filename_ path
-- `save filename` : save the map on _filename_ path, if no path provided it replaces the current _map.txt_
+- `add (object) (width) (height)` :  add a (_object_) to specified (_width_) x (_height_) position
+- `edit (width) (height)` : set the cusor to the specified (_width_) x (_height_) position
+- `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
+- `run (filename)` : run the (_filename_) script
+- `save (filename)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
+- `render skip` : turn skip's rendering
 - `exit` : quits the OSGA REPL
 - `clear` : free memory
