@@ -35,8 +35,8 @@
 - `add (object) (width) (height)` :  add a (_object_) to specified (_width_) x (_height_) position
 - `edit (width) (height)` : set the cusor to the specified (_width_) x (_height_) position
 - `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
-- `run (filename)` : run the (_filename_) script
-- `save (filename)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
+- `run (scriptname)` : run the (_filename_) script
+- `save (mapname)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
 - `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints help
 - `load (mapname)` : load a map named (_mapname_)
 - `exit` : quits the OSGA REPL
