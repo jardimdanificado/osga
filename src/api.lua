@@ -258,6 +258,7 @@ api.console = {
     start = function(worldsizex,worldsizey)
         local world = api.new.world(worldsizex,worldsizey)
         if arg[2] ~= nil then
+            world.session.message = arg[2]
             api.run(world,util.file.load.text(arg[2]))
         end
         
