@@ -81,9 +81,9 @@ ruleset['X'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['*'] = 'blue'
-ruleset.speed['*'] = 0
-ruleset['*'] = function(signal,worker,world,api)
+ruleset.color['$'] = 'blue'
+ruleset.speed['$'] = 0
+ruleset['$'] = function(signal,worker,world,api)
     local sig
     for i, v in ipairs(api.directions) do
         sig = api.signal.emit(world,worker.position,api.directions[i],signal.data)
@@ -113,7 +113,7 @@ end
 ruleset.color['!'] = 'magenta'
 ruleset.speed['!'] = 0
 ruleset['!'] = function(signal,worker,world,api)
-    if signal ~= nil then
+    if signal.data ~= nil then
         local result = {timer = signal.timer}
         table.insert(world.session.print,{timer=signal.data.timer, str = signal.data.str, position = {x=worker.position.x,y=worker.position.y}})
         signal.position = nil
@@ -140,21 +140,6 @@ ruleset['¬'] = function(signal,worker,world,api)
         api.signal.emit(world,signal.position,signal.direction,worker.data)
         signal.data = {}
     end
-end
-
-
-ruleset.color['a'] = 'green'
-ruleset.speed['a'] = 4
-ruleset['a'] = function(signal,worker,world,api)
-    local sig = api.signal.emit(world,worker.position,{x=0,y=1})
-    sig.color = api.console.randomcolor()
-end
-
-
-ruleset.color['b'] = 'reset'
-ruleset.speed['b'] = 16
-ruleset['b'] = function(signal,worker,world,api)
-    local sig = api.signal.emit(world,worker.position,{x=1,y=0},{str='texto de teste',timer = 3,position = worker.position})
 end
 
 

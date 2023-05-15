@@ -1,4 +1,0 @@
---this is a example osga script,  osga script is only made with console commands
-require lib/std.lua
-load examples/example_text.map
-skip 600

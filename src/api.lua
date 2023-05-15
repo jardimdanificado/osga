@@ -88,11 +88,11 @@ api.new = {
                 message = 'idle',
                 toskip = 0,
                 renderskip = true,
-                collect = true,
+                collectgarbage = true,
                 print = {},
-                dotgrid = false,
+                showdots = true,
             }
-        }        
+        }
         world.map = util.matrix.new(sizex,sizey,'.')
         return world
     end
@@ -154,7 +154,7 @@ api.frame = function(world)
             end
         end
     end
-    if world.session.collect and world.session.time % #world.map * 2 == 0 then
+    if world.session.collectgarbage and world.session.time % #world.map * 2 == 0 then
         api.run(world, 'clear')
     end
     return world
@@ -208,7 +208,7 @@ api.console = {
     end,
     printmap = function(world)
         local str = ''
-        local empty = world.session.dotgrid and '.' or ' '
+        local empty = world.session.hidedots and '.' or ' '
         local print_map = util.matrix.new(#world.map,#world.map[1],empty)
         for i, worker in ipairs(world.worker) do
             if worker.position ~= nil then
@@ -366,8 +366,9 @@ api.run = function(world, command)
                     for i, v in ipairs(worker.data) do
                         table.insert(temp2,v)
                     end
+                    worker.data = temp2
                 end
-                if worker ~= nil and worker.position then
+                if worker ~= nil and worker.position ~= nil then
                     table.insert(temp, worker)
                 end
             end
