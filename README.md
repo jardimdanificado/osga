@@ -1,6 +1,7 @@
 ## OSGA - Open Scripting Grid Abstracter
 
 The reference _Open Scripting Grid Abstracter_ implemented in lua.
+
 This is part of the _Open Scripting Grid Architecture_ project.
 
 ## OSGA - Command-line Commands
@@ -39,13 +40,13 @@ This is part of the _Open Scripting Grid Architecture_ project.
 
 ## OSGA - Console Commands
 
+- `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints avaliable varaibles
+- `require (modname)` : load a lib named (_modname_)
+- `run (scriptname)` : run the (_filename_) script
+- `load (mapname)` : load a map named (_mapname_)
+- `save (mapname)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
 - `add (object) (width) (height)` :  add a (_object_) to specified (_width_) x (_height_) position
 - `edit (width) (height)` : set the cusor to the specified (_width_) x (_height_) position
 - `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
-- `run (scriptname)` : run the (_filename_) script
-- `save (mapname)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
-- `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints avaliable varaibles
-- `load (mapname)` : load a map named (_mapname_)
-- `require (modname)` : load a lib named (_modname_)
-- `exit` : quits the OSGA REPL
 - `clear` : free memory
+- `exit` : quits the OSGA REPL
