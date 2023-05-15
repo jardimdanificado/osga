@@ -225,7 +225,7 @@ api.console = {
                 if signal.data ~= nil then
                     print_map[signal.position.x][signal.position.y] = api.console.colorstring('@',signal.color)
                 else
-                    print_map[signal.position.x][signal.position.y] = api.console.colorstring('$',signal.color)
+                    print_map[signal.position.x][signal.position.y] = api.console.colorstring('*',signal.color)
                 end
             end
         end

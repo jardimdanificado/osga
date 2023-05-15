@@ -5,7 +5,7 @@
 
 ## OSGA Signals
 
-- `$` : A pulse, contains nothing beside position and direction.
+- `*` : A pulse, contains nothing beside position and direction.
 - `@` : A transmission, same as pulse, but contains data.
 
 ### OSGA Signal Class
@@ -24,11 +24,13 @@
 - `&` : Queue operator.
 - `+` : Square spammer, sends the signal in vertical and horizontal directions.
 - `X` : Diagonal spammer, sends the signal in vertical and horizontal directions.
-- `*` : Spammer, sends the signal in all directions.
+- `$` : Spammer, sends the signal in all directions.
 - `-` : Deleter, delete the signal.
 - `?` : Randomizer.
 - `!` : Printer.
 - `|` : Mirror.
+- `¬` : Packer.
+- `%` : Unpacker.
 
 ## OSGA Console Commands
 
@@ -39,5 +41,6 @@
 - `save (mapname)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
 - `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints help
 - `load (mapname)` : load a map named (_mapname_)
+- `require (modname)` : load a lib named (_modname_)
 - `exit` : quits the OSGA REPL
 - `clear` : free memory
