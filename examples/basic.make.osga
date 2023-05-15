@@ -1,0 +1,5 @@
+run examples/libs.osga
+load examples/maps/basic.map
+write examples/basic.osga
+run examples/basic.osga
+skip 419

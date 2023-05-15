@@ -1,3 +1,21 @@
-run examples/libs.osga
-load examples/maps/basic.map
-skip 420
+require lib/template.lua
+require lib/std.lua
+require examples/example_lib.lua
+new 17 64
+add > 1 42
+add V 1 47
+add $ 5 27
+add ^ 5 42
+add X 8 33
+add - 9 32
+add - 10 47
+add > 11 21
+add ? 11 27
+add ? 11 33
+add ? 11 42
+add a 14 4
+add ^ 14 21
+add + 14 33
+add | 14 38
+add ^ 17 27
+add < 17 52

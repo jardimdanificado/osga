@@ -1,0 +1,4 @@
+run examples/libs.osga
+load examples/maps/printer.map
+write examples/printer.osga
+run examples/printer.osga

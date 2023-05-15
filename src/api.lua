@@ -88,9 +88,10 @@ api.new = {
                 message = 'idle',
                 toskip = 0,
                 renderskip = true,
-                collectgarbage = true,
+                garbagecollector = true,
                 print = {},
                 showdots = true,
+                loadedscripts = {}
             }
         }
         world.map = util.matrix.new(sizex,sizey,'.')
@@ -154,7 +155,7 @@ api.frame = function(world)
             end
         end
     end
-    if world.session.collectgarbage and world.session.time % #world.map * 2 == 0 then
+    if world.session.garbagecollector and world.session.time % #world.map * 2 == 0 then
         api.run(world, 'clear')
     end
     return world
@@ -185,26 +186,6 @@ api.console = {
     end,
     movecursor = function(x, y)
         return io.write("\27[" .. x .. ";" .. y .. "H")
-    end,
-    formatcommand = function(fullcmd)
-        while api.util.string.includes(fullcmd, '\n') do
-            fullcmd = api.util.string.replace(fullcmd, '\n', ';')
-        end
-    
-        while api.util.string.includes(fullcmd, '  ') do
-            fullcmd = api.util.string.replace(fullcmd, '  ', ' ')
-        end
-    
-        fullcmd = api.util.string.replace(fullcmd, '; ', ';')
-        fullcmd = api.util.string.replace(fullcmd, ' ;', ';')
-    
-        local splited = api.util.string.split(fullcmd, ';')
-        for i, v in ipairs(splited) do
-            if api.util.string.includes(v, '--') then
-                splited[i] = ''
-            end
-        end
-        return splited
     end,
     printmap = function(world)
         local str = ''
@@ -289,10 +270,31 @@ api.console = {
     end
 }
 
+api.formatcommand = function(fullcmd)
+    while api.util.string.includes(fullcmd, '\n') do
+        fullcmd = api.util.string.replace(fullcmd, '\n', ';')
+    end
+
+    while api.util.string.includes(fullcmd, '  ') do
+        fullcmd = api.util.string.replace(fullcmd, '  ', ' ')
+    end
+
+    fullcmd = api.util.string.replace(fullcmd, '; ', ';')
+    fullcmd = api.util.string.replace(fullcmd, ' ;', ';')
+
+    local splited = api.util.string.split(fullcmd, ';')
+    for i, v in ipairs(splited) do
+        if api.util.string.includes(v, '--') then
+            splited[i] = ''
+        end
+    end
+    return splited
+end
+
 api.run = function(world, command)
     master = {world=world,api=api}
     local fullcmd = command or io.read()
-    local splited = api.console.formatcommand(fullcmd)
+    local splited = api.formatcommand(fullcmd)
     for i, cmd in ipairs(splited) do
 
         local split = api.util.string.split(cmd, " ")
@@ -314,6 +316,7 @@ api.run = function(world, command)
                     world.ruleset.speed[k] = templib.speed[k]
                 end
             end
+            table.insert(world.session.loadedscripts,split[2])
         elseif api.util.string.includes(cmd, "add") then
 
             if #split >= 4 then
@@ -325,10 +328,13 @@ api.run = function(world, command)
 
         elseif api.util.string.includes(cmd, "load") then
 
-            world.singnal = {}
+            world.signal = {}
             world.worker = {}
             world.map = api.new.map(world, split[2])
             world.session.map = split[2]
+
+        elseif api.util.string.includes(split[1], 'new') then
+            world.map = util.matrix.new(split[2],split[3],'.')
 
         elseif api.util.string.includes(cmd, 'master.') or api.util.string.includes(cmd, '>') then
 
@@ -400,6 +406,22 @@ api.run = function(world, command)
 
             world.session.toskip = tonumber(split[2])
             print("please wait...")
+
+        elseif api.util.string.includes(cmd, 'write') then
+            local text = ''
+            for i, v in ipairs(world.session.loadedscripts) do
+                text = text .. 'require ' .. v .. '\n'
+            end
+            text = text .. 'new ' .. #world.map .. ' ' .. #world.map[1] .. '\n'
+            for x = 1, #world.map, 1 do
+                for y = 1, #world.map[x], 1 do
+                    if world.map[x][y] ~= '.' then
+                        text = text .. 'add ' .. world.map[x][y].id .. ' ' .. x .. ' ' .. y .. '\n'
+                    end
+                end
+            end
+            
+            util.file.save.text(split[2],text)
 
         elseif api.util.string.includes(cmd, 'run') then
             api.run(world, api.util.file.load.text(split[2]))
