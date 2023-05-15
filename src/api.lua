@@ -257,10 +257,11 @@ api.console = {
     end,
     start = function(worldsizex,worldsizey)
         local world = api.new.world(worldsizex,worldsizey)
-        world.session.message = arg[2]
+        
         if arg[2] ~= nil then
-            
             api.run(world,util.file.load.text(arg[2]))
+        elseif util.string.includes(arg[1],'.osga') then
+            api.run(world,util.file.load.text(arg[1]))
         end
         
         while not world.session.exit do
