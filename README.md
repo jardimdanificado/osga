@@ -40,7 +40,7 @@ This is part of the _Open Scripting Grid Architecture_ project.
 
 ## OSGA - Console Commands
 
-- `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints avaliable varaibles
+- `skip (number)` : plays the simulation for (_number_) frames
 - `require (modname)` : load a lib named (_modname_)
 - `run (scriptname)` : run the (_filename_) script
 - `load (mapname)` : load a map named (_mapname_)
@@ -48,5 +48,6 @@ This is part of the _Open Scripting Grid Architecture_ project.
 - `add (object) (width) (height)` :  add a (_object_) to specified (_width_) x (_height_) position
 - `edit (width) (height)` : set the cusor to the specified (_width_) x (_height_) position
 - `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
+- `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints avaliable varaibles
 - `clear` : free memory
 - `exit` : quits the OSGA REPL
