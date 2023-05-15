@@ -256,11 +256,11 @@ api.console = {
         world.session.message = str
     end,
     start = function(worldsizex,worldsizey)
-    
-        local startscript = arg[2] or ''
-        
         local world = api.new.world(worldsizex,worldsizey)
-        api.run(world,util.file.load.text(startscript))
+        if arg[2] ~= nil then
+            api.run(world,util.file.load.text(arg[2]))
+        end
+        
         while not world.session.exit do
     
             if world.session.toskip == 0 or world.session.renderskip then
