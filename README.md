@@ -1,7 +1,7 @@
 ## OSGA command-line commands
 
 - `lua osga.lua` : Starts the OSGA REPL on the default path _./data_
-- `lua osga.lua (path) (mapname)` : Starts the repl on specified (_path_)
+- `lua osga.lua (path)` : Starts the repl on specified (_path_)
 
 ## OSGA Signals
 
