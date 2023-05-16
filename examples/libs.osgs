@@ -1,0 +1,4 @@
+--load OSGA standard library
+require lib/std.lua
+--load the examples prepared lib
+require lib/example.lua

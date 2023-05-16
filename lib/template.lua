@@ -1,6 +1,6 @@
-local ruleset = {color={},speed={}}
+local ruleset = {color={},speed={},commands={}}
 
-ruleset.color['a'] = 'green'
+ruleset.color['a'] = 'reset'
 ruleset.speed['a'] = 4
 ruleset['a'] = function(signal,worker,world,api)
 --put your lua code here

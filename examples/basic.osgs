@@ -1,0 +1,3 @@
+run examples/libs.osgs
+load examples/map/basic.osgm
+skip 419

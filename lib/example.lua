@@ -1,4 +1,4 @@
-local ruleset = {color={},speed={}}
+local ruleset = {color={},speed={},commands={}}
 
 ruleset.color['a'] = 'green'
 ruleset.speed['a'] = 8

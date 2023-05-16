@@ -1,6 +1,0 @@
---load template lib, just for using visual letters
-require lib/template.lua
---load OSGA standard library
-require lib/std.lua
---load the examples prepared lib
-require examples/example_lib.lua

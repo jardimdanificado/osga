@@ -22,7 +22,29 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
   - `x` : Number.
   - `y` : Number.
 
-## OSGA - Vanilla Operators
+## OSGA - BuiltIn Commands
+
+- `require (modname)` : load a lib named (_modname_)
+
+## OSGA - Standard Library Commands(lib.std)
+
+- `run (scriptname)` : run the (_filename_) script
+- `skip (number)` : plays the simulation for (_number_) frames
+- `new (x) (y)` : creates a new map of size (_x_) (_y_)
+- `load (mapname)` : load a map named (_mapname_)
+- `save (mapname)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
+- `add (object) (width) (height)` :  add a (_object_) to specified (_width_) x (_height_) position
+- `edit (width) (height)` : set the cusor to the specified (_width_) x (_height_) position
+- `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
+- `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints avaliable varaibles
+- `write (filename)` : write map to script file, if _varname_ unavalaible prints avaliable varaibles
+- `clear` : free memory
+- `> (cmd)` : access master(world and api)
+- `>> (cmd)` : access lua layer
+- `>>> (cmd)` : direcly access OS layer( os.execute((_cmd_)) )
+- `turn exit` : quits the OSGA REPL
+
+## OSGA - Standard Library Operators(lib.std)
 
 - `> < ^ V` : Redirectiors.
 - `&` : Queue operator.
@@ -35,19 +57,3 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 - `|` : Mirror.
 - `¬` : Packer.
 - `%` : Unpacker.
-
-## OSGA - Console Commands
-
-- `skip (number)` : plays the simulation for (_number_) frames
-- `require (modname)` : load a lib named (_modname_)
-- `run (scriptname)` : run the (_filename_) script
-- `new (x) (y)` : creates a new map of size (_x_) (_y_)
-- `load (mapname)` : load a map named (_mapname_)
-- `save (mapname)` : save the map on (_filename_) path, if no path provided it replaces the current _map.txt_
-- `add (object) (width) (height)` :  add a (_object_) to specified (_width_) x (_height_) position
-- `edit (width) (height)` : set the cusor to the specified (_width_) x (_height_) position
-- `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
-- `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints avaliable varaibles
-- `write (filename)` : write map to script file, if _varname_ unavalaible prints avaliable varaibles
-- `clear` : free memory
-- `exit` : quits the OSGA REPL

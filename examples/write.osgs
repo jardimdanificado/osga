@@ -1,0 +1,4 @@
+run examples/libs.osgs
+load examples/map/write.osgm
+write examples/write.generated.osgs
+run examples/write.generated.osgs

@@ -73,7 +73,29 @@ api.new = {
             ruleset = 
             {
                 color = {},
-                speed = {}
+                speed = {},
+                commands = 
+                {
+                    require = function(world,api,args)
+                        local templib = require(api.util.string.replace(api.util.string.replace(args[1],'.lua',''),'/','.'))
+                        for k, v in pairs(templib) do
+                            if k ~= 'speed' and k ~= 'color' and k ~= 'commands' then
+                                world.ruleset[k] = v
+                                world.ruleset.color[k] = templib.color[k] 
+                                world.ruleset.speed[k] = templib.speed[k]
+                            end
+                        end
+                        for k, v in pairs(templib.commands) do
+                            --print(k)
+                            world.ruleset.commands[k] = v
+                        end
+                            
+                        table.insert(world.session.loadedscripts,args[1])
+                    end,
+                    run = function(world,api,args)
+                        api.run(world, api.util.file.load.text(args[1]))
+                    end
+                }
             },
             signal = {},
             worker = {},
@@ -213,7 +235,6 @@ api.console = {
 
         if #world.session.print > 0 then
             for i, v in ipairs(world.session.print) do
-                print(v.timer)
                 for y = 1, #v.str, 1 do
                     if print_map[v.position.x][v.position.y + y] ~= nil then
                         print_map[v.position.x][v.position.y + y] = string.sub(v.str,y,y)
@@ -254,8 +275,7 @@ api.console = {
             if world.session.editmode then
                 api.console.movecursor(world.session.cposi.x, world.session.cposi.y)
                 local chin = io.stdin:read(1)
-                world.map[world.session.cposi.x][world.session.cposi.y] =
-                    api.worker.spawn(world, world.session.cposi, chin, 2)
+                world.map[world.session.cposi.x][world.session.cposi.y] = api.worker.spawn(world, world.session.cposi, chin, 2)
                 world.session.editmode = false
             end
     
@@ -296,145 +316,16 @@ api.run = function(world, command)
     local fullcmd = command or io.read()
     local splited = api.formatcommand(fullcmd)
     for i, cmd in ipairs(splited) do
-
-        local split = api.util.string.split(cmd, " ")
-        cmd = string.gsub(cmd, "^%s*(.-)%s*$", "%1")
-
-        if api.util.string.includes(cmd, "edit") then
-
-            world.session.cposi = {
-                x = tonumber(split[2]),
-                y = tonumber(split[3])
-            }
-            world.session.editmode = true
-        elseif api.util.string.includes(cmd, 'require') then
-            local templib = require(util.string.replace(util.string.replace(split[2],'.lua',''),'/','.'))
-            for k, v in pairs(templib) do
-                if k ~= 'speed' and k ~= 'color' then
-                    world.ruleset[k] = v
-                    world.ruleset.color[k] = templib.color[k]
-                    world.ruleset.speed[k] = templib.speed[k]
-                end
+        if cmd ~= '' then
+            local split = api.util.string.split(cmd, " ")
+            cmd = string.gsub(cmd, "^%s*(.-)%s*$", "%1")
+            local args = {}
+            for i = 2, #split, 1 do
+                table.insert(args,split[i])
             end
-            table.insert(world.session.loadedscripts,split[2])
-        elseif api.util.string.includes(cmd, "add") then
-
-            if #split >= 4 then
-                api.worker.spawn(world, {
-                    x = tonumber(split[3]),
-                    y = tonumber(split[4])
-                }, split[2], split[5] or 2)
-            end
-
-        elseif api.util.string.includes(cmd, "load") then
-
-            world.signal = {}
-            world.worker = {}
-            world.map = api.new.map(world, split[2])
-            world.session.map = split[2]
-
-        elseif api.util.string.includes(split[1], 'new') then
-            world.map = util.matrix.new(split[2],split[3],'.')
-
-        elseif api.util.string.includes(cmd, 'master.') or api.util.string.includes(cmd, '>') then
-
-            cmd = api.util.string.replace(cmd, ">", 'master.')
-            assert(api.util.load(cmd))()
-
-        elseif api.util.string.includes(cmd, "rm") then
-
-            if world.map[tonumber(split[2])][tonumber(split[3])] ~= '.' then
-                world.session.cposi = {
-                    x = tonumber(split[2]),
-                    y = tonumber(split[3])
-                }
-                world.map[tonumber(split[2])][tonumber(split[3])].position = nil
-                world.map[tonumber(split[2])][tonumber(split[3])] = '.'
-            end
-
-        elseif api.util.string.includes(cmd, 'exit') then
-
-            world.session.exit = true
-
-        elseif api.util.string.includes(cmd, 'clear') then
-
-            local temp = {}
-            for i, signal in ipairs(world.signal) do
-                if signal ~= nil and signal.position ~= nil then
-                    table.insert(temp, signal)
-                end
-            end
-            world.signal = temp
-            temp = {}
-            for i, worker in ipairs(world.worker) do
-                local temp2 = {}
-                if worker.id == '&' then --if bank
-                    for i, v in ipairs(worker.data) do
-                        table.insert(temp2,v)
-                    end
-                    worker.data = temp2
-                end
-                if worker ~= nil and worker.position ~= nil then
-                    table.insert(temp, worker)
-                end
-            end
-            world.session.print = temp
-            temp = {}
-            for i, prt in ipairs(world.session.print) do
-                if prt.timer < 1 then
-                    table.insert(temp, prt)
-                end
-            end
-            world.session.print = temp
-
-        elseif api.util.string.includes(cmd, 'turn') then
-
-            if type(world.session[split[2]]) == 'boolean' then
-                world.session[split[2]] = api.util.turn(world.session[split[2]])
-            else
-                print("\n\27[32mavaliable to turn:\27[0m")
-                for k, v in pairs(world.session) do
-                    if type(v) == 'boolean' then
-                        print(k)
-                    end
-                end
-                print()
-                api.run(world,command, api)
-            end
-
-        elseif api.util.string.includes(cmd, 'skip') then
-
-            world.session.toskip = tonumber(split[2])
-            print("please wait...")
-
-        elseif api.util.string.includes(cmd, 'write') then
-            local text = ''
-            for i, v in ipairs(world.session.loadedscripts) do
-                text = text .. 'require ' .. v .. '\n'
-            end
-            text = text .. 'new ' .. #world.map .. ' ' .. #world.map[1] .. '\n'
-            for x = 1, #world.map, 1 do
-                for y = 1, #world.map[x], 1 do
-                    if world.map[x][y] ~= '.' then
-                        text = text .. 'add ' .. world.map[x][y].id .. ' ' .. x .. ' ' .. y .. '\n'
-                    end
-                end
-            end
-            
-            util.file.save.text(split[2],text)
-
-        elseif api.util.string.includes(cmd, 'run') then
-            api.run(world, api.util.file.load.text(split[2]))
-
-        elseif api.util.string.includes(cmd, 'save') then
-
-            if split[2] ~= nil then
-                api.util.file.save.charMap(split[2], world.map)
-            else
-                api.util.file.save.charMap(world.session.mapname, world.map)
-            end
-
+            world.ruleset.commands[split[1]](world,api,args,cmd)
         end
+        
     end
 end
 
