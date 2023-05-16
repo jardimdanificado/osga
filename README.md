@@ -1,10 +1,6 @@
 ## OSGA - Open Scripting Grid Abstracter
 
-This is the reference implementation of _Open Scripting Grid Architecture_
-
-The reference interpreter is called _Open Scripting Grid Abstracter_ and implemented in lua.
-
-_Open Scripting Grid Architecture_(OSGA) is how specification is called, and _Open Scripting Grid Abstracter_(osga) is how the interpreter is called, this is the official repository for both OSGA and osga.
+The reference _Open Scripting Grid Abstracter_ implemented in lua.
 
 ## OSGA - Command-line Commands
 

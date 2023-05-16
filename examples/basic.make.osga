@@ -1,5 +1,10 @@
+--run a script that load the examples libraries
 run examples/libs.osga
+--load the map
 load examples/maps/basic.map
+--write the current map to a script
 write examples/basic.osga
+--run the generatede script
 run examples/basic.osga
+--plays 419 frames
 skip 419

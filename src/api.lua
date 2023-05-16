@@ -241,7 +241,7 @@ api.console = {
         
         if arg[2] ~= nil then
             api.run(world,util.file.load.text(arg[2]))
-        elseif util.string.includes(arg[1],'.osga') then
+        elseif arg[1] ~= nil and util.string.includes(arg[1],'.osga') then
             api.run(world,util.file.load.text(arg[1]))
         end
         

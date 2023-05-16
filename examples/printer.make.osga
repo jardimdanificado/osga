@@ -1,4 +1,10 @@
+--run a script that load the examples libraries
 run examples/libs.osga
+--load the map
 load examples/maps/printer.map
+--write the current map to a script
 write examples/printer.osga
+--run the generated script
 run examples/printer.osga
+--plays 63 frames
+skip 63
