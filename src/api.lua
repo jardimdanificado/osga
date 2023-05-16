@@ -26,7 +26,7 @@ api.new = {
             y = y
         }
     end,
-    signal = function(position, direction, data)
+    signal = function(position, direction, data, func)
         return {
             direction = direction or {
                 x = 1,
@@ -34,7 +34,8 @@ api.new = {
             },
             data = data,
             position = position,
-            color = 'white'
+            color = 'white',
+            func = func or api.signal.move
         }
     end,
     worker = function(ruleset, id, position, timer, speed, color, data)
@@ -123,6 +124,7 @@ api.signal = {
         if signal.position == nil or world.map[signal.position.x][signal.position.y] == '.' then
             return
         end
+        signal.func(world,signal,worker,api)
         local worker = world.map[signal.position.x][signal.position.y]
         worker.func(signal, worker, world, api)
     end,
@@ -141,7 +143,7 @@ api.signal = {
         end
     end,
     emit = function(world, position, direction, data)
-        table.insert(world.signal, api.new.signal(position, direction, data))
+        table.insert(world.signal, api.new.signal(position, direction, data, api.signal.move))
         return world.signal[#world.signal]
     end
 }
@@ -161,7 +163,6 @@ api.frame = function(world)
     world.session.time = world.session.time + 1
     for i, v in ipairs(world.signal) do
         if v.position ~= nil then
-            api.signal.move(world, v)
             api.signal.work(world, v)
         end
     end
