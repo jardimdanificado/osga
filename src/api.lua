@@ -120,14 +120,15 @@ api.new = {
 }
 
 api.signal = {
-	signal.func(world,signal,worker,api)
     work = function(world, signal)
         if signal.position == nil or world.map[signal.position.x][signal.position.y] == '.' then
-            return
+            return signal.func(world,signal,nil,api)
+        else
+            signal.func(world,signal,worker,api)
+            local worker = world.map[signal.position.x][signal.position.y]
+            worker.func(signal, worker, world, api)
         end
         
-        local worker = world.map[signal.position.x][signal.position.y]
-        worker.func(signal, worker, world, api)
     end,
     move = function(world, signal)
         local sum = {
