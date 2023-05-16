@@ -165,6 +165,7 @@ api.frame = function(world)
         if v.position ~= nil then
             if signal.func == nil then
                 signal.func = api.signal.move
+            end
             api.signal.work(world, v)
         end
     end
