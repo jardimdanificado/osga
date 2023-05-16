@@ -126,6 +126,7 @@ api.signal = {
         else
             signal.func(world,signal,worker,api)
             local worker = world.map[signal.position.x][signal.position.y]
+            print(worker)
             worker.func(signal, worker, world, api)
         end
         
