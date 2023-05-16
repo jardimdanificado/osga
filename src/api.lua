@@ -163,8 +163,8 @@ api.frame = function(world)
     world.session.time = world.session.time + 1
     for i, v in ipairs(world.signal) do
         if v.position ~= nil then
-            if signal.func == nil then
-                signal.func = api.signal.move
+            if v.func == nil then
+                v.func = api.signal.move
             end
             api.signal.work(world, v)
         end
