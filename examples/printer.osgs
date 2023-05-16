@@ -1,3 +1,3 @@
-run examples/libs.osgs
+--luajit.exe main.lua .\examples\printer.osgs -lstd -lexample
 load examples/map/printer.osgm
 skip 63

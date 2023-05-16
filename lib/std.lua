@@ -828,6 +828,10 @@ ruleset['Ñ'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
+ruleset.commands.run = function(world,api,args)
+    api.run(world, api.util.file.load.text(args[1]))
+end
+
 ruleset.commands.edit = function(world,api,args)
     world.session.cposi = {
         x = tonumber(args[1]),
