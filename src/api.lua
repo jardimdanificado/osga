@@ -256,32 +256,6 @@ api.console = {
     end,
     start = function(worldsizex,worldsizey)
         local world = api.new.world(worldsizex,worldsizey)
-        
-        if arg[2] ~= nil then
-            for i = 2, #arg, 1 do
-                if util.string.includes(arg[i],'-l') then
-                    api.run(world,"require lib." .. util.string.replace(arg[i],'-l',''))
-                end
-            end
-
-            if util.string.includes(arg[2],'.osgs') then
-                api.run(world,util.file.load.text(arg[2]))
-            elseif util.string.includes(arg[2],'.osgm') then
-                world.map = api.new.map(world,arg[2])
-            end
-        elseif arg[1] ~= nil then
-            for i = 1, #arg, 1 do
-                if util.string.includes(arg[i],'-l') then
-                    api.run(world,"require lib." .. util.string.replace(arg[i],'-l',''))
-                end
-            end
-
-            if util.string.includes(arg[1],'.osgs') then
-                api.run(world,util.file.load.text(arg[1]))
-            elseif util.string.includes(arg[1],'.osgm') then
-                world.map = api.new.map(world,arg[1])
-            end
-        end
         local latermap = function() end
         local laterscript = {}
         for i, v in ipairs(arg) do
