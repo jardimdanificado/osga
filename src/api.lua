@@ -90,7 +90,7 @@ api.new = {
                             world.ruleset.commands[k] = v
                         end
                             
-                        table.insert(world.session.loadedscripts,args[1])
+                        table.insert(world.session.loadedscripts,api.util.string.replace(api.util.string.replace(args[1],'.lua',''),'/','.'))
                     end,
                 }
             },
@@ -174,7 +174,7 @@ api.frame = function(world)
             end
         end
     end
-    if world.session.garbagecollector and world.session.time % #world.map * 2 == 0 then
+    if world.session.garbagecollector and util.array.includes(world.session.loadedscripts,'lib.std') and world.session.time % #world.map * 2 == 0 then
         api.run(world, 'clear')
     end
     return world
