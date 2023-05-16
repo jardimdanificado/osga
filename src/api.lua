@@ -122,12 +122,13 @@ api.new = {
 api.signal = {
     work = function(world, signal)
         if signal.position == nil or world.map[signal.position.x][signal.position.y] == '.' then
-            return signal.func(world,signal,nil,api)
+            signal.func(world,signal,0,api)
         else
             
             local worker = world.map[signal.position.x][signal.position.y]
 
             worker.func(signal, worker, world, api)
+            print("worker ok")
             signal.func(world,signal,worker,api)
         end
         
