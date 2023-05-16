@@ -966,10 +966,12 @@ ruleset.commands.save = function(world,api,args)
 end
 
 ruleset.commands.help = function(world,api,args)
-    io.write("avaliable commands: ")
+    io.write("\27[32mAvaliable commands:\27[0m ")
     for k, v in pairs(world.ruleset.commands) do
         io.write(k .. ', ') 
     end
+    io.write('\n')
+    api.run(world)
 end
 
 return ruleset

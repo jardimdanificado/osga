@@ -28,6 +28,7 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 
 ## OSGA - Standard Library Commands(lib.std)
 
+- `help` : list all loaded commands
 - `run (scriptname)` : run the (_filename_) script
 - `skip (number)` : plays the simulation for (_number_) frames
 - `new (x) (y)` : creates a new map of size (_x_) (_y_)
