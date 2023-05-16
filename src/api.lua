@@ -282,7 +282,22 @@ api.console = {
                 world.map = api.new.map(world,arg[1])
             end
         end
-        
+        local latermap = function() end
+        local laterscript = {}
+        for i, v in ipairs(arg) do
+            if util.string.includes(v,'-l') then
+                api.run(world,"require lib." .. util.string.replace(v,'-l',''))
+            end
+            if util.string.includes(v,'.osgs') then
+                table.insert(laterscript,v)
+            elseif util.string.includes(v,'.osgm') then
+                latermap = function() world.map = api.new.map(world,v) end
+            end
+        end
+        latermap()
+        for i, v in ipairs(laterscript) do
+            api.run(world,util.file.load.text(v))
+        end
         while not world.session.exit do
     
             if world.session.toskip == 0 or world.session.renderskip then
