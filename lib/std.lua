@@ -1,62 +1,64 @@
 local ruleset = {}
-ruleset.speed = {}
-ruleset.color = {}
-ruleset.commands = {}
+ruleset.worker = {}
+ruleset.worker.speed = {}
+ruleset.worker.color = {}
+ruleset.signal = {}
+ruleset.command = {}
 
-ruleset.color['<'] = 'yellow'
-ruleset.speed['<'] = 0
-ruleset['<'] = function(signal,worker,world,api)
+ruleset.worker.color['<'] = 'yellow'
+ruleset.worker.speed['<'] = 0
+ruleset.worker['<'] = function(signal,worker,world,api)
     signal.direction = {x=0,y=-1} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['>'] = 'yellow'
-ruleset.speed['>'] = 0
-ruleset['>'] = function(signal,worker,world,api)
+ruleset.worker.color['>'] = 'yellow'
+ruleset.worker.speed['>'] = 0
+ruleset.worker['>'] = function(signal,worker,world,api)
     signal.direction = {x=0,y=1} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['^'] = 'yellow'
-ruleset.speed['^'] = 0
-ruleset['^'] = function(signal,worker,world,api)
+ruleset.worker.color['^'] = 'yellow'
+ruleset.worker.speed['^'] = 0
+ruleset.worker['^'] = function(signal,worker,world,api)
     signal.direction = {x=-1,y=0} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['V'] = 'yellow'
-ruleset.speed['V'] = 0
-ruleset['V'] = function(signal,worker,world,api)
+ruleset.worker.color['V'] = 'yellow'
+ruleset.worker.speed['V'] = 0
+ruleset.worker['V'] = function(signal,worker,world,api)
     signal.direction = {x=1,y=0} -- x = up/down, y = right/left
 end
 
 
-ruleset.color['|'] = 'yellow'
-ruleset.speed['|'] = 0
-ruleset['|'] = function(signal,worker,world,api)
+ruleset.worker.color['|'] = 'yellow'
+ruleset.worker.speed['|'] = 0
+ruleset.worker['|'] = function(signal,worker,world,api)
     signal.direction = {x = signal.direction.x*-1, y = signal.direction.y *-1}
     worker.color = signal.color
 end
 
 
-ruleset.color['-'] = 'red'
-ruleset.speed['-'] = 0
-ruleset['-'] = function(signal,worker,world,api)
+ruleset.worker.color['-'] = 'red'
+ruleset.worker.speed['-'] = 0
+ruleset.worker['-'] = function(signal,worker,world,api)
     signal.position = nil
 end
 
 
-ruleset.color['?'] = 'blue'
-ruleset.speed['?'] = 0
-ruleset['?'] = function(signal,worker,world,api)
+ruleset.worker.color['?'] = 'blue'
+ruleset.worker.speed['?'] = 0
+ruleset.worker['?'] = function(signal,worker,world,api)
     signal.direction = api.directions[api.util.random(1,#api.directions)]
     worker.color = signal.color
 end
 
 
-ruleset.color['+'] = 'blue'
-ruleset.speed['+'] = 0
-ruleset['+'] = function(signal,worker,world,api)
+ruleset.worker.color['+'] = 'blue'
+ruleset.worker.speed['+'] = 0
+ruleset.worker['+'] = function(signal,worker,world,api)
     for i, v in ipairs(api.directions) do
         if v.x == 0 or v.y == 0 then
           local sig = api.signal.emit(world,worker.position,api.directions[i],signal.data)
@@ -68,9 +70,9 @@ ruleset['+'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['X'] = 'blue'
-ruleset.speed['X'] = 0
-ruleset['X'] = function(signal,worker,world,api)
+ruleset.worker.color['X'] = 'blue'
+ruleset.worker.speed['X'] = 0
+ruleset.worker['X'] = function(signal,worker,world,api)
     for i, v in ipairs(api.directions) do
         if v.x ~= 0 and v.y ~= 0 then
             local sig = api.signal.emit(world,worker.position,api.directions[i],signal.data)
@@ -82,9 +84,9 @@ ruleset['X'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['$'] = 'blue'
-ruleset.speed['$'] = 0
-ruleset['$'] = function(signal,worker,world,api)
+ruleset.worker.color['$'] = 'blue'
+ruleset.worker.speed['$'] = 0
+ruleset.worker['$'] = function(signal,worker,world,api)
     local sig
     for i, v in ipairs(api.directions) do
         sig = api.signal.emit(world,worker.position,api.directions[i],signal.data)
@@ -95,9 +97,9 @@ ruleset['$'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['&'] = 'magenta'
-ruleset.speed['&'] = 0
-ruleset['&'] = function(signal,worker,world,api)
+ruleset.worker.color['&'] = 'magenta'
+ruleset.worker.speed['&'] = 0
+ruleset.worker['&'] = function(signal,worker,world,api)
     if signal.data ~= nil then
         table.insert(worker.data,signal.data)
     elseif #worker.data > 0 then
@@ -111,9 +113,9 @@ ruleset['&'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['!'] = 'magenta'
-ruleset.speed['!'] = 0
-ruleset['!'] = function(signal,worker,world,api)
+ruleset.worker.color['!'] = 'magenta'
+ruleset.worker.speed['!'] = 0
+ruleset.worker['!'] = function(signal,worker,world,api)
     if signal.data ~= nil then
         local result = {timer = signal.timer}
         table.insert(world.session.print,{timer=signal.data.timer, str = signal.data.str, position = {x=worker.position.x,y=worker.position.y}})
@@ -122,9 +124,9 @@ ruleset['!'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['%'] = 'magenta'
-ruleset.speed['%'] = 0
-ruleset['%'] = function(signal,worker,world,api)
+ruleset.worker.color['%'] = 'magenta'
+ruleset.worker.speed['%'] = 0
+ruleset.worker['%'] = function(signal,worker,world,api)
     for i, v in ipairs(signal.data) do
         api.signal.emit(world,signal.position,signal.direction,v)
     end
@@ -132,9 +134,9 @@ ruleset['%'] = function(signal,worker,world,api)
 end
 
 
-ruleset.color['¬'] = 'magenta'
-ruleset.speed['¬'] = 0
-ruleset['¬'] = function(signal,worker,world,api)
+ruleset.worker.color['¬'] = 'magenta'
+ruleset.worker.speed['¬'] = 0
+ruleset.worker['¬'] = function(signal,worker,world,api)
     if signal.data == nil then
         table.insert(worker.data,signal.data)
     else
@@ -143,696 +145,696 @@ ruleset['¬'] = function(signal,worker,world,api)
     end
 end
 
-ruleset.color['a'] = 'reset'
-ruleset.speed['a'] = 4
-ruleset['a'] = function(signal,worker,world,api)
+ruleset.worker.color['a'] = 'reset'
+ruleset.worker.speed['a'] = 4
+ruleset.worker['a'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['b'] = 'reset'
-ruleset.speed['b'] = 16
-ruleset['b'] = function(signal,worker,world,api)
+ruleset.worker.color['b'] = 'reset'
+ruleset.worker.speed['b'] = 16
+ruleset.worker['b'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['c'] = 'reset'
-ruleset.speed['c'] = 0
-ruleset['c'] = function(signal,worker,world,api)
+ruleset.worker.color['c'] = 'reset'
+ruleset.worker.speed['c'] = 0
+ruleset.worker['c'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['d'] = 'reset'
-ruleset.speed['d'] = 0
-ruleset['d'] = function(signal,worker,world,api)
+ruleset.worker.color['d'] = 'reset'
+ruleset.worker.speed['d'] = 0
+ruleset.worker['d'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['e'] = 'reset'
-ruleset.speed['e'] = 0
-ruleset['e'] = function(signal,worker,world,api)
+ruleset.worker.color['e'] = 'reset'
+ruleset.worker.speed['e'] = 0
+ruleset.worker['e'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['f'] = 'reset'
-ruleset.speed['f'] = 0
-ruleset['f'] = function(signal,worker,world,api)
+ruleset.worker.color['f'] = 'reset'
+ruleset.worker.speed['f'] = 0
+ruleset.worker['f'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['g'] = 'reset'
-ruleset.speed['g'] = 0
-ruleset['g'] = function(signal,worker,world,api)
+ruleset.worker.color['g'] = 'reset'
+ruleset.worker.speed['g'] = 0
+ruleset.worker['g'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['h'] = 'reset'
-ruleset.speed['h'] = 0
-ruleset['h'] = function(signal,worker,world,api)
+ruleset.worker.color['h'] = 'reset'
+ruleset.worker.speed['h'] = 0
+ruleset.worker['h'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['i'] = 'reset'
-ruleset.speed['i'] = 0
-ruleset['i'] = function(signal,worker,world,api)
+ruleset.worker.color['i'] = 'reset'
+ruleset.worker.speed['i'] = 0
+ruleset.worker['i'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['j'] = 'reset'
-ruleset.speed['j'] = 0
-ruleset['j'] = function(signal,worker,world,api)
+ruleset.worker.color['j'] = 'reset'
+ruleset.worker.speed['j'] = 0
+ruleset.worker['j'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['k'] = 'reset'
-ruleset.speed['k'] = 0
-ruleset['k'] = function(signal,worker,world,api)
+ruleset.worker.color['k'] = 'reset'
+ruleset.worker.speed['k'] = 0
+ruleset.worker['k'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['l'] = 'reset'
-ruleset.speed['l'] = 0
-ruleset['l'] = function(signal,worker,world,api)
+ruleset.worker.color['l'] = 'reset'
+ruleset.worker.speed['l'] = 0
+ruleset.worker['l'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['m'] = 'reset'
-ruleset.speed['m'] = 0
-ruleset['m'] = function(signal,worker,world,api)
+ruleset.worker.color['m'] = 'reset'
+ruleset.worker.speed['m'] = 0
+ruleset.worker['m'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['n'] = 'reset'
-ruleset.speed['n'] = 0
-ruleset['n'] = function(signal,worker,world,api)
+ruleset.worker.color['n'] = 'reset'
+ruleset.worker.speed['n'] = 0
+ruleset.worker['n'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['o'] = 'reset'
-ruleset.speed['o'] = 0
-ruleset['o'] = function(signal,worker,world,api)
+ruleset.worker.color['o'] = 'reset'
+ruleset.worker.speed['o'] = 0
+ruleset.worker['o'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['p'] = 'reset'
-ruleset.speed['p'] = 0
-ruleset['p'] = function(signal,worker,world,api)
+ruleset.worker.color['p'] = 'reset'
+ruleset.worker.speed['p'] = 0
+ruleset.worker['p'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['q'] = 'reset'
-ruleset.speed['q'] = 0
-ruleset['q'] = function(signal,worker,world,api)
+ruleset.worker.color['q'] = 'reset'
+ruleset.worker.speed['q'] = 0
+ruleset.worker['q'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['r'] = 'reset'
-ruleset.speed['r'] = 0
-ruleset['r'] = function(signal,worker,world,api)
+ruleset.worker.color['r'] = 'reset'
+ruleset.worker.speed['r'] = 0
+ruleset.worker['r'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['s'] = 'reset'
-ruleset.speed['s'] = 0
-ruleset['s'] = function(signal,worker,world,api)
+ruleset.worker.color['s'] = 'reset'
+ruleset.worker.speed['s'] = 0
+ruleset.worker['s'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['t'] = 'reset'
-ruleset.speed['t'] = 0
-ruleset['t'] = function(signal,worker,world,api)
+ruleset.worker.color['t'] = 'reset'
+ruleset.worker.speed['t'] = 0
+ruleset.worker['t'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['u'] = 'reset'
-ruleset.speed['u'] = 0
-ruleset['u'] = function(signal,worker,world,api)
+ruleset.worker.color['u'] = 'reset'
+ruleset.worker.speed['u'] = 0
+ruleset.worker['u'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['v'] = 'reset'
-ruleset.speed['v'] = 0
-ruleset['v'] = function(signal,worker,world,api)
+ruleset.worker.color['v'] = 'reset'
+ruleset.worker.speed['v'] = 0
+ruleset.worker['v'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['w'] = 'reset'
-ruleset.speed['w'] = 0
-ruleset['w'] = function(signal,worker,world,api)
+ruleset.worker.color['w'] = 'reset'
+ruleset.worker.speed['w'] = 0
+ruleset.worker['w'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['x'] = 'reset'
-ruleset.speed['x'] = 0
-ruleset['x'] = function(signal,worker,world,api)
+ruleset.worker.color['x'] = 'reset'
+ruleset.worker.speed['x'] = 0
+ruleset.worker['x'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['y'] = 'reset'
-ruleset.speed['y'] = 0
-ruleset['y'] = function(signal,worker,world,api)
+ruleset.worker.color['y'] = 'reset'
+ruleset.worker.speed['y'] = 0
+ruleset.worker['y'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['z'] = 'reset'
-ruleset.speed['z'] = 0
-ruleset['z'] = function(signal,worker,world,api)
+ruleset.worker.color['z'] = 'reset'
+ruleset.worker.speed['z'] = 0
+ruleset.worker['z'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['A'] = 'reset'
-ruleset.speed['A'] = 0
-ruleset['A'] = function(signal,worker,world,api)
+ruleset.worker.color['A'] = 'reset'
+ruleset.worker.speed['A'] = 0
+ruleset.worker['A'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['B'] = 'reset'
-ruleset.speed['B'] = 0
-ruleset['B'] = function(signal,worker,world,api)
+ruleset.worker.color['B'] = 'reset'
+ruleset.worker.speed['B'] = 0
+ruleset.worker['B'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['C'] = 'reset'
-ruleset.speed['C'] = 0
-ruleset['C'] = function(signal,worker,world,api)
+ruleset.worker.color['C'] = 'reset'
+ruleset.worker.speed['C'] = 0
+ruleset.worker['C'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['D'] = 'reset'
-ruleset.speed['D'] = 0
-ruleset['D'] = function(signal,worker,world,api)
+ruleset.worker.color['D'] = 'reset'
+ruleset.worker.speed['D'] = 0
+ruleset.worker['D'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['E'] = 'reset'
-ruleset.speed['E'] = 0
-ruleset['E'] = function(signal,worker,world,api)
+ruleset.worker.color['E'] = 'reset'
+ruleset.worker.speed['E'] = 0
+ruleset.worker['E'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['F'] = 'reset'
-ruleset.speed['F'] = 0
-ruleset['F'] = function(signal,worker,world,api)
+ruleset.worker.color['F'] = 'reset'
+ruleset.worker.speed['F'] = 0
+ruleset.worker['F'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['G'] = 'reset'
-ruleset.speed['G'] = 0
-ruleset['G'] = function(signal,worker,world,api)
+ruleset.worker.color['G'] = 'reset'
+ruleset.worker.speed['G'] = 0
+ruleset.worker['G'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['H'] = 'reset'
-ruleset.speed['H'] = 0
-ruleset['H'] = function(signal,worker,world,api)
+ruleset.worker.color['H'] = 'reset'
+ruleset.worker.speed['H'] = 0
+ruleset.worker['H'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['I'] = 'reset'
-ruleset.speed['I'] = 0
-ruleset['I'] = function(signal,worker,world,api)
+ruleset.worker.color['I'] = 'reset'
+ruleset.worker.speed['I'] = 0
+ruleset.worker['I'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['J'] = 'reset'
-ruleset.speed['J'] = 0
-ruleset['J'] = function(signal,worker,world,api)
+ruleset.worker.color['J'] = 'reset'
+ruleset.worker.speed['J'] = 0
+ruleset.worker['J'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['K'] = 'reset'
-ruleset.speed['K'] = 0
-ruleset['K'] = function(signal,worker,world,api)
+ruleset.worker.color['K'] = 'reset'
+ruleset.worker.speed['K'] = 0
+ruleset.worker['K'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['L'] = 'reset'
-ruleset.speed['L'] = 0
-ruleset['L'] = function(signal,worker,world,api)
+ruleset.worker.color['L'] = 'reset'
+ruleset.worker.speed['L'] = 0
+ruleset.worker['L'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['M'] = 'reset'
-ruleset.speed['M'] = 0
-ruleset['M'] = function(signal,worker,world,api)
+ruleset.worker.color['M'] = 'reset'
+ruleset.worker.speed['M'] = 0
+ruleset.worker['M'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['N'] = 'reset'
-ruleset.speed['N'] = 0
-ruleset['N'] = function(signal,worker,world,api)
+ruleset.worker.color['N'] = 'reset'
+ruleset.worker.speed['N'] = 0
+ruleset.worker['N'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['O'] = 'reset'
-ruleset.speed['O'] = 0
-ruleset['O'] = function(signal,worker,world,api)
+ruleset.worker.color['O'] = 'reset'
+ruleset.worker.speed['O'] = 0
+ruleset.worker['O'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['P'] = 'reset'
-ruleset.speed['P'] = 0
-ruleset['P'] = function(signal,worker,world,api)
+ruleset.worker.color['P'] = 'reset'
+ruleset.worker.speed['P'] = 0
+ruleset.worker['P'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Q'] = 'reset'
-ruleset.speed['Q'] = 0
-ruleset['Q'] = function(signal,worker,world,api)
+ruleset.worker.color['Q'] = 'reset'
+ruleset.worker.speed['Q'] = 0
+ruleset.worker['Q'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['R'] = 'reset'
-ruleset.speed['R'] = 0
-ruleset['R'] = function(signal,worker,world,api)
+ruleset.worker.color['R'] = 'reset'
+ruleset.worker.speed['R'] = 0
+ruleset.worker['R'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['S'] = 'reset'
-ruleset.speed['S'] = 0
-ruleset['S'] = function(signal,worker,world,api)
+ruleset.worker.color['S'] = 'reset'
+ruleset.worker.speed['S'] = 0
+ruleset.worker['S'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['T'] = 'reset'
-ruleset.speed['T'] = 0
-ruleset['T'] = function(signal,worker,world,api)
+ruleset.worker.color['T'] = 'reset'
+ruleset.worker.speed['T'] = 0
+ruleset.worker['T'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['U'] = 'reset'
-ruleset.speed['U'] = 0
-ruleset['U'] = function(signal,worker,world,api)
+ruleset.worker.color['U'] = 'reset'
+ruleset.worker.speed['U'] = 0
+ruleset.worker['U'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['W'] = 'reset'
-ruleset.speed['W'] = 0
-ruleset['W'] = function(signal,worker,world,api)
+ruleset.worker.color['W'] = 'reset'
+ruleset.worker.speed['W'] = 0
+ruleset.worker['W'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Y'] = 'reset'
-ruleset.speed['Y'] = 0
-ruleset['Y'] = function(signal,worker,world,api)
+ruleset.worker.color['Y'] = 'reset'
+ruleset.worker.speed['Y'] = 0
+ruleset.worker['Y'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Z'] = 'reset'
-ruleset.speed['Z'] = 0
-ruleset['Z'] = function(signal,worker,world,api)
+ruleset.worker.color['Z'] = 'reset'
+ruleset.worker.speed['Z'] = 0
+ruleset.worker['Z'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ç'] = 'reset'
-ruleset.speed['ç'] = 0
-ruleset['ç'] = function(signal,worker,world,api)
+ruleset.worker.color['ç'] = 'reset'
+ruleset.worker.speed['ç'] = 0
+ruleset.worker['ç'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ç'] = 'reset'
-ruleset.speed['Ç'] = 0
-ruleset['Ç'] = function(signal,worker,world,api)
+ruleset.worker.color['Ç'] = 'reset'
+ruleset.worker.speed['Ç'] = 0
+ruleset.worker['Ç'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ã'] = 'reset'
-ruleset.speed['ã'] = 0
-ruleset['ã'] = function(signal,worker,world,api)
+ruleset.worker.color['ã'] = 'reset'
+ruleset.worker.speed['ã'] = 0
+ruleset.worker['ã'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['â'] = 'reset'
-ruleset.speed['â'] = 0
-ruleset['â'] = function(signal,worker,world,api)
+ruleset.worker.color['â'] = 'reset'
+ruleset.worker.speed['â'] = 0
+ruleset.worker['â'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Â'] = 'reset'
-ruleset.speed['Â'] = 0
-ruleset['Â'] = function(signal,worker,world,api)
+ruleset.worker.color['Â'] = 'reset'
+ruleset.worker.speed['Â'] = 0
+ruleset.worker['Â'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ã'] = 'reset'
-ruleset.speed['Ã'] = 0
-ruleset['Ã'] = function(signal,worker,world,api)
+ruleset.worker.color['Ã'] = 'reset'
+ruleset.worker.speed['Ã'] = 0
+ruleset.worker['Ã'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['á'] = 'reset'
-ruleset.speed['á'] = 0
-ruleset['á'] = function(signal,worker,world,api)
+ruleset.worker.color['á'] = 'reset'
+ruleset.worker.speed['á'] = 0
+ruleset.worker['á'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['à'] = 'reset'
-ruleset.speed['à'] = 0
-ruleset['à'] = function(signal,worker,world,api)
+ruleset.worker.color['à'] = 'reset'
+ruleset.worker.speed['à'] = 0
+ruleset.worker['à'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Á'] = 'reset'
-ruleset.speed['Á'] = 0
-ruleset['Á'] = function(signal,worker,world,api)
+ruleset.worker.color['Á'] = 'reset'
+ruleset.worker.speed['Á'] = 0
+ruleset.worker['Á'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['À'] = 'reset'
-ruleset.speed['À'] = 0
-ruleset['À'] = function(signal,worker,world,api)
+ruleset.worker.color['À'] = 'reset'
+ruleset.worker.speed['À'] = 0
+ruleset.worker['À'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ä'] = 'reset'
-ruleset.speed['ä'] = 0
-ruleset['ä'] = function(signal,worker,world,api)
+ruleset.worker.color['ä'] = 'reset'
+ruleset.worker.speed['ä'] = 0
+ruleset.worker['ä'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ä'] = 'reset'
-ruleset.speed['Ä'] = 0
-ruleset['Ä'] = function(signal,worker,world,api)
+ruleset.worker.color['Ä'] = 'reset'
+ruleset.worker.speed['Ä'] = 0
+ruleset.worker['Ä'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ê'] = 'reset'
-ruleset.speed['ê'] = 0
-ruleset['ê'] = function(signal,worker,world,api)
+ruleset.worker.color['ê'] = 'reset'
+ruleset.worker.speed['ê'] = 0
+ruleset.worker['ê'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ê'] = 'reset'
-ruleset.speed['Ê'] = 0
-ruleset['Ê'] = function(signal,worker,world,api)
+ruleset.worker.color['Ê'] = 'reset'
+ruleset.worker.speed['Ê'] = 0
+ruleset.worker['Ê'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['é'] = 'reset'
-ruleset.speed['é'] = 0
-ruleset['é'] = function(signal,worker,world,api)
+ruleset.worker.color['é'] = 'reset'
+ruleset.worker.speed['é'] = 0
+ruleset.worker['é'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['É'] = 'reset'
-ruleset.speed['É'] = 0
-ruleset['É'] = function(signal,worker,world,api)
+ruleset.worker.color['É'] = 'reset'
+ruleset.worker.speed['É'] = 0
+ruleset.worker['É'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['è'] = 'reset'
-ruleset.speed['è'] = 0
-ruleset['è'] = function(signal,worker,world,api)
+ruleset.worker.color['è'] = 'reset'
+ruleset.worker.speed['è'] = 0
+ruleset.worker['è'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['È'] = 'reset'
-ruleset.speed['È'] = 0
-ruleset['È'] = function(signal,worker,world,api)
+ruleset.worker.color['È'] = 'reset'
+ruleset.worker.speed['È'] = 0
+ruleset.worker['È'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ë'] = 'reset'
-ruleset.speed['ë'] = 0
-ruleset['ë'] = function(signal,worker,world,api)
+ruleset.worker.color['ë'] = 'reset'
+ruleset.worker.speed['ë'] = 0
+ruleset.worker['ë'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ë'] = 'reset'
-ruleset.speed['Ë'] = 0
-ruleset['Ë'] = function(signal,worker,world,api)
+ruleset.worker.color['Ë'] = 'reset'
+ruleset.worker.speed['Ë'] = 0
+ruleset.worker['Ë'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['î'] = 'reset'
-ruleset.speed['î'] = 0
-ruleset['î'] = function(signal,worker,world,api)
+ruleset.worker.color['î'] = 'reset'
+ruleset.worker.speed['î'] = 0
+ruleset.worker['î'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Î'] = 'reset'
-ruleset.speed['Î'] = 0
-ruleset['Î'] = function(signal,worker,world,api)
+ruleset.worker.color['Î'] = 'reset'
+ruleset.worker.speed['Î'] = 0
+ruleset.worker['Î'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ï'] = 'reset'
-ruleset.speed['ï'] = 0
-ruleset['ï'] = function(signal,worker,world,api)
+ruleset.worker.color['ï'] = 'reset'
+ruleset.worker.speed['ï'] = 0
+ruleset.worker['ï'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ï'] = 'reset'
-ruleset.speed['Ï'] = 0
-ruleset['Ï'] = function(signal,worker,world,api)
+ruleset.worker.color['Ï'] = 'reset'
+ruleset.worker.speed['Ï'] = 0
+ruleset.worker['Ï'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['í'] = 'reset'
-ruleset.speed['í'] = 0
-ruleset['í'] = function(signal,worker,world,api)
+ruleset.worker.color['í'] = 'reset'
+ruleset.worker.speed['í'] = 0
+ruleset.worker['í'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Í'] = 'reset'
-ruleset.speed['Í'] = 0
-ruleset['Í'] = function(signal,worker,world,api)
+ruleset.worker.color['Í'] = 'reset'
+ruleset.worker.speed['Í'] = 0
+ruleset.worker['Í'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ì'] = 'reset'
-ruleset.speed['ì'] = 0
-ruleset['ì'] = function(signal,worker,world,api)
+ruleset.worker.color['ì'] = 'reset'
+ruleset.worker.speed['ì'] = 0
+ruleset.worker['ì'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ì'] = 'reset'
-ruleset.speed['Ì'] = 0
-ruleset['Ì'] = function(signal,worker,world,api)
+ruleset.worker.color['Ì'] = 'reset'
+ruleset.worker.speed['Ì'] = 0
+ruleset.worker['Ì'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['õ'] = 'reset'
-ruleset.speed['õ'] = 0
-ruleset['õ'] = function(signal,worker,world,api)
+ruleset.worker.color['õ'] = 'reset'
+ruleset.worker.speed['õ'] = 0
+ruleset.worker['õ'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Õ'] = 'reset'
-ruleset.speed['Õ'] = 0
-ruleset['Õ'] = function(signal,worker,world,api)
+ruleset.worker.color['Õ'] = 'reset'
+ruleset.worker.speed['Õ'] = 0
+ruleset.worker['Õ'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ô'] = 'reset'
-ruleset.speed['ô'] = 0
-ruleset['ô'] = function(signal,worker,world,api)
+ruleset.worker.color['ô'] = 'reset'
+ruleset.worker.speed['ô'] = 0
+ruleset.worker['ô'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ô'] = 'reset'
-ruleset.speed['Ô'] = 0
-ruleset['Ô'] = function(signal,worker,world,api)
+ruleset.worker.color['Ô'] = 'reset'
+ruleset.worker.speed['Ô'] = 0
+ruleset.worker['Ô'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ó'] = 'reset'
-ruleset.speed['ó'] = 0
-ruleset['ó'] = function(signal,worker,world,api)
+ruleset.worker.color['ó'] = 'reset'
+ruleset.worker.speed['ó'] = 0
+ruleset.worker['ó'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ó'] = 'reset'
-ruleset.speed['Ó'] = 0
-ruleset['Ó'] = function(signal,worker,world,api)
+ruleset.worker.color['Ó'] = 'reset'
+ruleset.worker.speed['Ó'] = 0
+ruleset.worker['Ó'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ò'] = 'reset'
-ruleset.speed['ò'] = 0
-ruleset['ò'] = function(signal,worker,world,api)
+ruleset.worker.color['ò'] = 'reset'
+ruleset.worker.speed['ò'] = 0
+ruleset.worker['ò'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ò'] = 'reset'
-ruleset.speed['Ò'] = 0
-ruleset['Ò'] = function(signal,worker,world,api)
+ruleset.worker.color['Ò'] = 'reset'
+ruleset.worker.speed['Ò'] = 0
+ruleset.worker['Ò'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ö'] = 'reset'
-ruleset.speed['ö'] = 0
-ruleset['ö'] = function(signal,worker,world,api)
+ruleset.worker.color['ö'] = 'reset'
+ruleset.worker.speed['ö'] = 0
+ruleset.worker['ö'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ö'] = 'reset'
-ruleset.speed['Ö'] = 0
-ruleset['Ö'] = function(signal,worker,world,api)
+ruleset.worker.color['Ö'] = 'reset'
+ruleset.worker.speed['Ö'] = 0
+ruleset.worker['Ö'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ú'] = 'reset'
-ruleset.speed['ú'] = 0
-ruleset['ú'] = function(signal,worker,world,api)
+ruleset.worker.color['ú'] = 'reset'
+ruleset.worker.speed['ú'] = 0
+ruleset.worker['ú'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ú'] = 'reset'
-ruleset.speed['Ú'] = 0
-ruleset['Ú'] = function(signal,worker,world,api)
+ruleset.worker.color['Ú'] = 'reset'
+ruleset.worker.speed['Ú'] = 0
+ruleset.worker['Ú'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ù'] = 'reset'
-ruleset.speed['ù'] = 0
-ruleset['ù'] = function(signal,worker,world,api)
+ruleset.worker.color['ù'] = 'reset'
+ruleset.worker.speed['ù'] = 0
+ruleset.worker['ù'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ù'] = 'reset'
-ruleset.speed['Ù'] = 0
-ruleset['Ù'] = function(signal,worker,world,api)
+ruleset.worker.color['Ù'] = 'reset'
+ruleset.worker.speed['Ù'] = 0
+ruleset.worker['Ù'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['û'] = 'reset'
-ruleset.speed['û'] = 0
-ruleset['û'] = function(signal,worker,world,api)
+ruleset.worker.color['û'] = 'reset'
+ruleset.worker.speed['û'] = 0
+ruleset.worker['û'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Û'] = 'reset'
-ruleset.speed['Û'] = 0
-ruleset['Û'] = function(signal,worker,world,api)
+ruleset.worker.color['Û'] = 'reset'
+ruleset.worker.speed['Û'] = 0
+ruleset.worker['Û'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ü'] = 'reset'
-ruleset.speed['ü'] = 0
-ruleset['ü'] = function(signal,worker,world,api)
+ruleset.worker.color['ü'] = 'reset'
+ruleset.worker.speed['ü'] = 0
+ruleset.worker['ü'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ü'] = 'reset'
-ruleset.speed['Ü'] = 0
-ruleset['Ü'] = function(signal,worker,world,api)
+ruleset.worker.color['Ü'] = 'reset'
+ruleset.worker.speed['Ü'] = 0
+ruleset.worker['Ü'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['ñ'] = 'reset'
-ruleset.speed['ñ'] = 0
-ruleset['ñ'] = function(signal,worker,world,api)
+ruleset.worker.color['ñ'] = 'reset'
+ruleset.worker.speed['ñ'] = 0
+ruleset.worker['ñ'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
 
-ruleset.color['Ñ'] = 'reset'
-ruleset.speed['Ñ'] = 0
-ruleset['Ñ'] = function(signal,worker,world,api)
+ruleset.worker.color['Ñ'] = 'reset'
+ruleset.worker.speed['Ñ'] = 0
+ruleset.worker['Ñ'] = function(signal,worker,world,api)
 --put your lua code here
 end
 
-ruleset.commands.run = function(world,api,args)
+ruleset.command.run = function(world,api,args)
     api.run(world, api.util.file.load.text(args[1]))
 end
 
-ruleset.commands.edit = function(world,api,args)
+ruleset.command.edit = function(world,api,args)
     world.session.cposi = {
         x = tonumber(args[1]),
         y = tonumber(args[2])
@@ -840,7 +842,7 @@ ruleset.commands.edit = function(world,api,args)
     world.session.editmode = true
 end
 
-ruleset.commands.add = function(world,api,args)
+ruleset.command.add = function(world,api,args)
     if #args >= 3 then
         api.worker.spawn(world, {
             x = tonumber(args[2]),
@@ -849,36 +851,36 @@ ruleset.commands.add = function(world,api,args)
     end
 end
 
-ruleset.commands.load = function(world,api,args)
+ruleset.command.load = function(world,api,args)
     world.signal = {}
     world.worker = {}
     world.map = api.new.map(world, args[1])
     world.session.map = args[1]
 end
 
-ruleset.commands.new = function(world,api,args)
+ruleset.command.new = function(world,api,args)
     world.map = api.util.matrix.new(args[1],args[2],'.')
 end
 
-ruleset.commands['>>>'] = function(world,api,args,cmd)
+ruleset.command['>>>'] = function(world,api,args,cmd)
     cmd = api.util.string.replace(cmd, ">>>", 'os.execute("') .. '")'
     assert(api.util.load(cmd))()
     api.run(world)
 end
 
-ruleset.commands['>>'] = function(world,api,args,cmd)
+ruleset.command['>>'] = function(world,api,args,cmd)
     cmd = api.util.string.replace(cmd, ">>", '')
     assert(api.util.load(cmd))()
     api.run(world)
 end
 
-ruleset.commands['>'] = function(world,api,args,cmd)
+ruleset.command['>'] = function(world,api,args,cmd)
     cmd = api.util.string.replace(cmd, ">", 'master.')
     assert(api.util.load(cmd))()
     api.run(world)
 end
 
-ruleset.commands.rm = function(world,api,args)
+ruleset.command.rm = function(world,api,args)
     if world.map[tonumber(args[1])][tonumber(args[2])] ~= '.' then
         world.session.cposi = {
             x = tonumber(args[1]),
@@ -889,7 +891,7 @@ ruleset.commands.rm = function(world,api,args)
     end
 end
 
-ruleset.commands.clear = function(world,api,args)
+ruleset.command.clear = function(world,api,args)
     local temp = {}
     for i, signal in ipairs(world.signal) do
         if signal ~= nil and signal.position ~= nil then
@@ -920,7 +922,7 @@ ruleset.commands.clear = function(world,api,args)
     world.session.print = temp
 end
 
-ruleset.commands.turn = function(world,api,args)
+ruleset.command.turn = function(world,api,args)
     if type(world.session[args[1]]) == 'boolean' then
         world.session[args[1]] = api.util.turn(world.session[args[1]])
     else
@@ -935,12 +937,12 @@ ruleset.commands.turn = function(world,api,args)
     end
 end
 
-ruleset.commands.skip = function(world,api,args)
+ruleset.command.skip = function(world,api,args)
     world.session.toskip = tonumber(args[1])
     print("please wait...")
 end
 
-ruleset.commands.write = function(world,api,args)
+ruleset.command.write = function(world,api,args)
     local text = ''
     for i, v in ipairs(world.session.loadedscripts) do
         text = text .. 'require ' .. v .. '\n'
@@ -957,7 +959,7 @@ ruleset.commands.write = function(world,api,args)
     api.util.file.save.text(args[1],text)
 end
 
-ruleset.commands.save = function(world,api,args)
+ruleset.command.save = function(world,api,args)
     if args[1] ~= nil then
         api.util.file.save.charMap(args[1], world.map)
     else
@@ -965,9 +967,9 @@ ruleset.commands.save = function(world,api,args)
     end
 end
 
-ruleset.commands.help = function(world,api,args)
+ruleset.command.help = function(world,api,args)
     io.write("\27[32mAvaliable commands:\27[0m ")
-    for k, v in pairs(world.ruleset.commands) do
+    for k, v in pairs(world.ruleset.command) do
         io.write(k .. ', ') 
     end
     io.write('\n')

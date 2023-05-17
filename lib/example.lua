@@ -1,16 +1,16 @@
-local ruleset = {color={},speed={},commands={}}
+local ruleset = {command={},worker={color={},speed={}},signal={}}
 
-ruleset.color['a'] = 'green'
-ruleset.speed['a'] = 8
-ruleset['a'] = function(signal,worker,world,api)
+ruleset.worker.color['a'] = 'green'
+ruleset.worker.speed['a'] = 8
+ruleset.worker['a'] = function(signal,worker,world,api)
     local sig = api.signal.emit(world,worker.position,{x=0,y=1})
     sig.color = api.console.randomcolor()
 end
 
 
-ruleset.color['b'] = 'reset'
-ruleset.speed['b'] = 16
-ruleset['b'] = function(signal,worker,world,api)
+ruleset.worker.color['b'] = 'reset'
+ruleset.worker.speed['b'] = 16
+ruleset.worker['b'] = function(signal,worker,world,api)
     local sig = api.signal.emit(world,worker.position,{x=1,y=0},{str='Open Scripting Grid Abstracter',timer = 8,position = worker.position})
 end
 

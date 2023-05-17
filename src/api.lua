@@ -41,7 +41,7 @@ api.new = {
     worker = function(ruleset, id, position, timer, speed, color, data)
         return {
             id = id,
-            func = ruleset[id],
+            func = ruleset.worker[id],
             position = position,
             timer = timer,
             speed = speed,
@@ -73,22 +73,32 @@ api.new = {
         {
             ruleset = 
             {
-                color = {},
-                speed = {},
-                commands = 
+
+                worker = 
+                {         
+                    color = {},
+                    speed = {}
+                },
+                signal = {},
+                command = 
                 {
                     require = function(world,api,args)
                         local templib = require(api.util.string.replace(api.util.string.replace(args[1],'.lua',''),'/','.'))
-                        for k, v in pairs(templib) do
-                            if k ~= 'speed' and k ~= 'color' and k ~= 'commands' then
-                                world.ruleset[k] = v
-                                world.ruleset.color[k] = templib.color[k] 
-                                world.ruleset.speed[k] = templib.speed[k]
+                        local keys = util.array.keys(templib.worker)
+                        for i, k in ipairs(keys) do
+                            if k ~= 'speed' and k ~= 'color' then
+                                world.ruleset.worker[k] = templib.worker[k]
+                                world.ruleset.worker.color[k] = templib.worker.color[k]
+                                world.ruleset.worker.speed[k] = templib.worker.speed[k]
                             end
                         end
-                        for k, v in pairs(templib.commands) do
+                        for k, v in pairs(templib.command) do
                             --print(k)
-                            world.ruleset.commands[k] = v
+                            world.ruleset.command[k] = v
+                        end
+                        for k, v in pairs(templib.signal) do
+                            --print(k)
+                            world.ruleset.signal[k] = v
                         end
                             
                         table.insert(world.session.loadedscripts,api.util.string.replace(api.util.string.replace(args[1],'.lua',''),'/','.'))
@@ -142,9 +152,9 @@ api.signal = {
 
 api.worker = {
     spawn = function(world, position, id, timer, speed)
-        speed = speed or world.ruleset.speed[id]
+        speed = speed or world.ruleset.worker.speed[id]
         if world.map[position.x][position.y] == '.' then
-            table.insert(world.worker, api.new.worker(world.ruleset, id, position, timer, speed, world.ruleset.color[id]))
+            table.insert(world.worker, api.new.worker(world.ruleset, id, position, timer, speed, world.ruleset.worker.color[id]))
             world.map[position.x][position.y] = world.worker[#world.worker]
             return world.map[position.x][position.y]
         end
@@ -331,7 +341,7 @@ api.run = function(world, command)
             for i = 2, #split, 1 do
                 table.insert(args,split[i])
             end
-            world.ruleset.commands[split[1]](world,api,args,cmd)
+            world.ruleset.command[split[1]](world,api,args,cmd)
         end
         
     end
