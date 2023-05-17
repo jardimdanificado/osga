@@ -120,20 +120,7 @@ api.new = {
 }
 
 api.signal = {
-    work = function(world, signal)
-        if signal.position == nil or world.map[signal.position.x][signal.position.y] == '.' then
-            signal.func(world,signal,0,api)
-        else
-            
-            local worker = world.map[signal.position.x][signal.position.y]
-
-            worker.func(signal, worker, world, api)
-            print("worker ok")
-            signal.func(world,signal,worker,api)
-        end
-        
-    end,
-    move = function(world, signal)
+    move = function(signal, worker, world, api)
         local sum = {
             x = signal.position.x + signal.direction.x,
             y = signal.position.y + signal.direction.y
@@ -148,7 +135,7 @@ api.signal = {
         end
     end,
     emit = function(world, position, direction, data)
-        table.insert(world.signal, api.new.signal(position, direction, data, api.signal.move))
+        table.insert(world.signal, api.new.signal(position, direction, data))
         return world.signal[#world.signal]
     end
 }
@@ -166,12 +153,18 @@ api.worker = {
 
 api.frame = function(world)
     world.session.time = world.session.time + 1
-    for i, v in ipairs(world.signal) do
+    local len = #world.signal
+    for i = 1, len, 1 do
+        local v = world.signal[i]
         if v.position ~= nil then
-            if v.func == nil then
-                v.func = api.signal.move
+            local worker = world.map[v.position.x][v.position.y]
+            v.func(v, worker, world, api)
+            if v.position ~= nil then
+                worker = world.map[v.position.x][v.position.y]
+                if worker ~= '.' then
+                    worker.func(v,worker,world,api)
+                end
             end
-            api.signal.work(world, v)
         end
     end
     for i, v in ipairs(world.worker) do
@@ -183,7 +176,7 @@ api.frame = function(world)
             end
         end
     end
-    if world.session.garbagecollector and util.array.includes(world.session.loadedscripts,'lib.std') and world.session.time % #world.map * 2 == 0 then
+    if world.session.garbagecollector and world.session.time % #world.map * 2 == 0 then
         api.run(world, 'clear')
     end
     return world
