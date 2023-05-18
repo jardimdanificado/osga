@@ -226,10 +226,8 @@ api.console = {
         local print_map = util.matrix.new(#world.map,#world.map[1],empty)
         for i, worker in ipairs(world.worker) do
             if worker.position ~= nil then
-                if type(worker) == 'table' then
+                if world.map[worker.position.x][worker.position.y] ~= '.' then
                     print_map[worker.position.x][worker.position.y] = api.console.boldstring(api.console.colorstring(world.map[worker.position.x][worker.position.y].id,worker.color))
-                else
-                    print_map[worker.position.x][worker.position.y] = world.map[worker.position.x][worker.position.y]
                 end
             end
         end
@@ -295,7 +293,7 @@ api.console = {
             if world.session.editmode then
                 api.console.movecursor(world.session.cposi.x, world.session.cposi.y)
                 local chin = io.stdin:read(1)
-                world.map[world.session.cposi.x][world.session.cposi.y] = api.worker.spawn(world, world.session.cposi, chin, 2)
+                world.map[world.session.cposi.x][world.session.cposi.y] = api.worker.spawn(world, world.session.cposi, chin, world.ruleset.worker[chin].speed)
                 world.session.editmode = false
             end
     

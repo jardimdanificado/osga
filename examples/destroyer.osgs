@@ -1,3 +1,5 @@
 --luajit.exe main.lua .\examples\destroyer.osgs -lstd -lexample
+require lib.std
+require lib.example
 load examples/map/destroyer.osgm
 skip 300

@@ -1,3 +1,5 @@
+require lib.std
+require lib.example
 load examples/map/write.osgm
 write examples/write.generated.osgs
 run examples/write.generated.osgs

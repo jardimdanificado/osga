@@ -1,3 +1,5 @@
 --luajit.exe main.lua .\examples\basic.osgs -lstd -lexample
+require lib.std
+require lib.example
 load examples/map/basic.osgm
 skip 419
