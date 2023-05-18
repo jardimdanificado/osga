@@ -173,7 +173,7 @@ api.frame = function(world)
             v.func(v, worker, world, api)
             if v.position ~= nil then
                 worker = world.map[v.position.x][v.position.y]
-                if worker ~= '.' then
+                if worker ~= nil and worker ~= '.' then
                     worker.func(v,worker,world,api)
                 end
             end

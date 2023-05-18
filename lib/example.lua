@@ -21,4 +21,18 @@ ruleset.worker['x'] = function(signal,worker,world,api)
     sig.color = 'red'
 end
 
+ruleset.worker.color['p'] = 'green'
+ruleset.worker.speed['p'] = 8
+ruleset.worker['p'] = function(signal,worker,world,api)
+    local sig = api.signal.emit(world,worker.position,{x=0,y=1},nil,world.ruleset.signal.pusher)
+    sig.color = 'magenta'
+end
+
+ruleset.worker.color['P'] = 'green'
+ruleset.worker.speed['P'] = 8
+ruleset.worker['P'] = function(signal,worker,world,api)
+    local sig = api.signal.emit(world,worker.position,{x=0,y=1},nil,world.ruleset.signal.puller)
+    sig.color = 'magenta'
+end
+
 return ruleset

@@ -14,6 +14,59 @@ ruleset.signal.destroyer = function(signal,worker,world,api)
     end
 end
 
+ruleset.signal.pusher = function(signal,_,world,api)
+    api.signal.move(signal,_,world,api)
+    local sum = 
+    {
+        x = signal.position.x + signal.direction.x,
+        y = signal.position.y + signal.direction.y,
+    }
+    if signal.position ~= nil and 
+    world.map[signal.position.x][signal.position.y] ~= nil and
+    world.map[sum.x][sum.y] ~= nil then
+
+        if world.map[signal.position.x][signal.position.y] ~= '.' and
+        world.map[sum.x][sum.y] == '.' then
+            local worker = world.map[signal.position.x][signal.position.y]
+            world.map[signal.position.x][signal.position.y] = '.'
+            world.map[sum.x][sum.y] = worker
+            worker.position.x = sum.x
+            worker.position.y = sum.y
+            
+            signal.position = nil
+        end
+    else
+        signal.position = nil
+    end
+end
+
+ruleset.signal.puller = function(signal,_,world,api)
+    api.signal.move(signal,_,world,api)
+    local sum = 
+    {
+        x = (signal.position.x + signal.direction.x*-1),
+        y = (signal.position.y + signal.direction.y*-1),
+    }
+    if signal.position ~= nil and 
+    world.map[signal.position.x][signal.position.y] ~= nil and
+    world.map[sum.x] ~= nil and world.map[sum.x][sum.y] ~= nil then
+
+        if world.map[signal.position.x][signal.position.y] ~= '.' and
+        world.map[sum.x][sum.y] == '.' then
+            local worker = world.map[signal.position.x][signal.position.y]
+            world.map[signal.position.x][signal.position.y] = '.'
+            world.map[sum.x][sum.y] = worker
+            worker.position.x = sum.x
+            worker.position.y = sum.y
+            
+            signal.position = nil
+        end
+    else
+        signal.position = nil
+    end
+end
+
+
 ruleset.worker.color['<'] = 'yellow'
 ruleset.worker.speed['<'] = 0
 ruleset.worker['<'] = function(signal,worker,world,api)
