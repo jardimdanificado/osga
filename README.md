@@ -5,7 +5,8 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 ## OSGA - Command-line Commands
 
 - `lua osga.lua` : Starts the OSGA REPL
-- `lua osga.lua (script)` : Starts the repl with the specified (_script_)
+- `lua osga.lua (script) ` : Starts the repl with the specified (_script_)
+- `lua osga.lua -lstd ` : Starts the repl with the specified lib loaded, in this case _lib.std_
 
 ## OSGA - Signals
 
@@ -58,3 +59,7 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 - `|` : Mirror.
 - `¬` : Packer.
 - `%` : Unpacker.
+
+## OSGA - Standard Library Sginals(lib.std)
+
+- `destroyer` : A pulse which destroy the worker and itself when find a worker.

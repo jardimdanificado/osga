@@ -1,0 +1,3 @@
+--luajit.exe main.lua .\examples\destroyer.osgs -lstd -lexample
+load examples/map/destroyer.osgm
+skip 300

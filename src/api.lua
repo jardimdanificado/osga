@@ -144,8 +144,10 @@ api.signal = {
             }
         end
     end,
-    emit = function(world, position, direction, data)
-        table.insert(world.signal, api.new.signal(position, direction, data))
+    emit = function(world, position, direction, data, func)
+
+        table.insert(world.signal, api.new.signal(position, direction, data, func))
+        
         return world.signal[#world.signal]
     end
 }

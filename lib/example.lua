@@ -14,4 +14,11 @@ ruleset.worker['b'] = function(signal,worker,world,api)
     local sig = api.signal.emit(world,worker.position,{x=1,y=0},{str='Open Scripting Grid Abstracter',timer = 8,position = worker.position})
 end
 
+ruleset.worker.color['c'] = 'green'
+ruleset.worker.speed['c'] = 8
+ruleset.worker['c'] = function(signal,worker,world,api)
+    local sig = api.signal.emit(world,worker.position,{x=0,y=1},nil,world.ruleset.signal.destroyer)
+    sig.color = 'red'
+end
+
 return ruleset

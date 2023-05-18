@@ -5,6 +5,15 @@ ruleset.worker.color = {}
 ruleset.signal = {}
 ruleset.command = {}
 
+ruleset.signal.destroyer = function(signal,worker,world,api)
+    api.signal.move(signal,worker,world,api)
+    if signal.position ~= nil and world.map[signal.position.x][signal.position.y] ~= '.' then
+        world.map[signal.position.x][signal.position.y].position = nil
+        world.map[signal.position.x][signal.position.y] = '.'
+        signal.position = nil
+    end
+end
+
 ruleset.worker.color['<'] = 'yellow'
 ruleset.worker.speed['<'] = 0
 ruleset.worker['<'] = function(signal,worker,world,api)
