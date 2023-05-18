@@ -63,3 +63,5 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 ## OSGA - Standard Library Sginals(lib.std)
 
 - `destroyer` : A pulse which destroy the worker and itself when find a worker.
+- `puller` : A pulse which pull the worker and destroy itself when find a worker.
+- `pusher` : A pulse which push the worker and destroy itself when find a worker.
