@@ -2,11 +2,21 @@
 
 The reference _Open Scripting Grid Abstracter_ implemented in lua.
 
+## OSGA - Building
+
+  `Note: that OSGA runs perfectly from the intepreter, building is completely optional`
+  
+- `(optional)`: put custom libs on the lib folder to preload them
+- `1` : Create a zip with the following: main.lua, src and lib
+- `2` : Drag and drop the zip into raylua_e or raylua_r(get them here https://github.com/TSnake41/raylib-lua)
+- `3` : Done.
+
 ## OSGA - Command-line Commands
 
 - `lua osga.lua` : Starts the OSGA REPL
-- `lua osga.lua (script)` : Starts the repl with the specified (_script_)
-- `lua osga.lua -lstd` : Starts the repl with the specified lib loaded, in this case _lib.std_
+- `lua osga.lua (file)` : Starts the repl with the specified (_file_), which can be a map(.osgm) or a script(.osgs)
+- `lua osga.lua -lstd` : Starts the repl with the specified preloaded lib(require), in this case _lib.std_
+- `lua osga.lua -l lib/std.lua` : Starts the repl with the specified not-preloaded lib(import), in this case _./lib/std.lua_
 
 ## OSGA - Signals
 
@@ -25,7 +35,8 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 
 ## OSGA - BuiltIn Commands
 
-- `require (modname)` : load a lib named (_modname_)
+- `require (modname)` : require a preloaded lib named (_modname_)
+- `import (filepath)` : load _dofile_ pointed by (_filepath_)
 
 ## OSGA - Standard Library Commands(lib.std)
 

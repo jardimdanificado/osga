@@ -103,6 +103,25 @@ api.new = {
                             
                         table.insert(world.session.loadedscripts,api.util.string.replace(api.util.string.replace(args[1],'.lua',''),'/','.'))
                     end,
+                    import = function(world,api,args)
+                        local templib = dofile(args[1])
+                        local keys = util.array.keys(templib.worker)
+                        for i, k in ipairs(keys) do
+                            if k ~= 'speed' and k ~= 'color' then
+                                world.ruleset.worker[k] = templib.worker[k]
+                                world.ruleset.worker.color[k] = templib.worker.color[k]
+                                world.ruleset.worker.speed[k] = templib.worker.speed[k]
+                            end
+                        end
+                        for k, v in pairs(templib.command) do
+                            world.ruleset.command[k] = v
+                        end
+                        for k, v in pairs(templib.signal) do
+                            world.ruleset.signal[k] = v
+                        end
+                            
+                        table.insert(world.session.loadedscripts,args[1])
+                    end
                 }
             },
             signal = {},
@@ -270,11 +289,16 @@ api.console = {
         local world = api.new.world(worldsizex,worldsizey)
         local latermap = function() end
         local laterscript = {}
+        local skip = false
         for i, v in ipairs(arg) do
-            if util.string.includes(v,'-l') then
+            if skip ~= false then
+                api.run(world,skip .. v)
+                skip = false
+            elseif v == '-l' then
+                skip = "import "
+            elseif util.string.includes(v,'-l') then
                 api.run(world,"require lib." .. util.string.replace(v,'-l',''))
-            end
-            if util.string.includes(v,'.osgs') then
+            elseif util.string.includes(v,'.osgs') then
                 table.insert(laterscript,v)
             elseif util.string.includes(v,'.osgm') then
                 latermap = function() world.map = api.new.map(world,v) end
