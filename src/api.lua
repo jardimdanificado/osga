@@ -35,7 +35,7 @@ api.new = {
             data = data,
             position = position,
             color = 'white',
-            func = func or api.signal.move
+            func = func or function() end
         }
     end,
     worker = function(ruleset, id, position, timer, speed, color, data)
@@ -43,6 +43,7 @@ api.new = {
             id = id,
             func = ruleset.worker[id],
             position = position,
+            direction = {x=0,y=0},
             timer = timer,
             speed = speed,
             color = color or 'white',
@@ -149,20 +150,6 @@ api.new = {
 }
 
 api.signal = {
-    move = function(signal, worker, world, api)
-        local sum = {
-            x = signal.position.x + signal.direction.x,
-            y = signal.position.y + signal.direction.y
-        }
-        if sum.x < 1 or sum.x > #world.map or sum.y < 1 or sum.y > #world.map[1] then
-            signal.position = nil
-        else
-            signal.position = {
-                x = signal.position.x + signal.direction.x,
-                y = signal.position.y + signal.direction.y
-            }
-        end
-    end,
     emit = function(world, position, direction, data, func)
 
         table.insert(world.signal, api.new.signal(position, direction, data, func))
@@ -182,6 +169,21 @@ api.worker = {
     end
 }
 
+api.move = function(world, signal)
+    local sum = {
+        x = signal.position.x + signal.direction.x,
+        y = signal.position.y + signal.direction.y
+    }
+    if sum.x < 1 or sum.x > #world.map or sum.y < 1 or sum.y > #world.map[1] then
+        signal.position = nil
+    else
+        signal.position = {
+            x = signal.position.x + signal.direction.x,
+            y = signal.position.y + signal.direction.y
+        }
+    end
+end
+
 api.frame = function(world)
     world.session.time = world.session.time + 1
     local len = #world.signal
@@ -189,6 +191,7 @@ api.frame = function(world)
         local v = world.signal[i]
         if v.position ~= nil then
             local worker = world.map[v.position.x][v.position.y]
+            api.move(world,v)
             v.func(v, worker, world, api)
             if v.position ~= nil then
                 worker = world.map[v.position.x][v.position.y]
@@ -199,6 +202,7 @@ api.frame = function(world)
         end
     end
     for i, v in ipairs(world.worker) do
+        api.move(world,v)
         if v.speed > 0 then
             if (v.position ~= nil) then
                 if (world.session.time % v.speed == 0) then

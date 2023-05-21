@@ -6,7 +6,6 @@ ruleset.signal = {}
 ruleset.command = {}
 
 ruleset.signal.destroyer = function(signal,worker,world,api)
-    api.signal.move(signal,worker,world,api)
     if signal.position ~= nil and world.map[signal.position.x][signal.position.y] ~= '.' then
         world.map[signal.position.x][signal.position.y].position = nil
         world.map[signal.position.x][signal.position.y] = '.'
@@ -15,7 +14,6 @@ ruleset.signal.destroyer = function(signal,worker,world,api)
 end
 
 ruleset.signal.pusher = function(signal,_,world,api)
-    api.signal.move(signal,_,world,api)
     local sum = 
     {
         x = signal.position.x + signal.direction.x,
@@ -41,7 +39,6 @@ ruleset.signal.pusher = function(signal,_,world,api)
 end
 
 ruleset.signal.puller = function(signal,_,world,api)
-    api.signal.move(signal,_,world,api)
     local sum = 
     {
         x = (signal.position.x + signal.direction.x*-1),
