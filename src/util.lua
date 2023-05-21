@@ -11,15 +11,7 @@ util.file.save = {}
 util.file.load = {}
 util.func = {}
 
-util.array._unpack = unpack or table.unpack
-
-util.array.unpack = function(input)
-    if type(input) == 'table' then
-        return util.array._unpack(input)
-    else
-        return input
-    end
-end
+util.array.unpack = unpack or table.unpack
 
 util.math.vec2 = function(x, y)
     return {
@@ -191,6 +183,20 @@ util.file.save.text = function(path, text)
     local file = io.open(path, "w")
     file:write(text)
     file:close()
+end
+
+util.table.assign = function(obj1, obj2)
+    for k, v in pairs(obj2) do
+        obj1[k] = obj2[k]
+    end
+end
+
+util.table.len = function(obj)
+    local count = 0
+    for k, v in pairs(obj) do
+        count = count + 1
+    end
+    return count
 end
 
 util.table.add = function(arr1, arr2)
@@ -667,24 +673,6 @@ util.roleta = function(...)
     end
 end
 
-util.pairs = function(obj)
-    local key_list = {}
-    for k in pairs(obj) do
-        if string.sub(k, 1, 1) ~= "_" then
-            table.insert(key_list, k)
-        end
-    end
-    local i = 0
-    return function()
-        i = i + 1
-        if key_list[i] ~= nil then
-            return key_list[i], obj[key_list[i]]
-        else
-            return nil, nil
-        end
-    end
-end
-
 util.id = function(charTable)
     charTable = charTable or util.char
     local tablelen = #charTable
@@ -699,20 +687,6 @@ util.id = function(charTable)
     return result
 end
 
-util.assign = function(obj1, obj2)
-    for k, v in pairs(obj2) do
-        obj1[k] = obj2[k]
-    end
-end
-
-util.len = function(obj)
-    local count = 0
-    for k, v in pairs(obj) do
-        count = count + 1
-    end
-    return count
-end
-
 util.turn = function(bool)
     if bool == false then
         return true
@@ -723,15 +697,14 @@ end
 
 util.load = loadstring or load
 
-util.unix =
-    function(ifUnix, ifWindows) -- returts ifunix if unix, if windows return ifWindows, if no args return true if is unix
-        ifUnix = ifUnix or true
-        ifWindows = ifWindows or false
-        if package.config:sub(1, 1) == '\\' then
-            return ifWindows
-        else
-            return ifUnix
-        end
+util.unix = function(ifUnix, ifWindows) -- returts ifunix if unix, if windows return ifWindows, if no args return true if is unix
+    ifUnix = ifUnix or true
+    ifWindows = ifWindows or false
+    if package.config:sub(1, 1) == '\\' then
+        return ifWindows
+    else
+        return ifUnix
     end
+end
 
 return util

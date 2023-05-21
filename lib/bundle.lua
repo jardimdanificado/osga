@@ -1,9 +1,10 @@
 local ruleset = {command={},worker={color={},speed={}},signal={}}
 
-command.pack = function(world,api,args)
+command['bundle.pack'] = function(world,api,args)
     local scripts = {}
     local mapfile = ""
     local outfile = ""
+	local rulsets = ""
 	for i,v in ipairs(args) do
 	    if api.util.string.includes(v,".osgs") then
 	        table.insert(scripts,v)
@@ -11,6 +12,8 @@ command.pack = function(world,api,args)
 	        mapfile = v
 	    elseif api.util.string.includes(v,".osgb") then
 	        outfile = v
+		elseif api.util.string.includes(v,".lua") then
+			table.insert(rulsets,v)
 	    end
 	end
 	if outfile == "" then
@@ -22,9 +25,17 @@ command.pack = function(world,api,args)
 	while api.util.string.includes(maptxt, key) do 
 	    key = api.util.id()
 	end
-	local result = key .. "\n" .. maptxt .. key
-	for i,v in ipairs(scripts) do 
-	    result = result .. api.util.file.load.text(v)
+	local result = key .. "\n" .. maptxt 
+	if #scripts > 0 then
+		result = result .. key
+		for i,v in ipairs(scripts) do 
+			result = result .. api.util.file.load.text(v) .. '\n'
+		end
+	end
+	if #rulsets > 0 then
+		for i,v in ipairs(rulsets) do 
+			result = result .. key .. api.util.file.load.text(v)
+		end
 	end
 	api.util.file.save.text(outfile,result)
 end
