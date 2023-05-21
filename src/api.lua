@@ -192,9 +192,9 @@ api.frame = function(world)
         if v.position ~= nil then
             local worker = world.map[v.position.x][v.position.y]
             api.move(world,v)
-            v.func(v, worker, world, api)
             if v.position ~= nil then
                 worker = world.map[v.position.x][v.position.y]
+                v.func(v, worker, world, api)
                 if worker ~= nil and worker ~= '.' then
                     worker.func(v,worker,world,api)
                 end
