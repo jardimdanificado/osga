@@ -102,7 +102,7 @@ api.console = {
                 skip = false
             elseif v == '-l' then
                 skip = "import "
-            elseif util.string.includes(v,'-l') then
+            elseif api.util.string.includes(v,'-l') then
                 api.run(world,"require lib." .. util.string.replace(v,'-l',''))
             elseif util.string.includes(v,'.osgs') then
                 table.insert(laterscript,v)
