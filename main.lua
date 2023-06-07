@@ -1,12 +1,8 @@
-local getch = require("lua-getch") 
 local api = require("src.api")
 
 api.console = {
     charbyte = function(ch)
         return ch:byte()
-    end,
-    getch = function()
-        getch.get_char(io.stdin)
     end,
     colors = 
     {
@@ -80,18 +76,6 @@ api.console = {
         world.session.message = str
     end,
     start = function(worldsizex,worldsizey)
-        io.stdin:setvbuf("no")
-        getch.set_raw_mode(io.stdin)
-        print("press space to skip, getch test.")
-        while true do
-            local char = getch.get_char(io.stdin)
-            print("got: ", char)
-            if((" "):byte() == char) then
-                getch.restore_mode()
-                io.stdin:setvbuf('line')
-                break
-            end
-        end
         local world = api.new.world(worldsizex,worldsizey)
         local latermap = function() end
         local laterscript = {}
