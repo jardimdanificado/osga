@@ -130,7 +130,6 @@ api.new = {
             session = {
                 time = 1,
                 exit = false,
-                editmode = false,
                 cposi = {
                     x = 1,
                     y = 1
@@ -316,13 +315,6 @@ api.console = {
     
             if world.session.toskip == 0 or world.session.renderskip then
                 api.console.printmap(world)
-            end
-    
-            if world.session.editmode then
-                api.console.movecursor(world.session.cposi.x, world.session.cposi.y)
-                local chin = io.stdin:read(1)
-                world.map[world.session.cposi.x][world.session.cposi.y] = api.worker.spawn(world, world.session.cposi, chin, world.ruleset.worker[chin].speed)
-                world.session.editmode = false
             end
     
             if world.session.toskip == 0 then

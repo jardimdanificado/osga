@@ -893,14 +893,6 @@ ruleset.command.run = function(world,api,args)
     api.run(world, api.util.file.load.text(args[1]))
 end
 
-ruleset.command.edit = function(world,api,args)
-    world.session.cposi = {
-        x = tonumber(args[1]),
-        y = tonumber(args[2])
-    }
-    world.session.editmode = true
-end
-
 ruleset.command.add = function(world,api,args)
     if #args >= 3 then
         api.worker.spawn(world, {
