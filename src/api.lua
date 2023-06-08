@@ -201,7 +201,6 @@ api.frame = function(world)
         end
     end
     for i, v in ipairs(world.worker) do
-        api.move(world,v)
         if v.speed > 0 then
             if (v.position ~= nil) then
                 if (world.session.time % v.speed == 0) then
@@ -361,9 +360,10 @@ api.run = function(world, command)
             for i = 2, #split, 1 do
                 table.insert(args,split[i])
             end
-            world.ruleset.command[split[1]](world,api,args,cmd)
+            if world.ruleset.command[split[1]] ~= nil then
+                world.ruleset.command[split[1]](world,api,args,cmd)
+            end
         end
-        
     end
 end
 

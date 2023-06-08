@@ -176,24 +176,25 @@ ruleset.worker.color['!'] = 'magenta'
 ruleset.worker.speed['!'] = 0
 ruleset.worker['!'] = function(signal,worker,world,api)
     if signal.data ~= nil then
-        local result = {timer = signal.timer}
         table.insert(world.session.print,{timer=signal.data.timer, str = signal.data.str, position = {x=worker.position.x,y=worker.position.y}})
         signal.position = nil
     end
 end
 
 
-ruleset.worker.color['%'] = 'magenta'
+ruleset.worker.color['%'] = 'magenta' --unpacker
 ruleset.worker.speed['%'] = 0
 ruleset.worker['%'] = function(signal,worker,world,api)
-    for i, v in ipairs(signal.data) do
-        api.signal.emit(world,signal.position,signal.direction,v)
+    if signal.data ~= nil then
+        for i, v in ipairs(signal.data) do
+            api.signal.emit(world,signal.position,signal.direction,v)
+        end
     end
     signal.position = nil
 end
 
 
-ruleset.worker.color['¬'] = 'magenta'
+ruleset.worker.color['¬'] = 'magenta' --packer
 ruleset.worker.speed['¬'] = 0
 ruleset.worker['¬'] = function(signal,worker,world,api)
     if signal.data == nil then
