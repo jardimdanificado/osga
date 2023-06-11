@@ -179,7 +179,7 @@ api.new = {
                 time = 1,
                 skip = 0,
                 garbagecollector = 17,-- 0 disable garbage collecting
-                config = {exit = false, renderskip = false},
+                config = {exit = false, renderskip = true},
                 print = {}, 
                 loadedscripts = {}
             }
