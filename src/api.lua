@@ -84,7 +84,15 @@ api.new = {
                 command = 
                 {
                     require = function(world,api,args)
-                        local templib = require(api.util.string.replace(api.util.string.replace(args[1],'.lua',''),'/','.'))
+                        local templib
+                        if not api.util.string.includes(args[1],'lib.') and not api.util.string.includes(args[1],'/') and not api.util.string.includes(args[1],'\\') then
+                            templib = require('lib.' .. args[1])
+                        else
+                            templib = require(
+                                api.util.string.replace(
+                                    api.util.string.replace(
+                                        api.util.string.replace(args[1],'.lua',''),'/','.'),'\\','.'))
+                        end
                         local keys = util.array.keys(templib.worker)
                         for i, k in ipairs(keys) do
                             if k ~= 'speed' and k ~= 'color' then
@@ -94,17 +102,18 @@ api.new = {
                             end
                         end
                         for k, v in pairs(templib.command) do
-                            --print(k)
                             world.ruleset.command[k] = v
                         end
                         for k, v in pairs(templib.signal) do
-                            --print(k)
                             world.ruleset.signal[k] = v
                         end
                             
                         table.insert(world.session.loadedscripts,api.util.string.replace(api.util.string.replace(args[1],'.lua',''),'/','.'))
                     end,
                     import = function(world,api,args)
+                        if not api.util.file.exist(args[1]) then
+                            return
+                        end
                         local templib = dofile(args[1])
                         local keys = util.array.keys(templib.worker)
                         for i, k in ipairs(keys) do
@@ -122,6 +131,45 @@ api.new = {
                         end
                             
                         table.insert(world.session.loadedscripts,args[1])
+                    end,
+                    collect = function(world,api,args) -- garbagecollect
+                        if args[1] ~= nil then
+                            if tonumber(args[1]) ~= nil then
+                                world.session.garbagecollector = args[1] or world.session.garbagecollector
+                            else
+                                print('current garbage collecting rate: ' .. world.session.garbagecollector)
+                                api.run(world)
+                                return
+                            end
+                        end
+                        local temp = {}
+                        for i, signal in ipairs(world.signal) do
+                            if signal ~= nil and signal.position ~= nil then
+                                table.insert(temp, signal)
+                            end
+                        end
+                        world.signal = temp
+                        temp = {}
+                        for i, worker in ipairs(world.worker) do
+                            local temp2 = {}
+                            if worker.id == '&' then --if bank
+                                for i, v in ipairs(worker.data) do
+                                    table.insert(temp2,v)
+                                end
+                                worker.data = temp2
+                            end
+                            if worker ~= nil and worker.position ~= nil then
+                                table.insert(temp, worker)
+                            end
+                        end
+                        world.session.print = temp
+                        temp = {}
+                        for i, prt in ipairs(world.session.print) do
+                            if prt.timer < 1 then
+                                table.insert(temp, prt)
+                            end
+                        end
+                        world.session.print = temp
                     end
                 }
             },
@@ -129,21 +177,17 @@ api.new = {
             worker = {},
             session = {
                 time = 1,
-                exit = false,
-                cposi = {
-                    x = 1,
-                    y = 1
-                },
-                message = 'idle',
-                toskip = 0,
-                renderskip = true,
-                garbagecollector = true,
-                print = {},
-                showdots = true,
+                skip = 0,
+                garbagecollector = 17,-- 0 disable garbage collecting
+                config = {exit = false, renderskip = false},
+                print = {}, 
                 loadedscripts = {}
             }
         }
         world.map = util.matrix.new(sizex,sizey,'.')
+        world.ruleset.command['-r'] = world.ruleset.command.require
+        world.ruleset.command['-i'] = world.ruleset.command.import
+        world.ruleset.command['-c'] = world.ruleset.command.collect
         return world
     end
 }
@@ -200,7 +244,9 @@ api.frame = function(world)
             end
         end
     end
-    for i, v in ipairs(world.worker) do
+    
+    for i = 1, #world.worker, 1 do
+        local v = world.worker[i]
         if v.speed > 0 then
             if (v.position ~= nil) then
                 if (world.session.time % v.speed == 0) then
@@ -209,9 +255,11 @@ api.frame = function(world)
             end
         end
     end
-    if world.session.garbagecollector and world.session.time % #world.map * 2 == 0 then
-        api.run(world, 'clear')
+
+    if world.session.garbagecollector ~= 0 and world.session.time % world.session.garbagecollector == 0 then
+        api.run(world, 'collect')
     end
+
     return world
 end
 
@@ -280,12 +328,6 @@ api.console = {
         os.execute(util.unix('clear', 'cls'))
         io.write(util.matrix.tostring(print_map))
         print('frame: ' .. world.session.time)
-        print('message: ' .. world.session.message)
-        print('active signals: ' .. #world.signal)
-        print('active worker count: ' .. #world.worker)
-    end,
-    message = function(world,str)
-        world.session.message = str
     end,
     start = function(worldsizex,worldsizey)
         local world = api.new.world(worldsizex,worldsizey)
@@ -310,16 +352,16 @@ api.console = {
         for i, v in ipairs(laterscript) do
             api.run(world,util.file.load.text(v))
         end
-        while not world.session.exit do
+        while not world.session.config.exit do
     
-            if world.session.toskip == 0 or world.session.renderskip then
+            if (world.session.skip == 0 or world.session.config.renderskip)then
                 api.console.printmap(world)
             end
     
-            if world.session.toskip == 0 then
+            if world.session.skip == 0 then
                 api.run(world)
             else
-                world.session.toskip = world.session.toskip - 1
+                world.session.skip = world.session.skip - 1
             end
     
             api.frame(world)
@@ -352,6 +394,7 @@ api.run = function(world, command)
     master = {world=world,api=api}
     local fullcmd = command or io.read()
     local splited = api.formatcommand(fullcmd)
+    
     for i, cmd in ipairs(splited) do
         if cmd ~= '' then
             local split = api.util.string.split(cmd, " ")
@@ -360,7 +403,10 @@ api.run = function(world, command)
             for i = 2, #split, 1 do
                 table.insert(args,split[i])
             end
-            if world.ruleset.command[split[1]] ~= nil then
+            if world.ruleset.command[split[1]] == nil then
+                print("unknown command!")
+                api.run(world)
+            else
                 world.ruleset.command[split[1]](world,api,args,cmd)
             end
         end

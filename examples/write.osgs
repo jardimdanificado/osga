@@ -3,3 +3,8 @@ require lib.example
 load examples/map/write.osgm
 write examples/write.generated.osgs
 run examples/write.generated.osgs
+echo
+echo done! examples/write.generated.osgs written succefully
+echo
+echo this is a self running script do not print the map, it set exit to true before even the loop start
+exit

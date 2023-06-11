@@ -35,8 +35,12 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 
 ## OSGA - BuiltIn Commands
 
+- `collect (x)` : collect garbage, if x provided then it set the collecting rate to (_x_), anything else will show current rate
 - `require (modname)` : require a preloaded lib named (_modname_)
 - `import (filepath)` : load _dofile_ pointed by (_filepath_)
+- `-c (x)` : collect shortcut
+- `-r (modname)` : require shortcut
+- `-i (filepath)` : import shortcut
 
 ## OSGA - Standard Library Commands(lib.std)
 
@@ -51,11 +55,15 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 - `rm (width) (height)` : remove the worker on the specified (_width_) x (_height_) position
 - `turn (varname)` : turn true/false any world.session variable, if _varname_ unavalaible prints avaliable varaibles
 - `write (filename)` : write map to script file, if _varname_ unavalaible prints avaliable varaibles
-- `clear` : free memory
+- `pause` : send the user to api.run()
+- `count (worker or signal)` : show active workers or signals, or both.
+- `echo (string)` : print text
+- `print (string)` : print text and send the user to a api.run(), waiting for another command
 - `> (cmd)` : access master(world and api)
 - `>> (cmd)` : access lua layer
 - `>>> (cmd)` : direcly access OS layer( os.execute((_cmd_)) )
-- `turn exit` : quits the OSGA REPL
+- `exit` : quit, but complete the current loop
+- `end` : force quit, terminate the process
 
 ## OSGA - Standard Library Operators(lib.std)
 

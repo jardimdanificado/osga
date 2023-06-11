@@ -943,43 +943,12 @@ ruleset.command.rm = function(world,api,args)
     end
 end
 
-ruleset.command.clear = function(world,api,args)
-    local temp = {}
-    for i, signal in ipairs(world.signal) do
-        if signal ~= nil and signal.position ~= nil then
-            table.insert(temp, signal)
-        end
-    end
-    world.signal = temp
-    temp = {}
-    for i, worker in ipairs(world.worker) do
-        local temp2 = {}
-        if worker.id == '&' then --if bank
-            for i, v in ipairs(worker.data) do
-                table.insert(temp2,v)
-            end
-            worker.data = temp2
-        end
-        if worker ~= nil and worker.position ~= nil then
-            table.insert(temp, worker)
-        end
-    end
-    world.session.print = temp
-    temp = {}
-    for i, prt in ipairs(world.session.print) do
-        if prt.timer < 1 then
-            table.insert(temp, prt)
-        end
-    end
-    world.session.print = temp
-end
-
 ruleset.command.turn = function(world,api,args)
-    if type(world.session[args[1]]) == 'boolean' then
-        world.session[args[1]] = api.util.turn(world.session[args[1]])
+    if type(world.session.config[args[1]]) == 'boolean' then
+        world.session.config[args[1]] = api.util.turn(world.session.config[args[1]])
     else
         print("\n\27[32mavaliable to turn:\27[0m")
-        for k, v in pairs(world.session) do
+        for k, v in pairs(world.session.config) do
             if type(v) == 'boolean' then
                 print(k)
             end
@@ -990,8 +959,47 @@ ruleset.command.turn = function(world,api,args)
 end
 
 ruleset.command.skip = function(world,api,args)
-    world.session.toskip = tonumber(args[1])
+    world.session.skip = tonumber(args[1])
     print("please wait...")
+end
+
+ruleset.command.pause = function(world,api,args)
+    api.run(world)
+end
+
+ruleset.command.exit = function(world,api,args)
+    world.session.config.exit = true
+end
+
+ruleset.command['end'] = function(world,api,args)
+    os.exit()
+end
+
+ruleset.command.count = function(world,api,args)
+    if args[1] == nil then
+        print("Active workers: " .. #world.worker)
+        print("Active signals: " .. #world.signal)
+    elseif api.util.string.includes(args[1],'worker') then
+        print("Active workers: " .. #world.worker)
+    elseif api.util.string.includes(args[1],'signal') then
+        print("Active signals: " .. #world.signal)
+    end
+    api.run(world)
+end
+
+ruleset.command.echo = function(world,api,args) --unblocked
+    for i, v in ipairs(args) do
+        io.write(v .. ' ')
+    end
+    io.write('\n')
+end
+
+ruleset.command.print = function(world,api,args) --blocked, user need to press enter or type a command to continue
+    for i, v in ipairs(args) do
+        io.write(v .. ' ')
+    end
+    io.write('\n')
+    api.run(world)
 end
 
 ruleset.command.write = function(world,api,args)
