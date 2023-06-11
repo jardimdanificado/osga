@@ -1,5 +1,6 @@
 --luajit.exe main.lua .\examples\basic.osgs -lstd -lexample
 require lib.std
 require lib.example
+turn renderskip
 load examples/map/basic.osgm
 skip 419
