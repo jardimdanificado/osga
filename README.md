@@ -4,7 +4,7 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 
 ## OSGA - Building
 
-  `Note: that OSGA runs perfectly from the intepreter, building is completely optional`
+  `Note: that OSGA runs perfectly from the intepreter, building is completly optional`
   
 - `(optional)`: put custom libs on the lib folder to preload them
 - `1` : Create a zip with the following: main.lua, src and lib
@@ -33,7 +33,7 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
   - `x` : Number.
   - `y` : Number.
 
-## OSGA - BuiltIn Commands
+## OSGA - Built-In Commands
 
 - `collect (x)` : collect garbage, if x provided then it set the collecting rate to (_x_), anything else will show current rate
 - `require (modname)` : require a preloaded lib named (_modname_)
