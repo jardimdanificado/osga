@@ -4,7 +4,7 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 
 ## OSGA - Building
 
-  `Note: that OSGA runs perfectly from the intepreter, building is completly optional`
+  `Note: that OSGA runs perfectly from the intepreter, building is completely optional`
   
 - `(optional)`: put custom libs on the lib folder to preload them
 - `1` : Create a zip with the following: main.lua, src and lib
