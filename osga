@@ -1,9 +1,4 @@
-#!/bin/bash
-
-# Get the directory path of the current script (resolving symbolic links)
 script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
-
-echo "The script directory is: $script_dir"
-
-luajit "$script_dir"/main.lua "$@"
+cd "$script_dir" 
+luajit ./main.lua "$@"
