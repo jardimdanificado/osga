@@ -162,14 +162,7 @@ api.new = {
                                 table.insert(temp, worker)
                             end
                         end
-                        world.session.print = temp
-                        temp = {}
-                        for i, prt in ipairs(world.session.print) do
-                            if prt.timer < 1 then
-                                table.insert(temp, prt)
-                            end
-                        end
-                        world.session.print = temp
+                        world.worker = temp
                     end
                 }
             },
@@ -180,7 +173,6 @@ api.new = {
                 skip = 0,
                 garbagecollector = 17,-- 0 disable garbage collecting
                 config = {exit = false, renderskip = true},
-                print = {}, 
                 loadedscripts = {}
             }
         }
@@ -307,20 +299,6 @@ api.console = {
                     print_map[signal.position.x][signal.position.y] = api.console.colorstring('@',signal.color)
                 else
                     print_map[signal.position.x][signal.position.y] = api.console.colorstring('*',signal.color)
-                end
-            end
-        end
-
-        if #world.session.print > 0 then
-            for i, v in ipairs(world.session.print) do
-                for y = 1, #v.str, 1 do
-                    if print_map[v.position.x][v.position.y + y] ~= nil then
-                        print_map[v.position.x][v.position.y + y] = string.sub(v.str,y,y)
-                    end
-                end
-                v.timer = v.timer - 1
-                if v.timer < 1 then
-                    world.session.print[i] = nil
                 end
             end
         end

@@ -74,7 +74,6 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 - `$` : Spammer, sends the signal in all directions.
 - `-` : Deleter, delete the signal.
 - `?` : Randomizer.
-- `!` : Printer.
 - `|` : Mirror.
 - `¬` : Packer.
 - `%` : Unpacker.

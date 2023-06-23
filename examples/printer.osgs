@@ -1,5 +1,0 @@
---luajit.exe main.lua .\examples\printer.osgs -lstd -lexample
-require lib.std
-require lib.example
-load examples/map/printer.osgm
-skip 64
