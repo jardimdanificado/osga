@@ -1,10 +1,10 @@
-local ruleset = {command={},worker={color={},speed={}},signal={}}
+local ruleset = {command={},worker={color={},rate={}},signal={}}
 
 ruleset.command.empty = function(world,api,args)
 end
 
 ruleset.worker.color['.'] = 'reset'
-ruleset.worker.speed['.'] = 8
+ruleset.worker.rate['.'] = 8
 ruleset.worker['.'] = function(signal,worker,world,api)
 end
 

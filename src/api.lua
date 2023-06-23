@@ -38,14 +38,14 @@ api.new = {
             func = func or function() end
         }
     end,
-    worker = function(ruleset, id, position, timer, speed, color, data)
+    worker = function(ruleset, id, position, timer, rate, color, data)
         return {
             id = id,
             func = ruleset.worker[id],
             position = position,
             direction = {x=0,y=0},
             timer = timer,
-            speed = speed,
+            rate = rate,
             color = color or 'white',
             data = data or {}
         }
@@ -78,7 +78,7 @@ api.new = {
                 worker = 
                 {         
                     color = {},
-                    speed = {}
+                    rate = {}
                 },
                 signal = {},
                 command = 
@@ -95,10 +95,10 @@ api.new = {
                         end
                         local keys = util.array.keys(templib.worker)
                         for i, k in ipairs(keys) do
-                            if k ~= 'speed' and k ~= 'color' then
+                            if k ~= 'rate' and k ~= 'color' then
                                 world.ruleset.worker[k] = templib.worker[k]
                                 world.ruleset.worker.color[k] = templib.worker.color[k]
-                                world.ruleset.worker.speed[k] = templib.worker.speed[k]
+                                world.ruleset.worker.rate[k] = templib.worker.rate[k]
                             end
                         end
                         for k, v in pairs(templib.command) do
@@ -117,10 +117,10 @@ api.new = {
                         local templib = dofile(args[1])
                         local keys = util.array.keys(templib.worker)
                         for i, k in ipairs(keys) do
-                            if k ~= 'speed' and k ~= 'color' then
+                            if k ~= 'rate' and k ~= 'color' then
                                 world.ruleset.worker[k] = templib.worker[k]
                                 world.ruleset.worker.color[k] = templib.worker.color[k]
-                                world.ruleset.worker.speed[k] = templib.worker.speed[k]
+                                world.ruleset.worker.rate[k] = templib.worker.rate[k]
                             end
                         end
                         for k, v in pairs(templib.command) do
@@ -194,10 +194,10 @@ api.signal = {
 }
 
 api.worker = {
-    spawn = function(world, position, id, timer, speed)
-        speed = speed or world.ruleset.worker.speed[id]
+    spawn = function(world, position, id, timer, rate)
+        rate = rate or world.ruleset.worker.rate[id]
         if world.map[position.x][position.y] == '.' then
-            table.insert(world.worker, api.new.worker(world.ruleset, id, position, timer, speed, world.ruleset.worker.color[id]))
+            table.insert(world.worker, api.new.worker(world.ruleset, id, position, timer, rate, world.ruleset.worker.color[id]))
             world.map[position.x][position.y] = world.worker[#world.worker]
             return world.map[position.x][position.y]
         end
@@ -239,9 +239,9 @@ api.frame = function(world)
     
     for i = 1, #world.worker, 1 do
         local v = world.worker[i]
-        if v.speed > 0 then
+        if v.rate > 0 then
             if (v.position ~= nil) then
-                if (world.session.time % v.speed == 0) then
+                if (world.session.time % v.rate == 0) then
                     v.func(nil, v, world, api)
                 end
             end
