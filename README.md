@@ -59,9 +59,9 @@ The reference _Open Scripting Grid Abstracter_ implemented in lua.
 - `count (worker or signal)` : show active workers or signals, or both.
 - `echo (string)` : print text
 - `print (string)` : print text and send the user to a api.run(), waiting for another command
-- `> (cmd)` : access master(world and api)
-- `>> (cmd)` : access lua layer
-- `>>> (cmd)` : direcly access OS layer( os.execute((_cmd_)) )
+- `expose` : expose world and api 
+- `> (cmd)` : access lua layer
+- `$ (cmd)` : direcly access OS layer( os.execute((_cmd_)) )
 - `exit` : quit, but complete the current loop
 - `end` : force quit, terminate the process
 

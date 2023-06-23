@@ -369,7 +369,6 @@ api.formatcommand = function(fullcmd)
 end
 
 api.run = function(world, command)
-    master = {world=world,api=api}
     local fullcmd = command or io.read()
     local splited = api.formatcommand(fullcmd)
     

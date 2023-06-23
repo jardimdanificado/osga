@@ -171,7 +171,7 @@ ruleset.worker['&'] = function(signal,worker,world,api)
     signal.position = nil
 end
 
-
+--[[ printer, deprecated in 1.2
 ruleset.worker.color['!'] = 'magenta'
 ruleset.worker.speed['!'] = 0
 ruleset.worker['!'] = function(signal,worker,world,api)
@@ -180,7 +180,7 @@ ruleset.worker['!'] = function(signal,worker,world,api)
         signal.position = nil
     end
 end
-
+--]]
 
 ruleset.worker.color['%'] = 'magenta' --unpacker
 ruleset.worker.speed['%'] = 0
@@ -914,7 +914,7 @@ ruleset.command.new = function(world,api,args)
     world.map = api.util.matrix.new(args[1],args[2],'.')
 end
 
-ruleset.command['>>>'] = function(world,api,args,cmd)
+ruleset.command['$'] = function(world,api,args,cmd)
     cmd = api.util.string.replace(cmd, ">>>", 'os.execute("') .. '")'
     assert(api.util.load(cmd))()
     api.run(world)
@@ -926,8 +926,9 @@ ruleset.command['>>'] = function(world,api,args,cmd)
     api.run(world)
 end
 
-ruleset.command['>'] = function(world,api,args,cmd)
-    cmd = api.util.string.replace(cmd, ">", 'master.')
+ruleset.command['expose'] = function(_world,_api,args,cmd)
+    world = _world
+    api = _api
     assert(api.util.load(cmd))()
     api.run(world)
 end
