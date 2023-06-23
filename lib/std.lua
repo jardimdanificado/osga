@@ -926,10 +926,9 @@ ruleset.command['>>'] = function(world,api,args,cmd)
     api.run(world)
 end
 
-ruleset.command['expose'] = function(_world,_api,args,cmd)
+ruleset.command.expose = function(_world,_api,args,cmd)
     world = _world
     api = _api
-    assert(api.util.load(cmd))()
     api.run(world)
 end
 
